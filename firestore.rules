@@ -1,0 +1,133 @@
+rules_version = '2';
+
+// Döntési oldal – Élelmezési menedzsment projektcsoport
+//
+// Hozzáférés: kizárólag a config/app.admins tömbben szereplő, ellenőrzött
+// e-mail-című Google-fiókok olvashatnak és írhatnak. Mindenki más (kijelentkezett
+// látogató és nem admin belépett felhasználó) semmit nem lát.
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // ---- Segédfüggvények -------------------------------------------------
+
+    function signedIn() {
+      return request.auth != null
+        && request.auth.token.email is string
+        && request.auth.token.email_verified == true;
+    }
+
+    function isAdmin() {
+      return signedIn()
+        && request.auth.token.email.lower()
+           in get(/databases/$(database)/documents/config/app).data.admins;
+    }
+
+    function validId(v) {
+      return v is string && v.matches('^[a-z0-9_]{1,40}$');
+    }
+
+    // A döntés nyitott, ha nincs status dokumentuma, vagy az nem "closed".
+    function isOpen(decisionId) {
+      return !exists(/databases/$(database)/documents/status/$(decisionId))
+        || get(/databases/$(database)/documents/status/$(decisionId)).data.state != 'closed';
+    }
+
+    // ---- config ----------------------------------------------------------
+    // Csak a konzolból írható. Az admin-lista e-maileket tartalmaz,
+    // ezért csak admin olvashatja.
+    match /config/{docId} {
+      allow read: if isAdmin();
+      allow write: if false;
+    }
+
+    // ---- users -----------------------------------------------------------
+    // Név és profilkép a szavazók és a csevegő megjelenítéséhez. E-mail nincs benne.
+    match /users/{uid} {
+      allow read: if isAdmin();
+      allow create, update: if isAdmin()
+        && uid == request.auth.uid
+        && request.resource.data.keys().hasOnly(['displayName', 'photoURL', 'lastSeen'])
+        && request.resource.data.keys().hasAll(['displayName', 'lastSeen'])
+        && request.resource.data.displayName is string
+        && request.resource.data.displayName.size() <= 100
+        && (!('photoURL' in request.resource.data)
+            || request.resource.data.photoURL == null
+            || (request.resource.data.photoURL is string
+                && request.resource.data.photoURL.size() <= 2000))
+        && request.resource.data.lastSeen == request.time;
+      allow delete: if false;
+    }
+
+    // ---- votes -----------------------------------------------------------
+    // Kulcs: {decisionId}__{uid}, így döntésenként és felhasználónként egy szavazat.
+    match /votes/{voteId} {
+      allow read: if isAdmin();
+
+      allow create, update: if isAdmin()
+        && request.resource.data.keys().hasOnly(['decisionId', 'optionId', 'uid', 'updatedAt'])
+        && request.resource.data.keys().hasAll(['decisionId', 'optionId', 'uid', 'updatedAt'])
+        && validId(request.resource.data.decisionId)
+        && validId(request.resource.data.optionId)
+        && request.resource.data.uid == request.auth.uid
+        && voteId == request.resource.data.decisionId + '__' + request.auth.uid
+        && request.resource.data.updatedAt == request.time
+        && isOpen(request.resource.data.decisionId);
+
+      allow delete: if isAdmin()
+        && resource.data.uid == request.auth.uid
+        && isOpen(resource.data.decisionId);
+    }
+
+    // ---- status ----------------------------------------------------------
+    // Lezárás: state "closed", kiválasztott opció, ki és mikor.
+    // Újranyitás: state "open", a többi mező null.
+    match /status/{decisionId} {
+      allow read: if isAdmin();
+
+      allow create, update: if isAdmin()
+        && validId(decisionId)
+        && request.resource.data.keys().hasOnly(['state', 'chosenOptionId', 'closedBy', 'closedAt'])
+        && request.resource.data.keys().hasAll(['state', 'chosenOptionId', 'closedBy', 'closedAt'])
+        && (
+          (request.resource.data.state == 'closed'
+            && validId(request.resource.data.chosenOptionId)
+            && request.resource.data.closedBy == request.auth.uid
+            && request.resource.data.closedAt == request.time)
+          ||
+          (request.resource.data.state == 'open'
+            && request.resource.data.chosenOptionId == null
+            && request.resource.data.closedBy == null
+            && request.resource.data.closedAt == null)
+        );
+
+      allow delete: if false;
+    }
+
+    // ---- messages --------------------------------------------------------
+    match /messages/{messageId} {
+      allow read: if isAdmin();
+
+      allow create: if isAdmin()
+        && request.resource.data.keys().hasOnly(['uid', 'text', 'decisionId', 'createdAt'])
+        && request.resource.data.keys().hasAll(['uid', 'text', 'decisionId', 'createdAt'])
+        && request.resource.data.uid == request.auth.uid
+        && request.resource.data.text is string
+        && request.resource.data.text.size() >= 1
+        && request.resource.data.text.size() <= 1000
+        && (request.resource.data.decisionId == null || validId(request.resource.data.decisionId))
+        && request.resource.data.createdAt == request.time;
+
+      allow update: if false;
+
+      // A szerző vagy admin törölhet. Mivel csak adminok férnek hozzá,
+      // a gyakorlatban bármelyik admin bármely üzenetet törölheti.
+      allow delete: if isAdmin();
+    }
+
+    // ---- Minden más tiltva -----------------------------------------------
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

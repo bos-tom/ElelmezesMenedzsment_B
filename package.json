@@ -1,0 +1,16 @@
+{
+  "name": "elelmezes-menedzsment-dontesek",
+  "private": true,
+  "description": "Döntési oldal – csak a Firestore-szabályok tesztjéhez és telepítéséhez kellenek a csomagok, az oldal build nélkül fut.",
+  "type": "module",
+  "scripts": {
+    "test:rules": "firebase emulators:exec --only firestore --project demo-dontesek \"node --test --test-concurrency=1 tests/rules.test.mjs\"",
+    "dev": "firebase emulators:exec --only auth,firestore --project demo-dontesek \"node scripts/dev.mjs\"",
+    "deploy:rules": "firebase deploy --only firestore:rules"
+  },
+  "devDependencies": {
+    "@firebase/rules-unit-testing": "^5.0.2",
+    "firebase": "^12.19.0",
+    "firebase-tools": "^15.32.1"
+  }
+}

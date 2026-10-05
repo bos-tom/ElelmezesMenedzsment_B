@@ -1,0 +1,1356 @@
+{
+ "version": "2026-10-05",
+ "sources": {
+  "FL": "Feladatleírás – 2026_R_feladatleiras_MenedzsmentB.pdf (oldal)",
+  "R": "37/2014. (IV. 30.) EMMI rendelet (hatályos szöveg, njt.hu)",
+  "REA": "Rendelet ea.pdf – 2026-os előadás a rendeletről és a diétáról (dia)",
+  "CÉL": "CÉL-rendelet.pdf – előadás a közétkeztetés céljairól, szereplőiről (dia)",
+  "BEV": "Bevezetés.pdf – tantárgyi követelmények (dia)",
+  "EA1": "1 munkavédelem, telepítés, helyiségek (R41A előadás, dia)",
+  "EA2": "2 víz, csatorna, fűtés, gáz, gőz (R41A előadás, dia)",
+  "EA3": "3 világítás, elektromos ellátás (R41A előadás, dia)",
+  "EA4": "4 felvonók (R41A előadás, dia)",
+  "EA5": "5 áruátvétel, raktározás (R41A előadás, dia)",
+  "EA6": "6 előkészítők (R41A előadás, dia)",
+  "EA7": "6 sütő-főző készülékek (R41A előadás, dia)",
+  "EA8": "7 cukrászgépek, tálalás (R41A előadás, dia)",
+  "EA9": "8 mosogatás (R41A előadás, dia)",
+  "IR": "irasos_anyag.pdf – Szolgáltatástechnika-kivonat (oldal)",
+  "MI": "MI-következtetés: a tananyag ezt így nem mondja ki, a csoportnak ellenőriznie kell"
+ },
+ "groups": [
+  {
+   "id": "A",
+   "title": "Intézmény és étkezők",
+   "decisions": [
+    {
+     "id": "intezmeny",
+     "title": "Milyen intézmény, milyen korcsoport?",
+     "impact": "Ebből következik az étkezések száma és energiaaránya, az adagok, ezen keresztül az üstméret, a tálalás módja és a tilalmi lista.",
+     "options": [
+      {
+       "id": "bolcsode",
+       "label": "Bölcsőde (1–3 év)",
+       "pros": [
+        [
+         "Kötött keret: napi 2 fő- és 2 kisétkezés, az energiaszükséglet 75%-a.",
+         "R",
+         "5. § (2) b)"
+        ]
+       ],
+       "cons": [
+        [
+         "300 bölcsődés egy intézményben nem életszerű.",
+         "MI",
+         ""
+        ],
+        [
+         "A legszigorúbb szabályok: nincs bő zsiradékban sült étel, sertés- és baromfizsír tilos, májból csak csirkemáj és zúza.",
+         "R",
+         "9. § (2), 14. § (1) j), 6. melléklet 4. lábj."
+        ],
+        [
+         "1 év alattiaknak külön tápszerkonyha kellhet.",
+         "EA1",
+         "65"
+        ]
+       ]
+      },
+      {
+       "id": "ovoda",
+       "label": "Óvoda (3–6 év)",
+       "pros": [
+        [
+         "Egy korcsoport (4–6 év), egy adagolási oszlop.",
+         "R",
+         "4. melléklet"
+        ],
+        [
+         "A tízórai, ebéd, uzsonna adja a napi 3 étkezést (65%).",
+         "R",
+         "5. § (2) c)"
+        ]
+       ],
+       "cons": [
+        [
+         "Óvodában önkiszolgálás nem alkalmazható, csoportos tálalás kell.",
+         "R",
+         "2. § (1) 15a."
+        ],
+        [
+         "Sertés- és baromfizsír tilos, és adalékanyag-tilalom van.",
+         "R",
+         "14. § (1) j), 14. § (2)"
+        ],
+        [
+         "300 fölötti óvodás egy épületben ritka; inkább több tagóvodát kiszállítással ellátó konyhaként életszerű.",
+         "MI",
+         ""
+        ]
+       ]
+      },
+      {
+       "id": "altalanos",
+       "label": "Általános iskola (6–14 év)",
+       "pros": [
+        [
+         "300–600 étkező egy iskolában életszerű.",
+         "MI",
+         ""
+        ],
+        [
+         "Napközis rendszerben a tízórai, ebéd, uzsonna teljesíti a legalább 3 étkezést.",
+         "R",
+         "5. § (2) c)"
+        ],
+        [
+         "Önkiszolgáló tálalás megengedett.",
+         "R",
+         "2. § (1) 15a."
+        ]
+       ],
+       "cons": [
+        [
+         "Két korcsoport (7–10 és 11–14 év): külön nyersanyag-kiszabati ív és külön adagolás.",
+         "R",
+         "5. § (4) a)–b)"
+        ],
+        [
+         "A 7–10 éveseknél adalékanyag-tilalom van.",
+         "R",
+         "14. § (2)"
+        ]
+       ]
+      },
+      {
+       "id": "kozepiskola",
+       "label": "Középiskola kollégiummal (14–18 év)",
+       "pros": [
+        [
+         "Egy korcsoport („15. évtől”), egyszerűbb adagolás.",
+         "R",
+         "4. melléklet"
+        ],
+        [
+         "A kollégium miatt egész napos ellátás: 3 fő- és 2 kisétkezés.",
+         "R",
+         "5. § (2) a)"
+        ]
+       ],
+       "cons": [
+        [
+         "Napi 5 étkezés: hosszabb üzemidő, több raktár és személyzet.",
+         "MI",
+         ""
+        ],
+        [
+         "Kollégium nélkül a diákok jellemzően csak ebédelnek, ami nem teljesíti a legalább 3 étkezést.",
+         "FL",
+         "1"
+        ]
+       ]
+      }
+     ],
+     "suggestion": "Általános iskola: a létszám életszerű, a napi 3 étkezés természetes, és a tananyag önkiszolgáló tálalási példái ráillenek."
+    },
+    {
+     "id": "etkezesek",
+     "title": "Ki hány étkezést vesz igénybe?",
+     "impact": "A feladat részétkezésenként konkrét létszámot és arányt kér. Ebből jön a napi adagszám és a gépek kapacitása.",
+     "depends": [
+      "intezmeny"
+     ],
+     "options": [
+      {
+       "id": "mind3",
+       "label": "Mindenki tízórait, ebédet és uzsonnát kap",
+       "pros": [
+        [
+         "Egyetlen létszám, egyszerű számolás; a napi energia 65%-a.",
+         "R",
+         "5. § (2) c)"
+        ]
+       ],
+       "cons": [
+        [
+         "Kevésbé életszerű: nem minden diák napközis.",
+         "MI",
+         ""
+        ],
+        [
+         "Kevés mondanivaló a „melyik részétkezést hányan” kérdésre.",
+         "FL",
+         "1"
+        ]
+       ]
+      },
+      {
+       "id": "vegyes",
+       "label": "Ebéd mindenkinek, tízórai és uzsonna csak egy részének",
+       "pros": [
+        [
+         "Pontosan azt mutatja be, amit a feladat kér: eltérő létszám és arány részétkezésenként.",
+         "FL",
+         "1"
+        ],
+        [
+         "A rendelet minden kombinációra ad arányt: tízórai + ebéd 50%, ebéd + uzsonna 50%, csak ebéd 35%.",
+         "R",
+         "5. § (2) d), (2a)"
+        ]
+       ],
+       "cons": [
+        [
+         "Több számolás és több étlapkombináció.",
+         "MI",
+         ""
+        ]
+       ]
+      },
+      {
+       "id": "egesznapos",
+       "label": "Egész napos ellátás (reggeli, tízórai, ebéd, uzsonna, vacsora)",
+       "pros": [
+        [
+         "Teljes ellátás, 100%.",
+         "R",
+         "5. § (2) a)"
+        ]
+       ],
+       "cons": [
+        [
+         "Csak kollégiumnál indokolt.",
+         "MI",
+         ""
+        ],
+        [
+         "Naponta 4 adag zöldség vagy gyümölcs és 3 adag gabona alapú élelmiszer kötelező.",
+         "R",
+         "7. § (2)"
+        ]
+       ]
+      }
+     ],
+     "suggestion": "Általános iskolánál a vegyes változat."
+    },
+    {
+     "id": "letszam",
+     "title": "Mekkora létszámmal tervezünk?",
+     "impact": "Legalább 300 fő, plusz a pedagógusok. A ténylegesen étkezők számát kell megadni, nem a lehetségest.",
+     "depends": [
+      "intezmeny"
+     ],
+     "options": [
+      {
+       "id": "300_400",
+       "label": "300–400 fő",
+       "pros": [
+        [
+         "Teljesíti a minimumot, kezelhető méretű konyha.",
+         "FL",
+         "1"
+        ]
+       ],
+       "cons": [
+        [
+         "Közel a határhoz: a pedagógusok nélkül is 300 fölött kell lennie a diákoknak.",
+         "FL",
+         "1"
+        ]
+       ]
+      },
+      {
+       "id": "400_600",
+       "label": "400–600 fő",
+       "pros": [
+        [
+         "Nagyobb általános iskolának életszerű.",
+         "MI",
+         ""
+        ],
+        [
+         "Indokolja a folyamatos üzemű mosogatógépet és a modulrendszerű üstsort.",
+         "IR",
+         "12"
+        ]
+       ],
+       "cons": [
+        [
+         "Nagyobb raktár- és hűtőkapacitás kell.",
+         "MI",
+         ""
+        ]
+       ]
+      },
+      {
+       "id": "600_felett",
+       "label": "600 fő fölött (több intézmény ellátása)",
+       "pros": [
+        [
+         "A központi konyha csoportos adagolása és kiszállítása jól bemutatható.",
+         "IR",
+         "4"
+        ]
+       ],
+       "cons": [
+        [
+         "Több rajz és gép, több hibalehetőség a bemutatón.",
+         "MI",
+         ""
+        ],
+        [
+         "Csak különálló, kiszállító üzemmel életszerű.",
+         "MI",
+         ""
+        ]
+       ]
+      }
+     ],
+     "suggestion": "400–500 fő."
+    },
+    {
+     "id": "helyszin",
+     "title": "Valós vagy kitalált telek?",
+     "impact": "A helyszínrajzon jelölni kell az égtájakat, a nyersanyag beérkezését, a fogyasztó vagy a kiszállítás útját és a közműveket.",
+     "options": [
+      {
+       "id": "valos",
+       "label": "Valós telek mintájára, megnevezett városban",
+       "pros": [
+        [
+         "A helyszínrajz térkép alapján hitelesen megrajzolható.",
+         "MI",
+         ""
+        ],
+        [
+         "Valós égtájakkal mutatható be a tájolás.",
+         "EA1",
+         "32"
+        ]
+       ],
+       "cons": [
+        [
+         "Kerülni kell, hogy úgy tűnjön, egy létező intézmény tényleges konyháját írjuk le.",
+         "MI",
+         ""
+        ],
+        [
+         "A meglévő tájolás nem feltétlenül követi a tankönyvi elvet.",
+         "EA1",
+         "32"
+        ]
+       ]
+      },
+      {
+       "id": "kitalalt",
+       "label": "Kitalált telek egy megnevezett városban",
+       "pros": [
+        [
+         "Szabadon követhető a tankönyvi tájolás: raktár észak, főzőtér északkelet, mosogató kelet, étkező délkelet.",
+         "EA1",
+         "32"
+        ],
+        [
+         "Szabadon választhatók a közművek (gáz, gőz, villany).",
+         "EA1",
+         "31"
+        ]
+       ],
+       "cons": [
+        [
+         "A környezetet magunknak kell kitalálni, kevésbé kézzelfogható.",
+         "MI",
+         ""
+        ]
+       ]
+      }
+     ],
+     "suggestion": "Kitalált telek egy valós városban: a tájolás és a közművek szabadon a tananyaghoz igazíthatók."
+    }
+   ]
+  },
+  {
+   "id": "B",
+   "title": "Az üzem elhelyezése és működtetése",
+   "decisions": [
+    {
+     "id": "uzemeltetes",
+     "title": "Ki üzemelteti a konyhát?",
+     "impact": "A rajzot alig befolyásolja, de a bemutató szervezeti részét igen: ki határozza meg a nyersanyagnormát, ki köt szerződést.",
+     "options": [
+      {
+       "id": "sajat",
+       "label": "Saját üzemeltetés (az intézmény maga)",
+       "pros": [
+        [
+         "A fenntartó határozza meg a létszámot és a nyersanyagnormát, ami a feladat része.",
+         "CÉL",
+         "23"
+        ],
+        [
+         "Illik a feladat állami, költségvetési fenntartójához.",
+         "FL",
+         "1"
+        ]
+       ],
+       "cons": [
+        [
+         "Az intézményre hárul az anyag- és értékkönyvelés, a pénzügyi lebonyolítás.",
+         "CÉL",
+         "23"
+        ]
+       ]
+      },
+      {
+       "id": "vallalkozo",
+       "label": "Vállalkozó üzemelteti (bérlő)",
+       "pros": [
+        [
+         "Az intézmény feladata szűkebb: napi létszám, étlap-ellenőrzés, elégedettségvizsgálat.",
+         "CÉL",
+         "24"
+        ]
+       ],
+       "cons": [
+        [
+         "Profitorientált működés, szerződéses jogviszony.",
+         "CÉL",
+         "26, 31"
+        ],
+        [
+         "Pályáztatás és szerződéskötés terhe a fenntartón.",
+         "CÉL",
+         "24"
+        ]
+       ]
+      }
+     ],
+     "suggestion": "Saját üzemeltetés."
+    },
+    {
+     "id": "elhelyezes",
+     "title": "Hol áll a konyha az intézményhez képest?",
+     "impact": "Ettől függ, kell-e étterem vagy kiszállítás, és mit kell a helyszínrajzon mutatni.",
+     "options": [
+      {
+       "id": "kapcsolodo",
+       "label": "Az iskolaépülethez kapcsolódik, helyben étkeztetés étteremmel",
+       "pros": [
+        [
+         "Nincs kiszállítás: nem kell szállítóedény-mosogatás és thermoport-állomány.",
+         "IR",
+         "8"
+        ],
+        [
+         "A helyszínrajzon a fogyasztó érkezését kell jelölni, ez egyszerűbb.",
+         "FL",
+         "1"
+        ]
+       ],
+       "cons": [
+        [
+         "Be kell mutatni a kapcsolatot az iskola épületével.",
+         "FL",
+         "1"
+        ],
+        [
+         "Szag- és zajvédelem az iskolarészek felé (elszívás, hangszigetelés).",
+         "EA1",
+         "49"
+        ]
+       ]
+      },
+      {
+       "id": "kulonallo",
+       "label": "Különálló épület, készétel kiszállítása tálalókonyhára",
+       "pros": [
+        [
+         "Több intézményt is elláthat, nagyobb létszám.",
+         "IR",
+         "4"
+        ],
+        [
+         "Pavilonos rendszer: független telepítés.",
+         "EA1",
+         "33"
+        ]
+       ],
+       "cons": [
+        [
+         "Kell expediáló tér, thermoportok, badellák, szállítóedény-mosogatás.",
+         "EA8",
+         "32–36"
+        ],
+        [
+         "A fogadó befejező konyha csak a főzőkonyha által rábízott műveleteket végezheti.",
+         "R",
+         "8. § (5)"
+        ],
+        [
+         "Csoportos adagolás, majd a helyszínen újra tálalás.",
+         "IR",
+         "4"
+        ]
+       ]
+      }
+     ],
+     "suggestion": "Az iskolaépülethez kapcsolódó, helyben étkeztető konyha."
+    },
+    {
+     "id": "szint",
+     "title": "Hány szinten legyen az üzem?",
+     "impact": "A szintek száma felvonót, szállítási útvonalat és gázhasználati korlátot jelent.",
+     "depends": [
+      "elhelyezes"
+     ],
+     "options": [
+      {
+       "id": "foldszint",
+       "label": "Egy szinten, földszinten",
+       "pros": [
+        [
+         "Nem kell áru- vagy ételfelvonó.",
+         "EA4",
+         "6–7"
+        ],
+        [
+         "Az egyirányú áramlás vízszintesen jól rajzolható.",
+         "FL",
+         "2"
+        ]
+       ],
+       "cons": [
+        [
+         "Nagyobb beépített terület.",
+         "MI",
+         ""
+        ]
+       ]
+      },
+      {
+       "id": "alagsor",
+       "label": "Raktárak alagsorban, konyha földszinten",
+       "pros": [
+        [
+         "Kisebb földszinti alapterület.",
+         "MI",
+         ""
+        ]
+       ],
+       "cons": [
+        [
+         "Felvonó kell, előtte 2×2 m szabad hellyel.",
+         "EA1",
+         "20"
+        ],
+        [
+         "PB-gáz a levegőnél nehezebb, csak talajszint felett használható.",
+         "EA2",
+         "24"
+        ]
+       ]
+      }
+     ],
+     "suggestion": "Egy szinten, földszinten."
+    }
+   ]
+  },
+  {
+   "id": "C",
+   "title": "Nyersanyag és beszerzés",
+   "decisions": [
+    {
+     "id": "zoldseg",
+     "title": "Milyen formában érkezik a zöldség és a burgonya?",
+     "impact": "Az érkező áru jellege határozza meg a raktárak és az előkészítő méretét, és azt, kell-e burgonyakoptató.",
+     "options": [
+      {
+       "id": "friss",
+       "label": "Előkészítetlen, friss áru",
+       "pros": [
+        [
+         "A napi nyers zöldség vagy gyümölcs friss áruval könnyen teljesíthető.",
+         "R",
+         "7. § (4) a)"
+        ],
+        [
+         "Teljes zöldség-előkészítő mutatható be.",
+         "EA6",
+         "4–5"
+        ]
+       ],
+       "cons": [
+        [
+         "Burgonyakoptató kell 1,5 m² betonkoszorús helyen, homokfogóval.",
+         "EA6",
+         "10"
+        ],
+        [
+         "Földesáru-raktár kell.",
+         "EA5",
+         "14"
+        ]
+       ]
+      },
+      {
+       "id": "vegyes",
+       "label": "Hámozott burgonya, a többi zöldség friss",
+       "pros": [
+        [
+         "Elmarad a burgonyakoptató; a feladat ezt a példát hozza.",
+         "FL",
+         "2"
+        ]
+       ],
+       "cons": [
+        [
+         "Az előkészített alapanyagot hűteni kell.",
+         "FL",
+         "3"
+        ]
+       ]
+      },
+      {
+       "id": "elokeszitett",
+       "label": "Főleg előkészített vagy fagyasztott zöldség",
+       "pros": [
+        [
+         "Kisebb előkészítő is elég.",
+         "FL",
+         "2"
+        ]
+       ],
+       "cons": [
+        [
+         "Több fagyasztó és hűtőkapacitás kell.",
+         "FL",
+         "2"
+        ],
+        [
+         "Drágább nyersanyag.",
+         "MI",
+         ""
+        ]
+       ]
+      }
+     ],
+     "suggestion": "Hámozott burgonya, a többi friss."
+    },
+    {
+     "id": "hus",
+     "title": "Hús, hal és tojás: milyen előkészítettséggel?",
+     "impact": "Eldönti, mekkora húselőkészítő és milyen gépek kellenek, és kell-e külön tojáselőkészítő.",
+     "options": [
+      {
+       "id": "porciozott",
+       "label": "Darabolt, csontozott hús, fagyasztott halfilé, fertőtlenített tojás",
+       "pros": [
+        [
+         "Kisebb húselőkészítő, a csontfűrész elmaradhat.",
+         "EA6",
+         "18, 24"
+        ],
+        [
+         "A halétel 10 nap alatt legalább egyszer kell, fagyasztva egyszerűen tárolható.",
+         "R",
+         "6. melléklet 4. sor"
+        ]
+       ],
+       "cons": [
+        [
+         "Szakosított hűtők így is kellenek.",
+         "EA6",
+         "19"
+        ],
+        [
+         "Hogy fertőtlenített tojásnál elhagyható-e a tojáselőkészítő, egyeztetni kell az oktatóval.",
+         "EA6",
+         "32"
+        ]
+       ]
+      },
+      {
+       "id": "bontas",
+       "label": "Egész vagy negyedelt hús bontással, friss hal, héjas tojás",
+       "pros": [
+        [
+         "Teljes húselőkészítő, sok géppel részletes diát ad.",
+         "EA6",
+         "18–25"
+        ]
+       ],
+       "cons": [
+        [
+         "Csontfűrész, húsdaráló, hústőkék, 190 cm fölötti horgok, lánckesztyű kell.",
+         "EA6",
+         "18, 20–21"
+        ],
+        [
+         "Külön tojáselőkészítő (héjtisztítás, fertőtlenítés).",
+         "EA6",
+         "32"
+        ],
+        [
+         "Szakosított hűtők: tőkehús, baromfi, hal, töltelékáru.",
+         "EA6",
+         "19"
+        ]
+       ]
+      }
+     ],
+     "suggestion": "Darabolt hús és fagyasztott hal, de egy kis húselőkészítő maradjon."
+    },
+    {
+     "id": "gyakorisag",
+     "title": "Milyen gyakran szállítanak?",
+     "impact": "Kötelező dia. A gyakoriság határozza meg a raktárak és a hűtők méretét.",
+     "options": [
+      {
+       "id": "napi",
+       "label": "Naponta tej, kenyér, zöldség-gyümölcs; hetente hús, tojás, fagyasztott áru; havonta szárazáru, konzerv",
+       "pros": [
+        [
+         "Pont a feladat által kért napi / heti / havi bontás.",
+         "FL",
+         "3"
+        ],
+        [
+         "Naponta tej vagy tejtermék kötelező.",
+         "R",
+         "7. § (6)"
+        ]
+       ],
+       "cons": [
+        [
+         "Minden reggel áruátvétel.",
+         "MI",
+         ""
+        ]
+       ]
+      },
+      {
+       "id": "ritkabb",
+       "label": "Friss áru hetente 2–3-szor, minden más heti vagy havi",
+       "pros": [
+        [
+         "Kevesebb áruátvétel.",
+         "MI",
+         ""
+        ]
+       ],
+       "cons": [
+        [
+         "Nagyobb hűtők, szigorú FIFO-rend.",
+         "EA5",
+         "16"
+        ]
+       ]
+      }
+     ],
+     "suggestion": "Napi friss áru, heti hús és fagyasztott, havi szárazáru."
+    }
+   ]
+  },
+  {
+   "id": "D",
+   "title": "Technológia és energia",
+   "decisions": [
+    {
+     "id": "energia",
+     "title": "Milyen energiával főzünk?",
+     "impact": "Az energiaforrás és a közművek a helyszínrajz-dián kötelezőek, és meghatározzák a használható gépeket.",
+     "options": [
+      {
+       "id": "gaz_villany",
+       "label": "Gáz és villany vegyesen",
+       "pros": [
+        [
+         "Gáztűzhely és gázzsámoly nagy edényekhez.",
+         "EA7",
+         "4, 8"
+        ]
+       ],
+       "cons": [
+        [
+         "Nyílt láng: szellőztetés, a zártlángúnál kéménybekötés.",
+         "EA7",
+         "4"
+        ],
+        [
+         "A gázos sütőkemence rosszul szabályozható.",
+         "EA7",
+         "13"
+        ],
+        [
+         "A szagelszívót évente tisztítani kell.",
+         "EA2",
+         "44"
+        ]
+       ]
+      },
+      {
+       "id": "villany",
+       "label": "Csak villany (az üstök saját gőzfejlesztővel)",
+       "pros": [
+        [
+         "A villamos kemence aknánként külön, jól szabályozható.",
+         "EA7",
+         "13"
+        ],
+        [
+         "Indukció, sütő-főző-pároló szekrény, saját gőzt fejlesztő üst.",
+         "EA7",
+         "7, 16, 25"
+        ]
+       ],
+       "cons": [
+        [
+         "3 fázisú bekötés és nagy teljesítményigény.",
+         "EA3",
+         "16, 21"
+        ],
+        [
+         "Fokozott érintésvédelem.",
+         "EA9",
+         "11"
+        ]
+       ]
+      },
+      {
+       "id": "goz",
+       "label": "Villany és központi kisnyomású gőz az üstökhöz",
+       "pros": [
+        [
+         "A gőzköpenyes üst gyors, nem ég le.",
+         "EA7",
+         "16"
+        ],
+        [
+         "A kisnyomású gőz fűtésre és melegvízre is jó.",
+         "EA2",
+         "20"
+        ]
+       ],
+       "cons": [
+        [
+         "Gőzrendszer, kondenzvíz-elvezetés, biztonsági szerelvények.",
+         "EA2",
+         "20–22"
+        ],
+        [
+         "Iskolai méretben ritkán indokolt.",
+         "MI",
+         ""
+        ]
+       ]
+      }
+     ],
+     "suggestion": "Csak villany."
+    },
+    {
+     "id": "dieta",
+     "title": "Hogyan biztosítjuk a diétás étkeztetést?",
+     "impact": "A szakorvos által igazolt diétát az intézménynek biztosítania kell. Ha saját konyhán készül, elkülönített munkaterület és tárolás kell.",
+     "options": [
+      {
+       "id": "sajat",
+       "label": "Saját konyhán, elkülönített diétás munkaterülettel",
+       "pros": [
+        [
+         "A legteljesebb megoldás a rendelet kötelezettségére.",
+         "R",
+         "15. § (1)"
+        ]
+       ],
+       "cons": [
+        [
+         "Térbeli vagy időbeli elkülönítés, keresztszennyeződés kizárása.",
+         "R",
+         "15. § (4)"
+        ],
+        [
+         "Dietetikus tervez; diétás szakács főz, vagy dietetikus felügyel.",
+         "R",
+         "16. § (5)–(6)"
+        ],
+        [
+         "Gluténmentes ételhez csak „gluténmentes” jelölésű alapanyag.",
+         "R",
+         "15. § (5)"
+        ]
+       ]
+      },
+      {
+       "id": "rendelt",
+       "label": "Más közétkeztetőtől rendeljük",
+       "pros": [
+        [
+         "Megengedett, ha a saját konyhán nincsenek meg a feltételek.",
+         "R",
+         "15. § (2)"
+        ]
+       ],
+       "cons": [
+        [
+         "Fogadás, melegen tartás és elkülönített tálalás így is kell.",
+         "MI",
+         ""
+        ],
+        [
+         "Szerződés és többletköltség.",
+         "MI",
+         ""
+        ]
+       ]
+      },
+      {
+       "id": "szulo",
+       "label": "A szülő viszi be vagy rendeli",
+       "pros": [
+        [
+         "Nevelési-oktatási intézményben megengedett, írásbeli nyilatkozattal.",
+         "R",
+         "15. § (2a)"
+        ]
+       ],
+       "cons": [
+        [
+         "Az intézménynek hűtést (0–5 °C), melegítést és fogyasztási helyet kell adnia.",
+         "REA",
+         "10, 14"
+        ],
+        [
+         "A bevitt étel a konyhára nem kerülhet be.",
+         "REA",
+         "14"
+        ]
+       ]
+      },
+      {
+       "id": "kombinalt",
+       "label": "Kombinált: gyakori diéták helyben, ritkák rendelve vagy szülőtől",
+       "pros": [
+        [
+         "Rugalmas; a diéták összevonása dietetikusi döntés.",
+         "REA",
+         "15"
+        ]
+       ],
+       "cons": [
+        [
+         "Bonyolultabb a leírás és a rajz.",
+         "MI",
+         ""
+        ]
+       ]
+      }
+     ],
+     "suggestion": "Saját konyhán időben elkülönítve a gyakori diétákra, a ritkákra rendelés."
+    },
+    {
+     "id": "talalas",
+     "title": "Hogyan tálalunk?",
+     "impact": "Az étkeztetés módja a korcsoporthoz igazodjon. Ez határozza meg a tálaló és az étterem berendezését.",
+     "depends": [
+      "intezmeny"
+     ],
+     "options": [
+      {
+       "id": "onkiszolgalo",
+       "label": "Önkiszolgáló, terelőkorlátos sor",
+       "pros": [
+        [
+         "Nagy létszámnál gyors; a tananyag részletes példát ad rá.",
+         "EA8",
+         "21–23"
+        ],
+        [
+         "Iskolában megengedett.",
+         "R",
+         "2. § (1) 15a."
+        ]
+       ],
+       "cons": [
+        [
+         "Kötelező a referenciaadag bemutatása és az adagolást segítő felügyelet.",
+         "R",
+         "6. § (1b), 16. § (8)"
+        ],
+        [
+         "Óvodában nem alkalmazható.",
+         "R",
+         "2. § (1) 15a."
+        ]
+       ]
+      },
+      {
+       "id": "pult",
+       "label": "Kiszolgáló pult: a személyzet adagol, a diák tálcán viszi",
+       "pros": [
+        [
+         "Pontos adag az adagolási útmutató szerint.",
+         "R",
+         "6. § (5)–(6)"
+        ]
+       ],
+       "cons": [
+        [
+         "Több tálaló személyzet kell.",
+         "MI",
+         ""
+        ]
+       ]
+      },
+      {
+       "id": "asztal",
+       "label": "Asztalhoz tálalás csoportosan",
+       "pros": [
+        [
+         "Kisebb gyerekeknél jellemző.",
+         "MI",
+         ""
+        ]
+       ],
+       "cons": [
+        [
+         "Nagy létszámnál lassú; a nagyüzemi kiszolgálásban a teljesítmény a döntő.",
+         "IR",
+         "5"
+        ]
+       ]
+      }
+     ],
+     "suggestion": "Kiszolgáló pult terelőkorlátos sorral."
+    },
+    {
+     "id": "mosogatas",
+     "title": "Milyen gép mosogatja a fogyasztói edényeket?",
+     "impact": "Az üzemiedény-mosogató a főzőkonyha mellett mindenképp kell; ez a döntés a fogyasztói edény mosogatójáról szól.",
+     "options": [
+      {
+       "id": "szakaszos",
+       "label": "Szakaszos üzemű, kosaras-ajtós gép",
+       "pros": [
+        [
+         "Egyszerű, kis helyigényű, nagy edényekhez is jó.",
+         "IR",
+         "11"
+        ]
+       ],
+       "cons": [
+        [
+         "Kis teljesítmény, kis forgalmú egységekbe való.",
+         "IR",
+         "11"
+        ]
+       ]
+      },
+      {
+       "id": "folyamatos",
+       "label": "Folyamatos üzemű kosaras vagy szalagos gép",
+       "pros": [
+        [
+         "Nagy teljesítmény, egy ember is kezelheti, higiénikus.",
+         "IR",
+         "12"
+        ],
+        [
+         "Hőszivattyúval kb. 30% áramot takarít meg.",
+         "IR",
+         "13"
+        ]
+       ],
+       "cons": [
+        [
+         "Nagy helyigény; a teljesítménnyel nő a gép hossza.",
+         "IR",
+         "12"
+        ],
+        [
+         "3 fázis, vízlágyítás, zsírfogó kell.",
+         "EA9",
+         "11"
+        ]
+       ]
+      }
+     ],
+     "suggestion": "Folyamatos üzemű gép."
+    },
+    {
+     "id": "kiegeszito",
+     "title": "Mely konyharészek legyenek külön helyiségben?",
+     "impact": "A tananyag üzemsémája a főzőkonyhához kapcsolja a hideg-, a tej- és a cukrászkonyhát.",
+     "options": [
+      {
+       "id": "hideg_tej",
+       "label": "Hidegkonyha és tejkonyha külön, cukrászkonyha nincs",
+       "pros": [
+        [
+         "Követi az üzemsémát a ritkán használt rész nélkül.",
+         "EA1",
+         "64"
+        ],
+        [
+         "Édesség 10 nap alatt legfeljebb négyszer, ezért cukrászat nem indokolt.",
+         "R",
+         "6. melléklet 12. sor"
+        ]
+       ],
+       "cons": [
+        [
+         "A tízórai és az uzsonna nagy terhelést ad a hidegkonyhának.",
+         "MI",
+         ""
+        ]
+       ]
+      },
+      {
+       "id": "mindharom",
+       "label": "Hideg-, tej- és cukrászkonyha is külön",
+       "pros": [
+        [
+         "A teljes üzemséma bemutatható.",
+         "EA1",
+         "64"
+        ]
+       ],
+       "cons": [
+        [
+         "A cukrászkonyhának saját tojás-, tej- és szárazáru-kapcsolat kell.",
+         "IR",
+         "1"
+        ],
+        [
+         "Kihasználatlan lenne.",
+         "MI",
+         ""
+        ]
+       ]
+      },
+      {
+       "id": "csak_hideg",
+       "label": "Csak hidegkonyha külön, a többi a főzőkonyhán",
+       "pros": [
+        [
+         "Kisebb alapterület.",
+         "MI",
+         ""
+        ]
+       ],
+       "cons": [
+        [
+         "Zónázás kell, nagyobb a keresztszennyeződés kockázata.",
+         "MI",
+         ""
+        ]
+       ]
+      }
+     ],
+     "suggestion": "Hidegkonyha és tejkonyha külön."
+    },
+    {
+     "id": "hulladek",
+     "title": "Hogyan kezeljük az ételhulladékot?",
+     "impact": "Külön helyiséget vagy gépet jelent az alaprajzon.",
+     "options": [
+      {
+       "id": "hutott",
+       "label": "Hűtött hulladéktároló, napi elszállítás",
+       "pros": [
+        [
+         "Egyszerű; a keletkezés napján el kell szállítani.",
+         "IR",
+         "14"
+        ]
+       ],
+       "cons": [
+        [
+         "Nagy térfogat, magas víztartalom.",
+         "IR",
+         "14"
+        ]
+       ]
+      },
+      {
+       "id": "orlo",
+       "label": "Ételmaradék-őrlő és víztelenítő gép",
+       "pros": [
+        [
+         "A víztartalom 20–25%-ra, a térfogat jelentősen csökken.",
+         "IR",
+         "14–16"
+        ]
+       ],
+       "cons": [
+        [
+         "Víz- és csatornabekötés, nagyobb beruházás.",
+         "IR",
+         "16"
+        ]
+       ]
+      }
+     ],
+     "suggestion": "Hűtött hulladéktároló."
+    }
+   ]
+  },
+  {
+   "id": "E",
+   "title": "Csoportmunka és bemutató",
+   "decisions": [
+    {
+     "id": "rajzeszkoz",
+     "title": "Miben rajzoljuk a terveket?",
+     "impact": "Két alaprajz kell: egy a helyiségekkel és az áramlással, egy a berendezésekkel. Nem kell méretarányos, a gép jelölhető négyzettel vagy körrel.",
+     "options": [
+      {
+       "id": "drawio",
+       "label": "draw.io (diagrams.net)",
+       "pros": [
+        [
+         "Rétegekkel ugyanarról az alaprajzról kijön a két kötelező változat.",
+         "FL",
+         "4"
+        ],
+        [
+         "Ingyenes, közösen szerkeszthető.",
+         "MI",
+         ""
+        ]
+       ],
+       "cons": [
+        [
+         "Rövid betanulás kell.",
+         "MI",
+         ""
+        ]
+       ]
+      },
+      {
+       "id": "ppt",
+       "label": "PowerPoint-alakzatok",
+       "pros": [
+        [
+         "Egyből a bemutatóban van, mindenki ismeri.",
+         "MI",
+         ""
+        ]
+       ],
+       "cons": [
+        [
+         "Nehéz arányosan tartani; a két alaprajzot kézzel kell duplikálni.",
+         "MI",
+         ""
+        ]
+       ]
+      },
+      {
+       "id": "3d",
+       "label": "3D lakástervező (Sweet Home 3D, Floorplanner)",
+       "pros": [
+        [
+         "Látványos.",
+         "MI",
+         ""
+        ]
+       ],
+       "cons": [
+        [
+         "A feladat nem kér méretarányos vagy 3D rajzot.",
+         "FL",
+         "1–2"
+        ],
+        [
+         "Nagykonyhai gépek jellemzően nincsenek benne.",
+         "MI",
+         ""
+        ]
+       ]
+      },
+      {
+       "id": "kezi",
+       "label": "Kézi rajz, beszkennelve",
+       "pros": [
+        [
+         "Gyors az első vázlathoz.",
+         "MI",
+         ""
+        ]
+       ],
+       "cons": [
+        [
+         "A szeminárium utáni javítás nehézkes.",
+         "FL",
+         "5"
+        ]
+       ]
+      }
+     ],
+     "suggestion": "draw.io."
+    },
+    {
+     "id": "mi",
+     "title": "Mire használjuk az MI-t?",
+     "impact": "Minden MI-vel készült részt jelölni kell, és az utolsó dián összegezni. Jelöletlen MI-használatért visszadobás és aláírás-megtagadás jár.",
+     "options": [
+      {
+       "id": "forma",
+       "label": "Csak formára: helyesírás, diák formázása",
+       "pros": [
+        [
+         "Kockázatmentes, kevés jelölnivaló.",
+         "BEV",
+         "4"
+        ]
+       ],
+       "cons": [
+        [
+         "Lassabb munka.",
+         "MI",
+         ""
+        ]
+       ]
+      },
+      {
+       "id": "ellenorzott",
+       "label": "Előkészítésre és ellenőrzésre, minden tartalom tananyagból igazolva",
+       "pros": [
+        [
+         "Gyorsabb, és a tananyaggal alátámasztott megoldás elfogadható.",
+         "BEV",
+         "4"
+        ]
+       ],
+       "cons": [
+        [
+         "Minden részt jelölni kell: melyik eszköz, mire.",
+         "FL",
+         "3, 4"
+        ]
+       ]
+      },
+      {
+       "id": "szabad",
+       "label": "Szabad használat",
+       "pros": [
+        [
+         "A leggyorsabb.",
+         "MI",
+         ""
+        ]
+       ],
+       "cons": [
+        [
+         "Hazai viszonyokhoz nem illő vagy tananyaggal nem igazolt MI-tartalom pontlevonás vagy elutasítás.",
+         "BEV",
+         "4"
+        ]
+       ]
+      }
+     ],
+     "suggestion": "Előkészítésre és ellenőrzésre, tananyagból igazolva. Ez a döntési lap is Claude-dal készült, ezt a bemutatóban fel kell tüntetni."
+    }
+   ]
+  }
+ ]
+}

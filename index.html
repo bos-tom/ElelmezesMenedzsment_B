@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="hu">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Konyhatervezési döntések</title>
+<meta name="description" content="Élelmezési menedzsment B projektcsoport – közös döntési oldal szavazással és csevegővel.">
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="css/style.css">
+<script type="module" src="js/app.js"></script>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <div class="topbar">
+      <div class="eyebrow">Élelmezési menedzsment B · projektfeladat 2026</div>
+      <div class="userbox" id="userbox"></div>
+    </div>
+    <h1>Konyhatervezési döntések</h1>
+    <p class="lede">Ezekben kell megállapodnunk, mielőtt szétosztjuk a munkát. Minden kérdésnél ott vannak a lehetőségek, alattuk az, mi szól mellettük és ellenük, forrással. A sárga címke azt jelzi, hogy az érvet nem a tananyagból, hanem MI-következtetésből vettük; ezeket ellenőriznünk kell.</p>
+    <div class="facts">
+      <span><b>Döntések</b><span id="f-count">18 kérdés</span></span>
+      <span><b>Bemutatás</b>utolsó szeminárium, pendrive-ról</span>
+      <span><b>Beadás</b>nov. 29. 23:59, Moodle</span>
+      <span><b>Súly</b>a vizsgajegy 40%-a</span>
+    </div>
+  </header>
+
+  <section class="gate" id="screen-loading" aria-live="polite">
+    <p>Betöltés…</p>
+  </section>
+
+  <section class="gate" id="screen-login" hidden aria-labelledby="login-title">
+    <h2 id="login-title">Belépés szükséges</h2>
+    <p>Az oldalt csak a projektcsoport tagjai láthatják. Lépj be azzal a Google-fiókkal, amelyet a csoportnak megadtál.</p>
+    <button class="btn primary" type="button" data-action="login">Belépés Google-fiókkal</button>
+  </section>
+
+  <section class="gate" id="screen-denied" hidden aria-labelledby="denied-title">
+    <h2 id="denied-title">Nincs hozzáférésed</h2>
+    <p>Ezzel a Google-fiókkal nem nyitható meg a döntési oldal. Ha a projektcsoport tagja vagy, kérd meg Tomot, hogy vegye fel az e-mail-címedet, vagy lépj be a csoportnak megadott fiókkal.</p>
+    <button class="btn" type="button" data-action="logout">Kilépés és belépés másik fiókkal</button>
+  </section>
+
+  <section class="gate" id="screen-error" hidden aria-labelledby="error-title">
+    <h2 id="error-title">Hiba történt</h2>
+    <p id="error-text"></p>
+    <button class="btn" type="button" data-action="reload">Újratöltés</button>
+  </section>
+
+  <div class="layout" id="screen-app" hidden>
+    <nav class="toc" aria-label="Tartalom">
+      <div class="progress" id="progress"></div>
+      <div class="jump">
+        <h2>Ugrás</h2>
+        <ol>
+          <li><a href="#osszesito"><span class="n">↑</span><span>Összesítő</span></a></li>
+          <li><a href="#csevego"><span class="n">↓</span><span>Csevegő</span></a></li>
+          <li><a href="#forrasok"><span class="n">↓</span><span>Források</span></a></li>
+        </ol>
+      </div>
+      <div class="groups" id="toc"></div>
+    </nav>
+    <main id="main">
+      <section class="summary" id="osszesito" aria-labelledby="osszesito-title">
+        <h2 class="block-title" id="osszesito-title">Összesítő</h2>
+        <table>
+          <thead>
+            <tr><th scope="col">#</th><th scope="col">Döntés</th><th scope="col">Vezető opció</th><th scope="col">Szavazat</th><th scope="col">Állapot</th></tr>
+          </thead>
+          <tbody id="summary-body"></tbody>
+        </table>
+      </section>
+
+      <div id="groups" class="groups-main"></div>
+
+      <section class="chat" id="csevego" aria-labelledby="csevego-title">
+        <h2 class="block-title" id="csevego-title">Csevegő</h2>
+        <p>Közös megbeszélés valós időben. Egy üzenet egy döntéshez címkézhető; a döntések alatti hozzászólások is itt jelennek meg, címkével.</p>
+        <div id="chat-main"></div>
+      </section>
+
+      <section class="legend" id="forrasok" aria-labelledby="forrasok-title">
+        <h2 class="block-title" id="forrasok-title">Források</h2>
+        <dl id="sources"></dl>
+        <p class="note" id="sources-note"></p>
+        <p class="ai-note"><strong>MI-nyilatkozat.</strong> A döntési lap tartalma (az érvek összegyűjtése, a forrásmegjelölések és a „Claude javaslata” sorok) és ez a weboldal Claude (MI) közreműködésével készült. A tárgy szabálya szerint ezt a bemutatóban is fel kell tüntetni.</p>
+      </section>
+    </main>
+  </div>
+
+  <footer class="foot">Az oldal Claude (MI) közreműködésével készült. · Élelmezési menedzsment B, 2026</footer>
+</div>
+
+<div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
+</body>
+</html>
