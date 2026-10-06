@@ -23,6 +23,8 @@ try {
 }
 const ADMINS = [...new Set([...(local.admins || []), ...TEST_ADMINS].map((e) => e.toLowerCase()))];
 const NAMES = { ...TEST_NAMES, ...(local.names || {}) };
+// A naplót a local fájlban megadottak (élesben Berni) és a próbához admin2 nézheti.
+const LOG_VIEWERS = [...new Set([...(local.logViewers || []), 'admin2@example.com'].map((e) => e.toLowerCase()))];
 const ROOT = fileURLToPath(new URL('..', import.meta.url));
 const FIRESTORE = process.env.FIRESTORE_EMULATOR_HOST || '127.0.0.1:8080';
 
@@ -39,6 +41,7 @@ const res = await fetch(
             fields: Object.fromEntries(Object.entries(NAMES).map(([e, n]) => [e, { stringValue: n }])),
           },
         },
+        logViewers: { arrayValue: { values: LOG_VIEWERS.map((e) => ({ stringValue: e })) } },
       },
     }),
   },

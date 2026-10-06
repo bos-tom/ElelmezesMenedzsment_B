@@ -26,12 +26,14 @@ export {
   deleteDoc,
   doc,
   getDoc,
+  limit,
   limitToLast,
   onSnapshot,
   orderBy,
   query,
   serverTimestamp,
   setDoc,
+  updateDoc,
 } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
 
 // Helyi fejlesztés: http://localhost:<port>/?emulator → a Firebase Emulatorhoz kapcsolódik.

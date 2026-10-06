@@ -20,20 +20,18 @@
       <div class="eyebrow site-title"><span class="st-main">Élelmezési menedzsment B</span><span class="st-sep"> · </span><span class="st-sub">projektfeladat 2026</span></div>
       <div class="userbox" id="userbox"></div>
     </div>
-    <div class="head-body">
-      <!-- Csak belépés után látszik (app.js: show('app')). -->
-      <div class="head-main" id="head-main" hidden>
-        <h1>Konyhatervezési döntések</h1>
-        <p class="lede">Ezekben kell megállapodnunk, mielőtt szétosztjuk a munkát. Minden kérdésnél ott vannak a lehetőségek, alattuk az, mi szól mellettük és ellenük, forrással. A sárga címke azt jelzi, hogy az érvet nem a tananyagból, hanem MI-következtetésből vettük; ezeket ellenőriznünk kell.</p>
-        <div class="facts">
-          <span><b>Döntések</b><span id="f-count">24 kérdés</span></span>
-          <span><b>Bemutatás</b>nov. 19. 11:30, pendrive-ról</span>
-          <span><b>Beadás</b>nov. 29. 23:59, Moodle</span>
-          <span><b>Súly</b>a vizsgajegy 40%-a</span>
-        </div>
-      </div>
-      <!-- Visszaszámlálók: a határidőt a data-deadline adja (js/countdown.js). -->
-      <div class="countdowns">
+    <!-- Menüsor: csak belépés után (app.js). A Napló menüpont csak a naplót megtekintő adminnak. -->
+    <nav class="mainnav" id="mainnav" aria-label="Főmenü" hidden>
+      <button type="button" class="navbtn" data-view="dashboard">Dashboard</button>
+      <button type="button" class="navbtn" data-view="dontesek">Tervezési döntések</button>
+      <button type="button" class="navbtn" data-view="feladatok">Feladatkiosztás</button>
+      <button type="button" class="navbtn" data-view="feltoltesek">Feltöltések</button>
+      <button type="button" class="navbtn" data-view="naplo" hidden>Napló</button>
+    </nav>
+    <!-- Visszaszámlálók: belépés előtt itt, belépve a Dashboardon (app.js mozgatja).
+         A határidőt a data-deadline adja (js/countdown.js). -->
+    <div class="head-body" id="countdown-home">
+      <div class="countdowns" id="countdowns">
         <aside class="countdown" data-deadline="2026-11-19T11:30:00+01:00" data-over="A tanórai bemutató időpontja elmúlt" aria-labelledby="cd-label-bemutato">
           <div class="cd-label" id="cd-label-bemutato">Tanórai bemutatóig hátravan</div>
           <div class="cd-units" role="timer" aria-live="off">
@@ -80,7 +78,66 @@
     <button class="btn" type="button" data-action="reload">Újratöltés</button>
   </section>
 
-  <div class="layout" id="screen-app" hidden>
+  <div id="screen-app" hidden>
+
+  <section class="view" id="view-dashboard" aria-labelledby="dashboard-title" hidden>
+    <div class="view-head">
+      <h1 id="dashboard-title">Dashboard</h1>
+      <p class="lede">A projekt legfontosabb időpontjai. Ide kerülnek majd az eldöntött részek és a haladás is.</p>
+    </div>
+    <div class="dash-grid" id="dash-countdowns"></div>
+  </section>
+
+  <section class="view" id="view-feladatok" aria-labelledby="feladatok-title" hidden>
+    <div class="view-head">
+      <h1 id="feladatok-title">Feladatkiosztás</h1>
+      <p class="lede">Ha a tervezési döntések lezárultak, itt bontjuk fel a feladatot részekre, és osztjuk ki személyenként.</p>
+    </div>
+    <p class="placeholder">Hamarosan.</p>
+  </section>
+
+  <section class="view" id="view-feltoltesek" aria-labelledby="feltoltesek-title" hidden>
+    <div class="view-head">
+      <h1 id="feltoltesek-title">Feltöltések</h1>
+      <p class="lede">Ide tölti fel mindenki a saját részét, és itt látszik, ki hol tart.</p>
+    </div>
+    <p class="placeholder">Hamarosan.</p>
+  </section>
+
+  <section class="view" id="view-naplo" aria-labelledby="naplo-title" hidden>
+    <div class="view-head">
+      <h1 id="naplo-title">Napló</h1>
+      <p class="lede">Belépések és benttartózkodás. Egy sor egy belépés: mikor lépett be, mikor volt utoljára aktív (látható oldallal), és mikor lépett ki.</p>
+    </div>
+    <section class="naplo-block" aria-labelledby="naplo-osszes-title">
+      <h2 class="block-title" id="naplo-osszes-title">Személyenként</h2>
+      <div class="table-wrap"><table class="data-table">
+        <thead><tr><th scope="col">Név</th><th scope="col">Belépések</th><th scope="col">Összes idő bent</th><th scope="col">Utoljára aktív</th><th scope="col">Állapot</th></tr></thead>
+        <tbody id="naplo-people"></tbody>
+      </table></div>
+    </section>
+    <section class="naplo-block" aria-labelledby="naplo-lista-title">
+      <h2 class="block-title" id="naplo-lista-title">Belépések</h2>
+      <div class="table-wrap"><table class="data-table">
+        <thead><tr><th scope="col">Név</th><th scope="col">Belépés</th><th scope="col">Utoljára aktív</th><th scope="col">Kilépés</th><th scope="col">Bent töltött idő</th></tr></thead>
+        <tbody id="naplo-sessions"></tbody>
+      </table></div>
+      <p class="note" id="naplo-note"></p>
+    </section>
+  </section>
+
+  <section class="view" id="view-dontesek" aria-labelledby="dontesek-title">
+  <div class="view-head">
+    <h1 id="dontesek-title">Konyhatervezési döntések</h1>
+    <p class="lede">Ezekben kell megállapodnunk, mielőtt szétosztjuk a munkát. Minden kérdésnél ott vannak a lehetőségek, alattuk az, mi szól mellettük és ellenük, forrással. A sárga címke azt jelzi, hogy az érvet nem a tananyagból, hanem MI-következtetésből vettük; ezeket ellenőriznünk kell.</p>
+    <div class="facts">
+      <span><b>Döntések</b><span id="f-count">24 kérdés</span></span>
+      <span><b>Bemutatás</b>nov. 19. 11:30, pendrive-ról</span>
+      <span><b>Beadás</b>nov. 29. 23:59, Moodle</span>
+      <span><b>Súly</b>a vizsgajegy 40%-a</span>
+    </div>
+  </div>
+  <div class="layout">
     <nav class="toc" aria-label="Tartalom">
       <div class="progress" id="progress"></div>
       <div class="jump">
@@ -119,6 +176,9 @@
         <p class="ai-note"><strong>MI-nyilatkozat.</strong> A döntési lap tartalma (az érvek összegyűjtése, a forrásmegjelölések és a „Claude javaslata” sorok) és ez a weboldal Claude (MI) közreműködésével készült. A tárgy szabálya szerint ezt a bemutatóban is fel kell tüntetni.</p>
       </section>
     </main>
+  </div>
+  </section>
+
   </div>
 
 </div>

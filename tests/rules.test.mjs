@@ -60,6 +60,14 @@ beforeEach(async () => {
     await setDoc(doc(db, 'config/app'), {
       // A nagybetűs token-e-mail kisbetűsítve is egyezzen.
       admins: [ADMIN1.email, ADMIN2.email],
+      // A naplót csak admin2 nézheti.
+      logViewers: [ADMIN2.email],
+    });
+    await setDoc(doc(db, 'sessions/s_admin1'), {
+      uid: 'admin1', startedAt: new Date(), lastSeenAt: new Date(), endedAt: null,
+    });
+    await setDoc(doc(db, 'sessions/s_admin1_closed'), {
+      uid: 'admin1', startedAt: new Date(), lastSeenAt: new Date(), endedAt: new Date(),
     });
     await setDoc(doc(db, 'users/admin1'), { displayName: 'Admin Egy', lastSeen: new Date() });
     await setDoc(doc(db, 'status/szint'), {
@@ -276,6 +284,51 @@ describe('Felhasználói profil', () => {
   });
   it('e-mail mező nem kerülhet a profilba', async () => {
     await assertFails(setDoc(doc(ctx(ADMIN2), 'users/admin2'), { displayName: 'X', email: ADMIN2.email, lastSeen: serverTimestamp() }));
+  });
+});
+
+describe('Belépési napló (sessions)', () => {
+  const newSession = (uid) => ({ uid, startedAt: serverTimestamp(), lastSeenAt: serverTimestamp(), endedAt: null });
+
+  it('admin rögzítheti a saját belépését', async () => {
+    await assertSucceeds(setDoc(doc(ctx(ADMIN1), 'sessions/uj'), newSession('admin1')));
+  });
+  it('más nevében nem lehet belépést rögzíteni', async () => {
+    await assertFails(setDoc(doc(ctx(ADMIN1), 'sessions/uj'), newSession('admin2')));
+  });
+  it('nem admin nem rögzíthet belépést', async () => {
+    await assertFails(setDoc(doc(ctx(MEMBER), 'sessions/uj'), newSession('member1')));
+  });
+  it('létrehozáskor nem lehet lezárt és nem lehet plusz mező', async () => {
+    await assertFails(setDoc(doc(ctx(ADMIN1), 'sessions/uj'), { ...newSession('admin1'), endedAt: serverTimestamp() }));
+    await assertFails(setDoc(doc(ctx(ADMIN1), 'sessions/uj'), { ...newSession('admin1'), ip: '1.2.3.4' }));
+  });
+  it('a saját nyitott munkamenet frissíthető (aktivitás, kilépés)', async () => {
+    const db = ctx(ADMIN1);
+    await assertSucceeds(updateDoc(doc(db, 'sessions/s_admin1'), { lastSeenAt: serverTimestamp() }));
+    await assertSucceeds(updateDoc(doc(db, 'sessions/s_admin1'), { lastSeenAt: serverTimestamp(), endedAt: serverTimestamp() }));
+  });
+  it('a kezdés ideje és a tulajdonos nem írható át', async () => {
+    const db = ctx(ADMIN1);
+    await assertFails(updateDoc(doc(db, 'sessions/s_admin1'), { startedAt: serverTimestamp(), lastSeenAt: serverTimestamp() }));
+    await assertFails(updateDoc(doc(db, 'sessions/s_admin1'), { uid: 'admin2', lastSeenAt: serverTimestamp() }));
+  });
+  it('lezárt munkamenet nem módosítható', async () => {
+    await assertFails(updateDoc(doc(ctx(ADMIN1), 'sessions/s_admin1_closed'), { lastSeenAt: serverTimestamp() }));
+  });
+  it('más munkamenete nem módosítható', async () => {
+    await assertFails(updateDoc(doc(ctx(ADMIN2), 'sessions/s_admin1'), { lastSeenAt: serverTimestamp() }));
+  });
+  it('a naplót csak a logViewers-ben szereplő admin olvashatja', async () => {
+    await assertSucceeds(getDocs(collection(ctx(ADMIN2), 'sessions')));
+    await assertFails(getDocs(collection(ctx(ADMIN1), 'sessions')));
+    await assertFails(getDoc(doc(ctx(ADMIN1), 'sessions/s_admin1')));
+    await assertFails(getDocs(collection(ctx(MEMBER), 'sessions')));
+    await assertFails(getDocs(collection(anon(), 'sessions')));
+  });
+  it('naplóbejegyzést senki nem törölhet', async () => {
+    await assertFails(deleteDoc(doc(ctx(ADMIN2), 'sessions/s_admin1')));
+    await assertFails(deleteDoc(doc(ctx(ADMIN1), 'sessions/s_admin1')));
   });
 });
 

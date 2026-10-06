@@ -23,6 +23,13 @@ service cloud.firestore {
            in get(/databases/$(database)/documents/config/app).data.admins;
     }
 
+    // A belépési naplót csak a config/app.logViewers tömbben szereplő admin olvashatja.
+    function isLogViewer() {
+      return isAdmin()
+        && request.auth.token.email.lower()
+           in get(/databases/$(database)/documents/config/app).data.get('logViewers', []);
+    }
+
     function validId(v) {
       return v is string && v.matches('^[a-z0-9_]{1,40}$');
     }
@@ -127,6 +134,31 @@ service cloud.firestore {
 
       // Törölni csak a szerző tudja a saját üzenetét.
       allow delete: if isAdmin() && resource.data.uid == request.auth.uid;
+    }
+
+    // ---- sessions (belépési napló) ----------------------------------------
+    // Minden admin a saját belépését rögzíti: kezdet, utolsó aktivitás, kilépés.
+    // Olvasni csak a naplót megtekintő admin tudja. Törölni senki.
+    match /sessions/{sessionId} {
+      allow read: if isLogViewer();
+
+      allow create: if isAdmin()
+        && request.resource.data.keys().hasOnly(['uid', 'startedAt', 'lastSeenAt', 'endedAt'])
+        && request.resource.data.keys().hasAll(['uid', 'startedAt', 'lastSeenAt', 'endedAt'])
+        && request.resource.data.uid == request.auth.uid
+        && request.resource.data.startedAt == request.time
+        && request.resource.data.lastSeenAt == request.time
+        && request.resource.data.endedAt == null;
+
+      // Csak a saját, még le nem zárt munkamenet frissíthető, és csak az idők.
+      allow update: if isAdmin()
+        && resource.data.uid == request.auth.uid
+        && resource.data.endedAt == null
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['lastSeenAt', 'endedAt'])
+        && request.resource.data.lastSeenAt == request.time
+        && (request.resource.data.endedAt == null || request.resource.data.endedAt == request.time);
+
+      allow delete: if false;
     }
 
     // ---- Minden más tiltva -----------------------------------------------

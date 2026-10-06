@@ -20,6 +20,7 @@ import {
 import { avatar, el, notify } from './dom.js';
 import { isClosed, mountDecisionVoting, subscribeVotes, tally } from './votes.js';
 import { createChatBox, subscribeMessages } from './chat.js';
+import { endSession, renderLog, startSession, subscribeLog } from './sessions.js';
 
 const ID_RE = /^[a-z0-9_]{1,40}$/;
 
@@ -28,6 +29,8 @@ const store = {
   isAdmin: false,
   nickname: null,
   colorIndex: null,
+  isLogViewer: false,
+  sessions: [],
   data: null,
   users: new Map(),
   votes: new Map(),
@@ -48,10 +51,42 @@ const tocMarks = new Map();
 const SCREENS = ['loading', 'login', 'denied', 'error', 'app'];
 function show(name) {
   for (const s of SCREENS) document.getElementById(`screen-${s}`).hidden = s !== name;
-  // A projekt címe és leírása csak belépett csoporttagnak látszik.
+  // A menü és a tartalom csak belépett csoporttagnak látszik.
   const inApp = name === 'app';
-  document.getElementById('head-main').hidden = !inApp;
   document.body.classList.toggle('in-app', inApp);
+  document.getElementById('mainnav').hidden = !inApp;
+  // A visszaszámlálók belépés előtt a fejlécben, belépve a Dashboardon vannak.
+  const countdowns = document.getElementById('countdowns');
+  const home = document.getElementById(inApp ? 'dash-countdowns' : 'countdown-home');
+  if (countdowns.parentElement !== home) home.append(countdowns);
+  document.getElementById('countdown-home').hidden = inApp;
+}
+
+// ---- Menü (nézetek) -----------------------------------------------------------
+
+const VIEWS = ['dashboard', 'dontesek', 'feladatok', 'feltoltesek', 'naplo'];
+let currentView = 'dontesek';
+
+function showView(name, { scroll = true } = {}) {
+  if (!VIEWS.includes(name) || (name === 'naplo' && !store.isLogViewer)) name = 'dontesek';
+  currentView = name;
+  for (const v of VIEWS) document.getElementById(`view-${v}`).hidden = v !== name;
+  for (const b of document.querySelectorAll('#mainnav [data-view]')) {
+    if (b.dataset.view === name) b.setAttribute('aria-current', 'page');
+    else b.removeAttribute('aria-current');
+  }
+  if (name === 'naplo') renderLog(store);
+  if (scroll) window.scrollTo({ top: 0, behavior: 'instant' });
+}
+
+document.getElementById('mainnav').addEventListener('click', (e) => {
+  const b = e.target.closest('[data-view]');
+  if (b) showView(b.dataset.view);
+});
+
+async function logout() {
+  await endSession();
+  await signOut(auth);
 }
 function showError(text) {
   document.getElementById('error-text').textContent = text;
@@ -137,7 +172,7 @@ document.addEventListener('click', (e) => {
   if (!t) return;
   const action = t.dataset.action;
   if (action === 'login') login();
-  else if (action === 'logout') signOut(auth).catch(() => notify('Nem sikerült kilépni, próbáld újra.'));
+  else if (action === 'logout') logout().catch(() => notify('Nem sikerült kilépni, próbáld újra.'));
   else if (action === 'reload') location.reload();
 });
 
@@ -363,6 +398,7 @@ function subscribeUsers() {
     });
     store.users = users;
     scheduleRefresh();
+    if (currentView === 'naplo') renderLog(store);
   }, () => notify('Nem sikerült betölteni a tagok nevét.'));
 }
 
@@ -386,6 +422,14 @@ function colorIndexFrom(config, user) {
   return i >= 0 ? i % 8 : null;
 }
 
+// A napló menüpont és oldal csak a config/app.logViewers-ben szereplő adminnak jelenik meg
+// (a szabályok is csak neki engedik olvasni).
+function isLogViewerFrom(config, user) {
+  const viewers = Array.isArray(config?.logViewers) ? config.logViewers : [];
+  const email = (user.email || '').toLowerCase();
+  return !!email && viewers.some((v) => typeof v === 'string' && v.toLowerCase() === email);
+}
+
 function saveProfile(user) {
   const profile = {
     displayName: displayNameOf(user).slice(0, 100),
@@ -403,6 +447,7 @@ function stopListeners() {
   store.votes = new Map();
   store.status = new Map();
   store.messages = [];
+  store.sessions = [];
 }
 
 // ---- Indulás ---------------------------------------------------------------
@@ -421,6 +466,7 @@ if (CONFIG_MISSING) {
     store.isAdmin = false;
     store.nickname = null;
     store.colorIndex = null;
+    store.isLogViewer = false;
     renderUserbox();
     if (!user) {
       show('login');
@@ -434,6 +480,7 @@ if (CONFIG_MISSING) {
       store.isAdmin = snap.exists();
       store.nickname = nicknameFrom(snap.data(), user);
       store.colorIndex = colorIndexFrom(snap.data(), user);
+      store.isLogViewer = store.isAdmin && isLogViewerFrom(snap.data(), user);
     } catch (e) {
       if (e.code !== 'permission-denied') {
         showError('Nem sikerült kapcsolódni az adatbázishoz. Ellenőrizd az internetkapcsolatot, és töltsd újra az oldalt.');
@@ -461,7 +508,19 @@ if (CONFIG_MISSING) {
     renderUserbox();
     saveProfile(user).catch(() => {});
     unsubs.push(subscribeUsers(), subscribeVotes(store, scheduleRefresh), subscribeMessages(store, scheduleRefresh));
+    startSession(user.uid);
+
+    // Napló: csak a naplót megtekintő adminnak; az állapot („Bent van”) félpercenként frissül.
+    document.querySelector('#mainnav [data-view="naplo"]').hidden = !store.isLogViewer;
+    if (store.isLogViewer) {
+      unsubs.push(subscribeLog(store, () => { if (currentView === 'naplo') renderLog(store); }));
+      const t = setInterval(() => { if (currentView === 'naplo') renderLog(store); }, 30_000);
+      unsubs.push(() => clearInterval(t));
+    }
+
     show('app');
+    // Megnyitáskor mindig a Tervezési döntések fül.
+    showView('dontesek', { scroll: false });
     refresh();
     if (location.hash) document.getElementById(location.hash.slice(1))?.scrollIntoView();
   });
