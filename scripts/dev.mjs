@@ -42,6 +42,8 @@ const res = await fetch(
           },
         },
         logViewers: { arrayValue: { values: LOG_VIEWERS.map((e) => ({ stringValue: e })) } },
+        // Férfi sziluett (Dashboard): a local fájlból, a próbához admin2 is.
+        male: { arrayValue: { values: [...new Set([...(local.male || []), 'admin2@example.com'])].map((e) => ({ stringValue: e.toLowerCase() })) } },
       },
     }),
   },

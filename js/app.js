@@ -21,6 +21,7 @@ import { avatar, el, notify } from './dom.js';
 import { isClosed, mountDecisionVoting, subscribeVotes, tally } from './votes.js';
 import { createChatBox, subscribeMessages } from './chat.js';
 import { endSession, renderLog, startSession, subscribeLog } from './sessions.js';
+import { membersFrom, renderDashboard } from './dashboard.js';
 
 const ID_RE = /^[a-z0-9_]{1,40}$/;
 
@@ -31,6 +32,7 @@ const store = {
   colorIndex: null,
   isLogViewer: false,
   sessions: [],
+  members: [],
   data: null,
   users: new Map(),
   votes: new Map(),
@@ -481,6 +483,7 @@ if (CONFIG_MISSING) {
       store.nickname = nicknameFrom(snap.data(), user);
       store.colorIndex = colorIndexFrom(snap.data(), user);
       store.isLogViewer = store.isAdmin && isLogViewerFrom(snap.data(), user);
+      store.members = store.isAdmin ? membersFrom(snap.data()) : [];
     } catch (e) {
       if (e.code !== 'permission-denied') {
         showError('Nem sikerült kapcsolódni az adatbázishoz. Ellenőrizd az internetkapcsolatot, és töltsd újra az oldalt.');
@@ -519,6 +522,7 @@ if (CONFIG_MISSING) {
     }
 
     show('app');
+    renderDashboard(store.members);
     // Megnyitáskor mindig a Tervezési döntések fül.
     showView('dontesek', { scroll: false });
     refresh();
