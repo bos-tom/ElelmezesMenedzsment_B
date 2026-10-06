@@ -1873,7 +1873,7 @@
     {
      "id": "rajzeszkoz",
      "title": "Miben rajzoljuk a terveket?",
-     "impact": "Két alaprajz kell: egy a helyiségekkel és az áramlással, egy a berendezésekkel. Nem kell méretarányos, a gép jelölhető négyzettel vagy körrel.",
+     "impact": "Két alaprajz kell: egy a helyiségekkel és az útvonalakkal, egy a berendezésekkel. Nem kell méretarányos, a gép jelölhető négyzettel vagy körrel.",
      "options": [
       {
        "id": "drawio",
