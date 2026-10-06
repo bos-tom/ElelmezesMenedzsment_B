@@ -3,13 +3,26 @@
 // Megnyitás: http://localhost:5500/?emulator
 // A Google-belépés ablakában (emulator) adj meg egy fiókot az alábbi címek egyikével.
 
-import { createReadStream, statSync } from 'node:fs';
+import { createReadStream, readFileSync, statSync } from 'node:fs';
 import http from 'node:http';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const PORT = 5500;
-const ADMINS = ['admin1@example.com', 'admin2@example.com'];
+const TEST_ADMINS = ['admin1@example.com', 'admin2@example.com'];
+// Becenév csak az elsőnek, hogy a Google-névre visszaesés is kipróbálható legyen.
+const TEST_NAMES = { 'admin1@example.com': 'Anna' };
+
+// A csoport valódi címei az admin-config.local.json-ból (nincs a gitben). Ezek kerülnek előre,
+// hogy a csevegőszínek sorrendje ugyanaz legyen, mint élesben; a két próbacím utánuk jön.
+let local = { admins: [], names: {} };
+try {
+  local = JSON.parse(readFileSync(new URL('../admin-config.local.json', import.meta.url), 'utf8'));
+} catch {
+  console.log('admin-config.local.json nem található – csak a próbacímekkel indul.');
+}
+const ADMINS = [...new Set([...(local.admins || []), ...TEST_ADMINS].map((e) => e.toLowerCase()))];
+const NAMES = { ...TEST_NAMES, ...(local.names || {}) };
 const ROOT = fileURLToPath(new URL('..', import.meta.url));
 const FIRESTORE = process.env.FIRESTORE_EMULATOR_HOST || '127.0.0.1:8080';
 
@@ -19,7 +32,14 @@ const res = await fetch(
     method: 'PATCH',
     headers: { Authorization: 'Bearer owner', 'Content-Type': 'application/json' },
     body: JSON.stringify({
-      fields: { admins: { arrayValue: { values: ADMINS.map((e) => ({ stringValue: e })) } } },
+      fields: {
+        admins: { arrayValue: { values: ADMINS.map((e) => ({ stringValue: e })) } },
+        names: {
+          mapValue: {
+            fields: Object.fromEntries(Object.entries(NAMES).map(([e, n]) => [e, { stringValue: n }])),
+          },
+        },
+      },
     }),
   },
 );
@@ -53,5 +73,5 @@ http.createServer((req, res) => {
   createReadStream(file).pipe(res);
 }).listen(PORT, () => {
   console.log(`Döntési oldal: http://localhost:${PORT}/?emulator`);
-  console.log(`Próba-adminok: ${ADMINS.join(', ')}`);
+  console.log(`Belépni tudó címek (${ADMINS.length}): ${ADMINS.join(', ')}`);
 });

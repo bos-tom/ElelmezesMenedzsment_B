@@ -4,5 +4,7 @@ firebase-debug.log
 firestore-debug.log
 ui-debug.log
 *.log
+# Valódi e-mail-címek – csak helyben
+*.local.json
 .DS_Store
 Thumbs.db

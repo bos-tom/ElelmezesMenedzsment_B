@@ -2,6 +2,7 @@
 import {
   CONFIG_MISSING,
   GoogleAuthProvider,
+  USE_EMULATOR,
   auth,
   collection,
   db,
@@ -25,6 +26,8 @@ const ID_RE = /^[a-z0-9_]{1,40}$/;
 const store = {
   user: null,
   isAdmin: false,
+  nickname: null,
+  colorIndex: null,
   data: null,
   users: new Map(),
   votes: new Map(),
@@ -60,7 +63,7 @@ function renderUserbox() {
   }
   box.replaceChildren(
     avatar(u.photoURL),
-    el('span', { class: 'name', text: u.displayName || 'Névtelen' }),
+    el('span', { class: 'name', text: displayNameOf(u) }),
     el('button', { class: 'btn small', type: 'button', 'data-action': 'logout', text: 'Kilépés' }),
   );
 }
@@ -82,7 +85,21 @@ function authErrorMessage(e) {
   }
 }
 
+// Helyi próbánál: fut-e még az Auth Emulator? (Különben a böngésző hibaoldala jönne fel.)
+async function emulatorReachable() {
+  try {
+    await fetch('http://127.0.0.1:9099/', { mode: 'no-cors', cache: 'no-store', signal: AbortSignal.timeout(1500) });
+    return true;
+  } catch {
+    return false;
+  }
+}
+
 async function login() {
+  if (USE_EMULATOR && !(await emulatorReachable())) {
+    notify('A helyi próbakörnyezet nem fut. Indítsd el az asztali „Döntési oldal (próba)” parancsikonnal, majd töltsd újra ezt az oldalt.');
+    return;
+  }
   const provider = new GoogleAuthProvider();
   provider.setCustomParameters({ prompt: 'select_account' });
   try {
@@ -104,6 +121,13 @@ async function login() {
 }
 
 document.addEventListener('click', (e) => {
+  // A csevegő döntéscímkéje a döntéshez ugrik, és kinyitja annak hozzászólás-ablakát.
+  const tag = e.target.closest('a.dtag');
+  if (tag) {
+    const thread = document.querySelector(`${tag.getAttribute('href')} details.thread`);
+    if (thread) thread.open = true;
+    return;
+  }
   const t = e.target.closest('[data-action]');
   if (!t) return;
   const action = t.dataset.action;
@@ -151,6 +175,17 @@ function argList(items, kind) {
   return ul;
 }
 
+// Opcióhoz tartozó táblázat (pl. létszámterv): { caption, cols[], rows[][], lastRowTotal }.
+function optTable(t) {
+  if (!t || !Array.isArray(t.cols) || !Array.isArray(t.rows)) return null;
+  const table = el('table', { class: 'opt-table' },
+    t.caption ? el('caption', { text: t.caption }) : null,
+    el('thead', null, el('tr', null, ...t.cols.map((c) => el('th', { scope: 'col', text: String(c) })))),
+    el('tbody', null, ...t.rows.map((r, i) => el('tr', { class: t.lastRowTotal && i === t.rows.length - 1 ? 'total' : null },
+      ...r.map((c, j) => (j === 0 ? el('th', { scope: 'row', text: String(c) }) : el('td', { text: String(c) })))))));
+  return el('div', { class: 'opt-table-wrap', role: 'region', 'aria-label': t.caption || 'Táblázat', tabindex: '0' }, table);
+}
+
 function buildDecision(dec) {
   const art = el('article', { class: 'decision', id: dec.id, 'aria-labelledby': `h-${dec.id}` });
   const stateSlot = el('div', { class: 'dstate' });
@@ -160,7 +195,7 @@ function buildDecision(dec) {
     el('h3', { id: `h-${dec.id}`, text: dec.title }),
     el('p', { class: 'impact', text: dec.impact }));
   if (dec.depends?.length) {
-    const deps = dec.depends.map((id) => store.data.byId.get(id)).filter(Boolean);
+    const deps = dec.depends.map((id) => store.data.byId.get(id)).filter(Boolean).sort((a, b) => a.num - b.num);
     const line = el('div', { class: 'depends' }, 'Ettől függ: ');
     deps.forEach((d, i) => {
       if (i) line.append(', ');
@@ -172,11 +207,12 @@ function buildDecision(dec) {
   art.append(head, confirmSlot);
 
   const cards = new Map();
-  const opts = el('div', { class: 'options' });
+  const hasTable = dec.options.some((o) => o.table);
+  const opts = el('div', { class: 'options' + (hasTable ? ' has-table' : ''), 'data-count': dec.options.length });
   for (const o of dec.options) {
     const h = el('div', { class: 'opt-head' }, el('h4', { text: o.label }));
     const slot = el('div', { class: 'vote-slot' });
-    const card = el('div', { class: 'opt' }, h, argList(o.pros, 'pro'), argList(o.cons, 'con'), slot);
+    const card = el('div', { class: 'opt' }, h, optTable(o.table), argList(o.pros, 'pro'), argList(o.cons, 'con'), slot);
     cards.set(o.id, { card, head: h, slot });
     opts.append(card);
   }
@@ -317,6 +353,7 @@ function subscribeUsers() {
       users.set(d.id, {
         displayName: typeof u.displayName === 'string' && u.displayName.trim() ? u.displayName : null,
         photoURL: typeof u.photoURL === 'string' ? u.photoURL : null,
+        colorIndex: Number.isInteger(u.colorIndex) && u.colorIndex >= 0 && u.colorIndex <= 7 ? u.colorIndex : null,
       });
     });
     store.users = users;
@@ -324,12 +361,34 @@ function subscribeUsers() {
   }, () => notify('Nem sikerült betölteni a tagok nevét.'));
 }
 
+// A config/app.names-ben megadott becenév elsőbbséget kap a Google-fiók nevével szemben.
+function displayNameOf(user) {
+  return store.nickname || user.displayName || 'Névtelen';
+}
+
+function nicknameFrom(config, user) {
+  const email = (user.email || '').toLowerCase();
+  const names = config?.names;
+  if (!email || !names || typeof names !== 'object') return null;
+  const n = names[email];
+  return typeof n === 'string' && n.trim() ? n.trim().slice(0, 100) : null;
+}
+
+// Csevegőszín: az admin-listabeli hely szerint, így 8 tagig mindenki más színt kap.
+function colorIndexFrom(config, user) {
+  const admins = Array.isArray(config?.admins) ? config.admins : [];
+  const i = admins.findIndex((a) => typeof a === 'string' && a.toLowerCase() === (user.email || '').toLowerCase());
+  return i >= 0 ? i % 8 : null;
+}
+
 function saveProfile(user) {
-  return setDoc(doc(db, 'users', user.uid), {
-    displayName: (user.displayName || 'Névtelen').slice(0, 100),
+  const profile = {
+    displayName: displayNameOf(user).slice(0, 100),
     photoURL: user.photoURL && user.photoURL.length <= 2000 ? user.photoURL : null,
     lastSeen: serverTimestamp(),
-  });
+  };
+  if (store.colorIndex != null) profile.colorIndex = store.colorIndex;
+  return setDoc(doc(db, 'users', user.uid), profile);
 }
 
 function stopListeners() {
@@ -355,6 +414,8 @@ if (CONFIG_MISSING) {
     stopListeners();
     store.user = user;
     store.isAdmin = false;
+    store.nickname = null;
+    store.colorIndex = null;
     renderUserbox();
     if (!user) {
       show('login');
@@ -366,6 +427,8 @@ if (CONFIG_MISSING) {
     try {
       const snap = await getDoc(doc(db, 'config', 'app'));
       store.isAdmin = snap.exists();
+      store.nickname = nicknameFrom(snap.data(), user);
+      store.colorIndex = colorIndexFrom(snap.data(), user);
     } catch (e) {
       if (e.code !== 'permission-denied') {
         showError('Nem sikerült kapcsolódni az adatbázishoz. Ellenőrizd az internetkapcsolatot, és töltsd újra az oldalt.');
@@ -390,6 +453,7 @@ if (CONFIG_MISSING) {
     }
     if (store.user !== user) return;
 
+    renderUserbox();
     saveProfile(user).catch(() => {});
     unsubs.push(subscribeUsers(), subscribeVotes(store, scheduleRefresh), subscribeMessages(store, scheduleRefresh));
     show('app');

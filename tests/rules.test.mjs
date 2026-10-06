@@ -255,8 +255,8 @@ describe('Üzenetek', () => {
   it('a szerző törölheti', async () => {
     await assertSucceeds(deleteDoc(doc(ctx(ADMIN2), 'messages/m_admin2')));
   });
-  it('admin törölheti más üzenetét', async () => {
-    await assertSucceeds(deleteDoc(doc(ctx(ADMIN1), 'messages/m_admin2')));
+  it('más üzenetét senki nem törölheti, admin sem', async () => {
+    await assertFails(deleteDoc(doc(ctx(ADMIN1), 'messages/m_admin2')));
   });
 });
 
@@ -266,6 +266,13 @@ describe('Felhasználói profil', () => {
   });
   it('más profilját nem írhatja', async () => {
     await assertFails(setDoc(doc(ctx(ADMIN2), 'users/admin1'), { displayName: 'X', lastSeen: serverTimestamp() }));
+  });
+  it('színsorszám 0–7 között elfogadva', async () => {
+    await assertSucceeds(setDoc(doc(ctx(ADMIN2), 'users/admin2'), { displayName: 'B', colorIndex: 7, lastSeen: serverTimestamp() }));
+  });
+  it('színsorszám tartományon kívül vagy nem egész: elutasítva', async () => {
+    await assertFails(setDoc(doc(ctx(ADMIN2), 'users/admin2'), { displayName: 'B', colorIndex: 8, lastSeen: serverTimestamp() }));
+    await assertFails(setDoc(doc(ctx(ADMIN2), 'users/admin2'), { displayName: 'B', colorIndex: '1', lastSeen: serverTimestamp() }));
   });
   it('e-mail mező nem kerülhet a profilba', async () => {
     await assertFails(setDoc(doc(ctx(ADMIN2), 'users/admin2'), { displayName: 'X', email: ADMIN2.email, lastSeen: serverTimestamp() }));

@@ -1,6 +1,6 @@
 # Konyhatervezési döntések – döntési oldal
 
-Az Élelmezési menedzsment B projektcsoport közös döntési oldala. Itt állapodunk meg a konyhatervezési feladat 18 kérdésében: szavazás, döntések lezárása, döntésenkénti hozzászólások és egy közös csevegő.
+Az Élelmezési menedzsment B projektcsoport közös döntési oldala. Itt állapodunk meg a konyhatervezési feladat alapkérdéseiben (jelenleg 24 döntés, a `data/dontesek.json` alapján): szavazás, döntések lezárása, döntésenkénti hozzászólások és egy közös csevegő.
 
 - **Cím:** https://bos-tom.github.io/ElelmezesMenedzsment_B/
 - **Repó:** https://github.com/bos-tom/ElelmezesMenedzsment_B
@@ -59,33 +59,36 @@ Egyszer kell végigcsinálni, kb. 20 perc. Ha egy menüpont neve angol, az angol
 
 ### 5. Az admin-lista: `config/app` dokumentum
 
-Ez dönti el, ki láthatja az oldalt. A címek csak itt szerepelnek, a kódban nem.
+Ez dönti el, ki láthatja az oldalt, és milyen néven jelenik meg. A címek csak a Firestore-ban szerepelnek, a kódban és a GitHubon nem.
+
+> **A csoport valódi címei és becenevei** Tom gépén, a repó mappájában vannak: **`admin-config.local.json`**. Ez a fájl szándékosan nem kerül fel a GitHubra (`.gitignore`), mert a repó nyilvános. Onnan másold át az értékeket.
 
 1. **Firestore Database → Data** fül → **Start collection**.
 2. Collection ID: **`config`** → **Next**.
 3. Document ID: **`app`** (ne az automatikus azonosító legyen!).
-4. Mező hozzáadása:
-   - Field: **`admins`**
-   - Type: **array**
-   - Az elemek mind **string** típusúak, egy-egy Google-fiókos e-mail-cím, **csupa kisbetűvel**:
+4. Első mező, az admin-lista:
+   - Field: **`admins`**, Type: **array**
+   - Minden elem **string**: egy-egy Google-fiókos e-mail-cím, **csupa kisbetűvel**, pontosan az, amellyel a tag a Google-be belép.
+5. Második mező, a becenevek (nem kötelező):
+   - Field: **`names`**, Type: **map**
+   - Minden elem: a mező neve az e-mail-cím (kisbetűvel), a típusa **string**, az értéke a becenév.
+6. **Save**.
 
-   ```json
-   {
-     "admins": [
-       "elso.admin@gmail.com",
-       "masodik.admin@gmail.com",
-       "harmadik.admin@gmail.com",
-       "negyedik.admin@gmail.com",
-       "otodik.admin@gmail.com",
-       "hatodik.admin@gmail.com"
-     ]
-   }
-   ```
+A dokumentum szerkezete (a címek itt csak minták):
 
-   A minta helyére a csoport 6 tagjának valódi címét írd. Pontosan azt a címet add meg, amellyel a tag a Google-be belép.
-5. **Save**.
+```json
+{
+  "admins": ["elso.tag@gmail.com", "masodik.tag@gmail.com"],
+  "names": {
+    "elso.tag@gmail.com": "Fanni",
+    "masodik.tag@gmail.com": "Reni"
+  }
+}
+```
 
-Később új tagot ugyanitt, egy új tömbelemmel lehet felvenni. Az oldalt ehhez nem kell újra közzétenni, elég, ha az illető újratölti.
+A becenév jelenik meg mindenhol (szavazók, csevegő, fejléc) a Google-fiók neve helyett. Akinek nincs beceneve, annál a Google-név látszik. Az új becenév a következő belépéskor vagy újratöltéskor lép életbe.
+
+Később új tagot ugyanitt, egy új tömbelemmel (és ha kell, egy új `names`-elemmel) lehet felvenni. Az oldalt ehhez nem kell újra közzétenni, elég, ha az illető újratölti.
 
 > Ha a `config/app` dokumentum hiányzik vagy rossz a neve, **mindenki** a „Nincs hozzáférésed” képernyőt fogja látni.
 
@@ -133,6 +136,7 @@ Ehhez a kódnak már fent kell lennie a GitHubon (push után).
 | „Ez a webcím nincs engedélyezve a belépéshez” | 3. lépés: a `bos-tom.github.io` hiányzik az Authorized domains közül. |
 | Belépés után mindenki „Nincs hozzáférésed”-et kap | 5. lépés: a dokumentum neve pontosan `config` / `app`, a mező `admins` tömb, a címek kisbetűsek. Ellenőrizd a 6. lépést is. |
 | Csak egy tag kapja ezt | Az ő címe nincs az `admins` tömbben, elírták, vagy más fiókkal lépett be. |
+| Valakinél a Google-neve látszik a becenév helyett | A `names`-ben a mező neve (az e-mail) nem pontosan egyezik az `admins`-beli címmel, vagy még nem töltötte újra az oldalt. |
 | Mobilon nem nyílik meg a belépőablak | Az oldal ilyenkor automatikusan átirányításos belépésre vált. Ha így sem megy, a böngésző ne blokkolja a felugró ablakokat. |
 
 ---
@@ -147,13 +151,13 @@ Ehhez a kódnak már fent kell lennie a GitHubon (push után).
 
 | Firestore | Tartalom | Ki írhatja |
 |---|---|---|
-| `config/app` | `admins`: az engedélyezett e-mailek | senki a weboldalról, csak a konzol |
+| `config/app` | `admins`: az engedélyezett e-mailek; `names`: e-mail → becenév | senki a weboldalról, csak a konzol |
 | `users/{uid}` | név, profilkép, utolsó belépés | mindenki a sajátját |
 | `votes/{döntés}__{uid}` | a tag szavazata egy döntésben | mindenki a sajátját, lezárt döntésnél senki |
 | `status/{döntés}` | nyitott / lezárva, elfogadott opció, ki és mikor zárta le | admin |
-| `messages/{id}` | csevegőüzenet (1–1000 karakter), opcionális döntéscímkével | mindenki a saját nevében; módosítani nem lehet; törölni a szerző vagy admin tud |
+| `messages/{id}` | csevegőüzenet (1–1000 karakter), opcionális döntéscímkével | mindenki a saját nevében; módosítani nem lehet; törölni csak a szerző tudja |
 
-Szerepkörök: mivel csak adminok férnek hozzá, minden belépő tag szavazhat, írhat, lezárhat és újranyithat döntést, és bármely üzenetet törölhet. Ezért külön „Admin” jelvény sincs a felületen.
+Szerepkörök: mivel csak adminok férnek hozzá, minden belépő tag szavazhat, írhat, lezárhat és újranyithat döntést. Csevegőüzenetet mindenki csak a sajátját törölheti. Ezért külön „Admin” jelvény sincs a felületen.
 
 Fájlok:
 
@@ -193,4 +197,4 @@ Helyi próba hamis Google-fiókokkal, a valódi Firebase-projekt érintése nél
 npm run dev
 ```
 
-Utána nyisd meg: http://localhost:5500/?emulator. Belépéskor az emulator saját ablaka jön fel. Adj meg `admin1@example.com` vagy `admin2@example.com` címet (ezek a próba-adminok), vagy bármilyen más címet a „Nincs hozzáférésed” képernyő kipróbálásához. Az `?emulator` nélkül és nem `localhost`-on az oldal mindig a valódi Firebase-projekthez kapcsolódik.
+Utána nyisd meg: http://localhost:5500/?emulator. Belépéskor az emulator saját ablaka jön fel. Adj meg `admin1@example.com` (becenév: Anna) vagy `admin2@example.com` (becenév nélkül) címet; ezek a próba-adminok, vagy bármilyen más címet a „Nincs hozzáférésed” képernyő kipróbálásához. Az `?emulator` nélkül és nem `localhost`-on az oldal mindig a valódi Firebase-projekthez kapcsolódik.

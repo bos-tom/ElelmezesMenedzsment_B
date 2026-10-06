@@ -1,5 +1,5 @@
 {
- "version": "2026-10-05",
+ "version": "2026-10-06",
  "sources": {
   "FL": "Feladatleírás – 2026_R_feladatleiras_MenedzsmentB.pdf (oldal)",
   "R": "37/2014. (IV. 30.) EMMI rendelet (hatályos szöveg, njt.hu)",
@@ -149,9 +149,197 @@
          "1"
         ]
        ]
+      },
+      {
+       "id": "peto_mintaju",
+       "label": "Mozgássérült gyerekek konduktív nevelési intézménye: óvoda és általános iskola kollégiummal (Pető-mintájú)",
+       "pros": [
+        [
+         "Óvoda és általános iskola, vagyis oktatási-nevelési intézmény, így illeszthető a feladat intézménykörébe.",
+         "MI",
+         ""
+        ],
+        [
+         "A kollégium miatt egész napos ellátás: 3 fő- és 2 kisétkezés.",
+         "R",
+         "5. § (2) a)"
+        ],
+        [
+         "A szakorvos által igazolt diétákat biztosítani kell; a diétás konyha itt jól bemutatható.",
+         "R",
+         "15. § (1)"
+        ],
+        [
+         "Mozgássérült gyerekeknél gyakori a módosított állagú (pl. pépes) étel.",
+         "MI",
+         ""
+        ]
+       ],
+       "cons": [
+        [
+         "Nem biztos, hogy a feladat ilyen speciális intézményt is elfogad: az oktatóval egyeztetni kell.",
+         "MI",
+         ""
+        ],
+        [
+         "Önkiszolgálás helyett segített, asztalhoz tálalt étkezés kell, több tálaló személyzettel.",
+         "MI",
+         ""
+        ],
+        [
+         "Sok korcsoport (óvodás, kisiskolás, nagyobb, felnőtt személyzet): sok adagolási oszlop.",
+         "R",
+         "4. melléklet"
+        ],
+        [
+         "A legalább 300 étkezőhöz az óvoda, az iskola és a kollégium együtt kell.",
+         "FL",
+         "1"
+        ],
+        [
+         "Létező intézmény mintájára készül: kerülni kell, hogy úgy tűnjön, a tényleges konyháját írjuk le.",
+         "MI",
+         ""
+        ]
+       ]
+      },
+      {
+       "id": "vakok_iskolaja",
+       "label": "Vak és gyengénlátó gyerekek óvodája és általános iskolája kollégiummal (vakok iskolája mintájára)",
+       "pros": [
+        [
+         "Óvoda, iskola és kollégium, vagyis köznevelési intézmény, így illeszthető a feladat intézménykörébe.",
+         "MI",
+         ""
+        ],
+        [
+         "A kollégium miatt egész napos ellátás: 3 fő- és 2 kisétkezés.",
+         "R",
+         "5. § (2) a)"
+        ],
+        [
+         "Különleges tálalási szempontok (segített étkezés, állandó terítési rend), érdekes a bemutatón.",
+         "MI",
+         ""
+        ]
+       ],
+       "cons": [
+        [
+         "Nem biztos, hogy a feladat ilyen speciális intézményt is elfogad: az oktatóval egyeztetni kell.",
+         "MI",
+         ""
+        ],
+        [
+         "Az ilyen iskolák létszáma jellemzően kicsi, a legalább 300 étkező nehezen jön ki.",
+         "MI",
+         ""
+        ],
+        [
+         "A Hermina úti Vakok Állami Intézete ma főleg szociális ellátás, nem köznevelés; mintának a vakok iskolája jobb.",
+         "MI",
+         ""
+        ],
+        [
+         "Sok korcsoport és felnőtt személyzet: sok adagolási oszlop.",
+         "R",
+         "4. melléklet"
+        ]
+       ]
       }
      ],
      "suggestion": "Általános iskola: a létszám életszerű, a napi 3 étkezés természetes, és a tananyag önkiszolgáló tálalási példái ráillenek."
+    },
+    {
+     "id": "varos",
+     "title": "Melyik városban működik az intézmény és a konyha?",
+     "impact": "A feladat kifejezetten kéri, hogy az intézmény elhelyezkedését városra pontosan adjuk meg. A város a helyszínrajzot, a beszállítást és az elérhető közműveket is befolyásolja.",
+     "options": [
+      {
+       "id": "budapest",
+       "label": "Budapest, megnevezett kerületben",
+       "pros": [
+        [
+         "Megfelel a feladat kérésének: „elhelyezkedése: melyik városban található”.",
+         "FL",
+         "1"
+        ],
+        [
+         "Sok beszállító, a napi friss áru szállítása könnyen megoldható.",
+         "MI",
+         ""
+        ],
+        [
+         "A közművek (gáz, csatorna, három fázisú áram) szinte mindenhol elérhetők.",
+         "MI",
+         ""
+        ]
+       ],
+       "cons": [
+        [
+         "Szűk, beépített telek: nehezebb az áruátvétel és a fogyasztói útvonal elkülönítése a helyszínrajzon.",
+         "MI",
+         ""
+        ]
+       ]
+      },
+      {
+       "id": "megyeszekhely",
+       "label": "Vidéki nagyváros, megyeszékhely (pl. Debrecen, Szeged, Pécs, Győr, Kecskemét)",
+       "pros": [
+        [
+         "Megfelel a feladat kérésének: „elhelyezkedése: melyik városban található”.",
+         "FL",
+         "1"
+        ],
+        [
+         "300 fölötti létszámú intézmény itt is életszerű.",
+         "MI",
+         ""
+        ],
+        [
+         "Nagyobb telek: az áruátvétel, a tájolás és a közművek szabadabban rajzolhatók.",
+         "MI",
+         ""
+        ]
+       ],
+       "cons": [
+        [
+         "Szűkebb beszállítói kör, egyes áruknál ritkább szállítással kell számolni.",
+         "MI",
+         ""
+        ]
+       ]
+      },
+      {
+       "id": "kisvaros",
+       "label": "Kisváros vagy nagyközség vidéken",
+       "pros": [
+        [
+         "Bőven van hely, akár különálló konyhaépülethez is.",
+         "MI",
+         ""
+        ]
+       ],
+       "cons": [
+        [
+         "300 fölötti létszám egy intézményben kevésbé életszerű; inkább több intézményt ellátó konyhaként.",
+         "MI",
+         ""
+        ],
+        [
+         "A ritkább beszállítás nagyobb raktárt és több hűtő-, fagyasztókapacitást igényelhet.",
+         "FL",
+         "2"
+        ],
+        [
+         "Vezetékes gáz nem mindenhol van, ez szűkítheti a használható gépeket.",
+         "MI",
+         ""
+        ]
+       ]
+      }
+     ],
+     "suggestion": "Vidéki megyeszékhely, kitalált telekkel (lásd a telekről szóló döntést): a 300 fölötti létszám életszerű, és a tájolás, a közművek szabadon a tananyaghoz igazíthatók."
     },
     {
      "id": "etkezesek",
@@ -307,6 +495,334 @@
       }
      ],
      "suggestion": "400–500 fő."
+    },
+    {
+     "id": "felnottek",
+     "title": "Kik étkeznek a gyerekeken kívül?",
+     "impact": "A feladat a gyerekek mellé a nevelőket, pedagógusokat is az étkezők közé sorolja, és mindig a ténylegesen étkezők számát kéri. A dolgozói kör az intézménytípustól függ: bölcsődében kisgyermeknevelő, takarító, karbantartó; óvodában óvodapedagógus, dajka, pedagógiai asszisztens, konyhai kisegítő, takarító, karbantartó, kertész; iskolában tanárok és a technikai személyzet.",
+     "depends": [
+      "intezmeny"
+     ],
+     "options": [
+      {
+       "id": "csak_pedagogus",
+       "label": "Csak a pedagógusok (nevelők, tanárok)",
+       "pros": [
+        [
+         "Ez a feladat minimuma: „minimum 300, plusz a nevelők/pedagógusok”.",
+         "FL",
+         "1"
+        ]
+       ],
+       "cons": [
+        [
+         "Kimaradnak a technikai dolgozók (takarító, karbantartó, kertész, konyhai kisegítő), akik a valóságban is étkeznek.",
+         "MI",
+         ""
+        ]
+       ]
+      },
+      {
+       "id": "minden_dolgozo",
+       "label": "Pedagógusok és a többi dolgozó is (pedagógiai asszisztens, dajka, takarító, karbantartó, kertész, portás, adminisztráció)",
+       "pros": [
+        [
+         "Életszerű; a „ténylegesen igénybe vevők” száma így jól indokolható a bemutatón.",
+         "FL",
+         "3"
+        ],
+        [
+         "A felnőttek adagja a 4. melléklet „15. évtől” oszlopa szerint számolható.",
+         "R",
+         "4. melléklet"
+        ]
+       ],
+       "cons": [
+        [
+         "Még egy étkezői csoport: munkakörönként külön létszám és külön részétkezés-bontás kell.",
+         "MI",
+         ""
+        ]
+       ]
+      },
+      {
+       "id": "konyhai_dolgozok_is",
+       "label": "Mint az előző, plusz a konyha saját dolgozói (szakács, konyhai kisegítő)",
+       "pros": [
+        [
+         "Teljes kép: a konyhai dolgozók is étkeznek műszak közben.",
+         "MI",
+         ""
+        ]
+       ],
+       "cons": [
+        [
+         "A konyhai létszám az üzemtervtől függ, ezért csak később pontosítható.",
+         "MI",
+         ""
+        ]
+       ]
+      }
+     ],
+     "suggestion": "Pedagógusok és a többi dolgozó is; az étkező felnőtteket munkakörönként adjuk meg (pl. pedagógus, pedagógiai asszisztens, takarító, karbantartó, kertész)."
+    },
+    {
+     "id": "felnott_etkezes",
+     "title": "Mely étkezéseket kérik a felnőttek?",
+     "impact": "Nem vehetjük úgy, hogy minden felnőtt minden étkezésre be van fizetve. Csoportonként meg kell adni, ki melyik részétkezést kéri: van, aki csak ebédel, és van, aki csak tízórait és uzsonnát kér.",
+     "depends": [
+      "felnottek"
+     ],
+     "options": [
+      {
+       "id": "csak_ebed",
+       "label": "Minden étkező felnőtt csak ebédel",
+       "pros": [
+        [
+         "Egyszerű; egyszeri étkezésnél az ebéd a napi energia 35%-a.",
+         "R",
+         "5. § (2) d)"
+        ]
+       ],
+       "cons": [
+        [
+         "Kevés eltérés, keveset mutat a kért részétkezés-bontásból.",
+         "FL",
+         "1"
+        ]
+       ]
+      },
+      {
+       "id": "vegyes",
+       "label": "Vegyes: a többség csak ebédel, néhány pedagógus csak tízórait és uzsonnát kér, a korán kezdő technikai dolgozók reggeliznek is",
+       "pros": [
+        [
+         "Pont azt mutatja, amit a feladat kér: részétkezésenként eltérő létszám és arány.",
+         "FL",
+         "1"
+        ],
+        [
+         "Minden kombinációra van arány: csak reggeli 20%, csak tízórai 15%, ebéd és uzsonna 50%.",
+         "R",
+         "5. § (2a)"
+        ]
+       ],
+       "cons": [
+        [
+         "Több létszámsor a nyersanyag-kiszabati íven.",
+         "R",
+         "5. § (4) a)"
+        ]
+       ]
+      },
+      {
+       "id": "ebed_kisetkezes",
+       "label": "Ebéd mindenkinek, a kisétkezéseket (tízórai, uzsonna) csak egyes pedagógusok kérik",
+       "pros": [
+        [
+         "Életszerű, és még átlátható.",
+         "MI",
+         ""
+        ],
+        [
+         "A tízórai és az uzsonna kisétkezés, a reggeli főétkezés.",
+         "R",
+         "2. § (2)"
+        ]
+       ],
+       "cons": [
+        [
+         "Reggelivel nem számol, pedig a korán kezdő dolgozóknál előfordul.",
+         "MI",
+         ""
+        ]
+       ]
+      }
+     ],
+     "suggestion": "Vegyes."
+    },
+    {
+     "id": "letszamterv",
+     "title": "Részletes létszámterv: hányan, melyik étkezésen, korcsoportonként?",
+     "impact": "A feladat konkrétan kéri, hogy melyik részétkezést hányan és milyen arányban veszik igénybe, a gyerekeknél korcsoportonként, a felnőtteknél külön. A számok az általános iskola javaslatra épülő példák (450 gyerek); ha más intézmény vagy létszám nyer, a táblát ahhoz kell igazítani. Kerülendő, hogy mindenki minden étkezésre be legyen fizetve.",
+     "depends": [
+      "intezmeny",
+      "letszam",
+      "etkezesek",
+      "felnott_etkezes"
+     ],
+     "options": [
+      {
+       "id": "reggeli_nelkul",
+       "label": "A) Tízórai, ebéd, uzsonna – reggeli nélkül",
+       "table": {
+        "caption": "Étkezők száma naponta (fő)",
+        "cols": [
+         "Csoport",
+         "Létszám",
+         "Reggeli",
+         "Tízórai",
+         "Ebéd",
+         "Uzsonna"
+        ],
+        "rows": [
+         [
+          "Alsó tagozat (7–10 év)",
+          "220",
+          "–",
+          "180",
+          "220",
+          "150"
+         ],
+         [
+          "Felső tagozat (11–14 év)",
+          "230",
+          "–",
+          "110",
+          "230",
+          "60"
+         ],
+         [
+          "Pedagógusok",
+          "40",
+          "–",
+          "6",
+          "34",
+          "6"
+         ],
+         [
+          "Egyéb dolgozók",
+          "18",
+          "–",
+          "–",
+          "18",
+          "–"
+         ],
+         [
+          "Összesen",
+          "508",
+          "–",
+          "296",
+          "502",
+          "216"
+         ]
+        ],
+        "lastRowTotal": true
+       },
+       "pros": [
+        [
+         "Pontosan a kért bontás: melyik részétkezést hányan és milyen arányban.",
+         "FL",
+         "1"
+        ],
+        [
+         "Korcsoportonként külön létszám, ahogy a kiszabati ívhez kell.",
+         "R",
+         "5. § (4) a)"
+        ],
+        [
+         "Tízórai, ebéd és uzsonna: 65%; csak ebéd: 35%; ebéd és uzsonna: 50%.",
+         "R",
+         "5. § (2) c)–d), (2a)"
+        ],
+        [
+         "Hat pedagógus csak tízórait és uzsonnát kér, nem mindenki fizet be mindenre.",
+         "MI",
+         ""
+        ]
+       ],
+       "cons": [
+        [
+         "Reggeli nincs: a korán kezdő dolgozók és gyerekek nem kapnak reggel főétkezést.",
+         "MI",
+         ""
+        ]
+       ]
+      },
+      {
+       "id": "reggelivel",
+       "label": "B) Ugyanez reggelivel egy kisebb csoportnak (korán érkező gyerekek, technikai dolgozók)",
+       "table": {
+        "caption": "Étkezők száma naponta (fő)",
+        "cols": [
+         "Csoport",
+         "Létszám",
+         "Reggeli",
+         "Tízórai",
+         "Ebéd",
+         "Uzsonna"
+        ],
+        "rows": [
+         [
+          "Alsó tagozat (7–10 év)",
+          "220",
+          "40",
+          "180",
+          "220",
+          "150"
+         ],
+         [
+          "Felső tagozat (11–14 év)",
+          "230",
+          "30",
+          "110",
+          "230",
+          "60"
+         ],
+         [
+          "Pedagógusok",
+          "40",
+          "–",
+          "6",
+          "34",
+          "6"
+         ],
+         [
+          "Egyéb dolgozók",
+          "18",
+          "6",
+          "–",
+          "18",
+          "–"
+         ],
+         [
+          "Összesen",
+          "508",
+          "76",
+          "296",
+          "502",
+          "216"
+         ]
+        ],
+        "lastRowTotal": true
+       },
+       "pros": [
+        [
+         "Mind a négy részétkezés megjelenik, eltérő létszámmal.",
+         "FL",
+         "1"
+        ],
+        [
+         "A reggeli főétkezés; csak reggeli esetén a napi energia 20%-a.",
+         "R",
+         "2. § (2) a), 5. § (2a) a)"
+        ]
+       ],
+       "cons": [
+        [
+         "A reggeli miatt korábban kezdődik a konyhai műszak, több személyzet kell.",
+         "MI",
+         ""
+        ],
+        [
+         "Még egy étkezés a nyersanyag-kiszabati íven és az étlapon.",
+         "R",
+         "3. § (1)"
+        ]
+       ]
+      }
+     ],
+     "suggestion": "A) változat. A számok példák: a végleges létszámot az intézmény és a létszám eldöntése után a csoportnak kell beírnia."
     },
     {
      "id": "helyszin",
@@ -946,6 +1462,162 @@
       }
      ],
      "suggestion": "Saját konyhán időben elkülönítve a gyakori diétákra, a ritkákra rendelés."
+    },
+    {
+     "id": "allergia",
+     "title": "Milyen ételallergiás és -intoleranciás gyerekekkel számolunk?",
+     "impact": "Ez határozza meg, milyen ételeket kell külön elkészíteni, és ezen keresztül az üzem kialakítását (külön diétás főzőhely vagy időbeli eltolás). Az igazolt diétát az intézménynek biztosítania kell.",
+     "depends": [
+      "dieta"
+     ],
+     "options": [
+      {
+       "id": "alap4",
+       "label": "A négy leggyakoribb: gluténérzékenység (cöliákia), laktózérzékenység, tejfehérje-allergia, tojásallergia",
+       "pros": [
+        [
+         "Szakorvos által igazolt diétánál a diétás étrendet biztosítani kell.",
+         "R",
+         "15. § (1)"
+        ],
+        [
+         "Gluténmentes ételhez csak „gluténmentes” jelölésű alapanyag használható; erre konkrét előírás van.",
+         "R",
+         "15. § (5)"
+        ],
+        [
+         "Földimogyoró, diófélék és szezámmag a közétkeztetésben eleve tilos, ezekre nem kell külön ételsor.",
+         "R",
+         "14. § (1) l)"
+        ]
+       ],
+       "cons": [
+        [
+         "Négy külön diétás ételsor vagy kombinált (pl. glutén- és tejmentes) ételek kellenek.",
+         "MI",
+         ""
+        ]
+       ]
+      },
+      {
+       "id": "bovebb",
+       "label": "A négy leggyakoribb, plusz szója-, hal- és zellerallergia, valamint cukorbetegség (szénhidrátcsökkentett étrend)",
+       "pros": [
+        [
+         "Teljesebb kép; a szénhidrát-anyagcsere-zavart a rendelet külön is említi.",
+         "R",
+         "15. § (1)"
+        ],
+        [
+         "Az étlapon az allergén összetevőket egyébként is fel kell tüntetni.",
+         "R",
+         "6. § (2) b)"
+        ]
+       ],
+       "cons": [
+        [
+         "Sok, kis létszámú külön ételsor: nagyobb diétás konyha és dietetikusi tervezés kell.",
+         "R",
+         "16. § (5)–(6)"
+        ]
+       ]
+      },
+      {
+       "id": "gluten_laktoz",
+       "label": "Csak gluténmentes és laktózmentes étrend",
+       "pros": [
+        [
+         "Kevesebb külön ételsor, egyszerűbb elkülönítés a konyhán.",
+         "MI",
+         ""
+        ]
+       ],
+       "cons": [
+        [
+         "Ha tejfehérje- vagy tojásallergiás gyerek igazolást hoz, az ő diétáját is biztosítani kell.",
+         "R",
+         "15. § (1)"
+        ]
+       ]
+      }
+     ],
+     "suggestion": "A négy leggyakoribb, létszámmal együtt megadva (példa 450 gyerekre: 6 gluténérzékeny, 10 laktózérzékeny, 3 tejfehérje-allergiás, 2 tojásallergiás; a számokat a csoportnak kell véglegesítenie)."
+    },
+    {
+     "id": "dieta_konyha",
+     "title": "Hogyan különítjük el az allergénmentes ételek készítését?",
+     "impact": "Ha saját konyhán készül diétás étel, a diétát befolyásoló anyagot az elkészítéstől a tárolásig és tálalásig ki kell zárni. Ez vagy külön főzőhelyiséget jelent, vagy azt, hogy a diétás ételek időben eltolva készülnek.",
+     "depends": [
+      "dieta",
+      "allergia"
+     ],
+     "options": [
+      {
+       "id": "kabin",
+       "label": "Külön diétás főzőkabin saját főzőberendezéssel, hűtővel, edényzettel",
+       "pros": [
+        [
+         "Térbeli elkülönítés: a legbiztosabb védelem a szennyeződés ellen.",
+         "R",
+         "15. § (4)"
+        ],
+        [
+         "Párhuzamosan főzhető a normál étellel, nem nyújtja meg a főzési időt.",
+         "MI",
+         ""
+        ]
+       ],
+       "cons": [
+        [
+         "Plusz helyiség az alaprajzon, saját gépekkel és kézmosóval.",
+         "MI",
+         ""
+        ]
+       ]
+      },
+      {
+       "id": "idoben",
+       "label": "Közös főzőtérben, időben eltolva: előbb a diétás ételek, takarítás után a normál",
+       "pros": [
+        [
+         "Nem kell külön helyiség, kisebb alapterület és kevesebb gép.",
+         "MI",
+         ""
+        ]
+       ],
+       "cons": [
+        [
+         "A szennyeződés lehetőségét így is ki kell zárni, a tárolásnál és a tálalásnál is.",
+         "R",
+         "15. § (4)"
+        ],
+        [
+         "Hosszabb főzési idő, gondos ütemezés és takarítás a váltások között.",
+         "MI",
+         ""
+        ]
+       ]
+      },
+      {
+       "id": "munkaasztal",
+       "label": "Elkülönített diétás munkaasztal-sor a főzőkonyhán belül, saját edényzettel",
+       "pros": [
+        [
+         "Középút: kevesebb hely kell, mint a külön kabinhoz.",
+         "MI",
+         ""
+        ]
+       ],
+       "cons": [
+        [
+         "A lisztpor és a gőz miatt gluténmentes ételnél kockázatos.",
+         "MI",
+         ""
+        ]
+       ]
+      }
+     ],
+     "suggestion": "Külön kis diétás főzőkabin, ha a négy leggyakoribb allergiával számolunk; néhány diétás adagnál az időbeli eltolás is elég."
     },
     {
      "id": "talalas",

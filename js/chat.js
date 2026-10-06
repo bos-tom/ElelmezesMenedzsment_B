@@ -39,6 +39,16 @@ export function subscribeMessages(store, onUpdate) {
   }, () => notify('Nem sikerült betölteni a csevegőt. Töltsd újra az oldalt.'));
 }
 
+// A szerző háttérszíne (0–7). A profilban tárolt sorszám az admin-lista sorrendjéből jön;
+// ha hiányzik (régi profil), a uid-ból képzett sorszám a tartalék.
+function colorOf(store, uid) {
+  const i = store.users.get(uid)?.colorIndex;
+  if (i != null) return i;
+  let h = 0;
+  for (const ch of uid) h = (h * 31 + ch.charCodeAt(0)) >>> 0;
+  return h % 8;
+}
+
 async function sendMessage(store, text, decisionId) {
   await addDoc(collection(db, 'messages'), {
     uid: store.user.uid,
@@ -85,7 +95,12 @@ export function createChatBox(store, { decisionId = null, label }) {
     el('div', { class: 'row' }, left, sendBtn),
     el('div', { class: 'hint', text: 'Enter: küldés · Shift+Enter: új sor' }));
 
-  const root = el('div', { class: 'chatbox' }, el('div', { class: 'msgwrap' }, list, newBtn), form);
+  const root = el('div', { class: 'chatbox' },
+    isThread && el('p', { class: 'thread-hint' },
+      'Itt csak ennek a döntésnek a hozzászólásai látszanak. Az összes üzenet egy helyen: ',
+      el('a', { href: '#csevego', text: 'Csevegő ↓' })),
+    el('div', { class: 'msgwrap' }, list, newBtn),
+    form);
 
   function updateCounter() {
     const n = ta.value.trim().length;
@@ -190,9 +205,10 @@ export function createChatBox(store, { decisionId = null, label }) {
       time.textContent = msg.pending ? 'küldés…' : formatTime(msg.createdAt);
       time.dateTime = msg.createdAt.toISOString();
       time.title = formatFull(msg.createdAt);
+      li.dataset.color = String(colorOf(store, msg.uid));
       li.classList.toggle('mine', me);
       li.classList.toggle('pending', msg.pending);
-      const canDelete = !msg.pending && (me || store.isAdmin);
+      const canDelete = !msg.pending && me; // csak a saját üzenet törölhető
       if (canDelete && !del.firstChild) showDelete();
       if (!canDelete) del.replaceChildren();
     }

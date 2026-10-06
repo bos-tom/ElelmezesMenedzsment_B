@@ -10,6 +10,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
 <link rel="stylesheet" href="css/style.css">
+<script type="module" src="js/countdown.js"></script>
 <script type="module" src="js/app.js"></script>
 </head>
 <body>
@@ -19,13 +20,27 @@
       <div class="eyebrow">Élelmezési menedzsment B · projektfeladat 2026</div>
       <div class="userbox" id="userbox"></div>
     </div>
-    <h1>Konyhatervezési döntések</h1>
-    <p class="lede">Ezekben kell megállapodnunk, mielőtt szétosztjuk a munkát. Minden kérdésnél ott vannak a lehetőségek, alattuk az, mi szól mellettük és ellenük, forrással. A sárga címke azt jelzi, hogy az érvet nem a tananyagból, hanem MI-következtetésből vettük; ezeket ellenőriznünk kell.</p>
-    <div class="facts">
-      <span><b>Döntések</b><span id="f-count">18 kérdés</span></span>
-      <span><b>Bemutatás</b>utolsó szeminárium, pendrive-ról</span>
-      <span><b>Beadás</b>nov. 29. 23:59, Moodle</span>
-      <span><b>Súly</b>a vizsgajegy 40%-a</span>
+    <div class="head-body">
+      <div class="head-main">
+        <h1>Konyhatervezési döntések</h1>
+        <p class="lede">Ezekben kell megállapodnunk, mielőtt szétosztjuk a munkát. Minden kérdésnél ott vannak a lehetőségek, alattuk az, mi szól mellettük és ellenük, forrással. A sárga címke azt jelzi, hogy az érvet nem a tananyagból, hanem MI-következtetésből vettük; ezeket ellenőriznünk kell.</p>
+        <div class="facts">
+          <span><b>Döntések</b><span id="f-count">24 kérdés</span></span>
+          <span><b>Bemutatás</b>utolsó szeminárium, pendrive-ról</span>
+          <span><b>Beadás</b>nov. 29. 23:59, Moodle</span>
+          <span><b>Súly</b>a vizsgajegy 40%-a</span>
+        </div>
+      </div>
+      <aside class="countdown" id="countdown" aria-labelledby="cd-label">
+        <div class="cd-label" id="cd-label">Leadásig hátravan</div>
+        <div class="cd-units" role="timer" aria-live="off">
+          <div class="cd-u"><span class="cd-n" id="cd-d">--</span><span class="cd-l">nap</span></div>
+          <div class="cd-u"><span class="cd-n" id="cd-h">--</span><span class="cd-l">óra</span></div>
+          <div class="cd-u"><span class="cd-n" id="cd-m">--</span><span class="cd-l">perc</span></div>
+          <div class="cd-u"><span class="cd-n" id="cd-s">--</span><span class="cd-l">mp</span></div>
+        </div>
+        <div class="cd-when" id="cd-when">2026. november 29. 23:59 · Moodle</div>
+      </aside>
     </div>
   </header>
 
