@@ -290,7 +290,13 @@ section.chat>p{margin:0;color:var(--muted);max-width:72ch;font-size:14px}
 .legend dd{margin:0;color:var(--muted)}
 .legend .note{color:var(--muted);margin:6px 0 0;max-width:80ch}
 .ai-note{background:var(--ai-soft);border:1px dashed var(--ai);border-radius:var(--r);padding:10px 12px;margin:10px 0 0;max-width:80ch;color:var(--ink)}
-footer.foot{margin-top:40px;padding-top:14px;border-top:1px solid var(--line);font:500 12px/1.5 var(--f-mono);color:var(--muted)}
+/* Belépés előtti oldal: nagy, középre rendezett cím; a fejléc alatti vonal a belépőablak alatt is megismétlődik. */
+body:not(.in-app) .topbar{justify-content:center;padding-block:28px 12px}
+body:not(.in-app) .site-title{display:grid;justify-items:center;gap:12px;text-align:center;text-transform:none;letter-spacing:0;color:var(--ink)}
+body:not(.in-app) .st-main{font:800 clamp(34px,6.4vw,72px)/1.02 var(--f-display);letter-spacing:-.015em;text-wrap:balance}
+body:not(.in-app) .st-sep{display:none}
+body:not(.in-app) .st-sub{font:500 clamp(12px,1.5vw,15px)/1 var(--f-mono);letter-spacing:.28em;text-transform:uppercase;color:var(--muted)}
+body:not(.in-app) .wrap::after{content:"";display:block;border-top:2px solid var(--ink)}
 
 /* ---- Értesítés ---- */
 .toast{position:fixed;left:50%;bottom:16px;transform:translateX(-50%);max-width:min(560px,calc(100vw - 32px));background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:var(--r);font-size:14px;box-shadow:0 4px 18px rgba(0,0,0,.25);z-index:10}
