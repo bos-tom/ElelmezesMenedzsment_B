@@ -48,6 +48,10 @@ const tocMarks = new Map();
 const SCREENS = ['loading', 'login', 'denied', 'error', 'app'];
 function show(name) {
   for (const s of SCREENS) document.getElementById(`screen-${s}`).hidden = s !== name;
+  // A projekt címe és leírása csak belépett csoporttagnak látszik.
+  const inApp = name === 'app';
+  document.getElementById('head-main').hidden = !inApp;
+  document.body.classList.toggle('in-app', inApp);
 }
 function showError(text) {
   document.getElementById('error-text').textContent = text;
@@ -58,7 +62,8 @@ function renderUserbox() {
   const box = document.getElementById('userbox');
   const u = store.user;
   if (!u) {
-    box.replaceChildren(el('button', { class: 'btn primary', type: 'button', 'data-action': 'login', text: 'Belépés Google-fiókkal' }));
+    // Belépés előtt a belépőfelület gombja elég.
+    box.replaceChildren();
     return;
   }
   box.replaceChildren(

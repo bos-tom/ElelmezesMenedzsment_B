@@ -1,40 +1,40 @@
-// Visszaszámlálás a beadási határidőig (Moodle). Független a belépéstől és a Firebase-től.
+// Visszaszámlálók (tanórai bemutató, leadás). Függetlenek a belépéstől és a Firebase-től.
+// Minden .countdown[data-deadline] doboz a saját időpontjáig számol vissza;
+// a határidőt az index.html-ben kell átírni (magyar idő, novemberben UTC+1).
 
-// 2026. november 29. 23:59, magyar idő (novemberben CET = UTC+1).
-const DEADLINE = new Date('2026-11-29T23:59:00+01:00');
 const URGENT_DAYS = 7;
-
-const box = document.getElementById('countdown');
-const parts = {
-  d: document.getElementById('cd-d'),
-  h: document.getElementById('cd-h'),
-  m: document.getElementById('cd-m'),
-  s: document.getElementById('cd-s'),
-};
-const label = document.getElementById('cd-label');
-
 const pad = (n) => String(n).padStart(2, '0');
 
+const boxes = [...document.querySelectorAll('.countdown[data-deadline]')].map((box) => ({
+  box,
+  deadline: new Date(box.dataset.deadline).getTime(),
+  label: box.querySelector('.cd-label'),
+  parts: Object.fromEntries([...box.querySelectorAll('[data-part]')].map((el) => [el.dataset.part, el])),
+  done: false,
+}));
+
 function tick() {
-  const left = DEADLINE.getTime() - Date.now();
-  if (left <= 0) {
-    box.classList.add('over');
-    box.classList.remove('urgent');
-    label.textContent = 'A leadási határidő lejárt';
-    for (const p of Object.values(parts)) p.textContent = '00';
-    return false;
+  const now = Date.now();
+  for (const c of boxes) {
+    if (c.done) continue;
+    const left = c.deadline - now;
+    if (left <= 0) {
+      c.done = true;
+      c.box.classList.add('over');
+      c.box.classList.remove('urgent');
+      c.label.textContent = c.box.dataset.over || 'Lejárt';
+      for (const p of Object.values(c.parts)) p.textContent = '00';
+      continue;
+    }
+    const total = Math.floor(left / 1000);
+    const d = Math.floor(total / 86400);
+    c.parts.d.textContent = String(d);
+    c.parts.h.textContent = pad(Math.floor((total % 86400) / 3600));
+    c.parts.m.textContent = pad(Math.floor((total % 3600) / 60));
+    c.parts.s.textContent = pad(total % 60);
+    c.box.classList.toggle('urgent', d < URGENT_DAYS);
   }
-  const total = Math.floor(left / 1000);
-  const d = Math.floor(total / 86400);
-  const h = Math.floor((total % 86400) / 3600);
-  const m = Math.floor((total % 3600) / 60);
-  const s = total % 60;
-  parts.d.textContent = String(d);
-  parts.h.textContent = pad(h);
-  parts.m.textContent = pad(m);
-  parts.s.textContent = pad(s);
-  box.classList.toggle('urgent', d < URGENT_DAYS);
-  return true;
+  return boxes.some((c) => !c.done);
 }
 
 if (tick()) {

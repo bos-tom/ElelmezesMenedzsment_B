@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Konyhatervezési döntések</title>
+<title>Élelmezési menedzsment B · projektfeladat 2026</title>
 <meta name="description" content="Élelmezési menedzsment B projektcsoport – közös döntési oldal szavazással és csevegővel.">
 <meta name="robots" content="noindex">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -21,26 +21,40 @@
       <div class="userbox" id="userbox"></div>
     </div>
     <div class="head-body">
-      <div class="head-main">
+      <!-- Csak belépés után látszik (app.js: show('app')). -->
+      <div class="head-main" id="head-main" hidden>
         <h1>Konyhatervezési döntések</h1>
         <p class="lede">Ezekben kell megállapodnunk, mielőtt szétosztjuk a munkát. Minden kérdésnél ott vannak a lehetőségek, alattuk az, mi szól mellettük és ellenük, forrással. A sárga címke azt jelzi, hogy az érvet nem a tananyagból, hanem MI-következtetésből vettük; ezeket ellenőriznünk kell.</p>
         <div class="facts">
           <span><b>Döntések</b><span id="f-count">24 kérdés</span></span>
-          <span><b>Bemutatás</b>utolsó szeminárium, pendrive-ról</span>
+          <span><b>Bemutatás</b>nov. 19. 11:30, pendrive-ról</span>
           <span><b>Beadás</b>nov. 29. 23:59, Moodle</span>
           <span><b>Súly</b>a vizsgajegy 40%-a</span>
         </div>
       </div>
-      <aside class="countdown" id="countdown" aria-labelledby="cd-label">
-        <div class="cd-label" id="cd-label">Leadásig hátravan</div>
-        <div class="cd-units" role="timer" aria-live="off">
-          <div class="cd-u"><span class="cd-n" id="cd-d">--</span><span class="cd-l">nap</span></div>
-          <div class="cd-u"><span class="cd-n" id="cd-h">--</span><span class="cd-l">óra</span></div>
-          <div class="cd-u"><span class="cd-n" id="cd-m">--</span><span class="cd-l">perc</span></div>
-          <div class="cd-u"><span class="cd-n" id="cd-s">--</span><span class="cd-l">mp</span></div>
-        </div>
-        <div class="cd-when" id="cd-when">2026. november 29. 23:59 · Moodle</div>
-      </aside>
+      <!-- Visszaszámlálók: a határidőt a data-deadline adja (js/countdown.js). -->
+      <div class="countdowns">
+        <aside class="countdown" data-deadline="2026-11-19T11:30:00+01:00" data-over="A tanórai bemutató időpontja elmúlt" aria-labelledby="cd-label-bemutato">
+          <div class="cd-label" id="cd-label-bemutato">Tanórai bemutatóig hátravan</div>
+          <div class="cd-units" role="timer" aria-live="off">
+            <div class="cd-u"><span class="cd-n" data-part="d">--</span><span class="cd-l">nap</span></div>
+            <div class="cd-u"><span class="cd-n" data-part="h">--</span><span class="cd-l">óra</span></div>
+            <div class="cd-u"><span class="cd-n" data-part="m">--</span><span class="cd-l">perc</span></div>
+            <div class="cd-u"><span class="cd-n" data-part="s">--</span><span class="cd-l">mp</span></div>
+          </div>
+          <div class="cd-when">2026. november 19. 11:30 · tanórán</div>
+        </aside>
+        <aside class="countdown" data-deadline="2026-11-29T23:59:00+01:00" data-over="A leadási határidő lejárt" aria-labelledby="cd-label-leadas">
+          <div class="cd-label" id="cd-label-leadas">Leadásig hátravan</div>
+          <div class="cd-units" role="timer" aria-live="off">
+            <div class="cd-u"><span class="cd-n" data-part="d">--</span><span class="cd-l">nap</span></div>
+            <div class="cd-u"><span class="cd-n" data-part="h">--</span><span class="cd-l">óra</span></div>
+            <div class="cd-u"><span class="cd-n" data-part="m">--</span><span class="cd-l">perc</span></div>
+            <div class="cd-u"><span class="cd-n" data-part="s">--</span><span class="cd-l">mp</span></div>
+          </div>
+          <div class="cd-when">2026. november 29. 23:59 · Moodle</div>
+        </aside>
+      </div>
     </div>
   </header>
 
