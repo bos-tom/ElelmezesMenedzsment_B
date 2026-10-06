@@ -63,12 +63,45 @@ function progressOf(/* member */) {
   return { done: 0, total: 0 };
 }
 
+// Összesített haladás: kör alakú jelző a tábla közepén.
+function overallGauge(done, total) {
+  const pct = total ? Math.round((done / total) * 100) : 0;
+  const r = 52;
+  const c = 2 * Math.PI * r;
+  const ring = svg('svg', { viewBox: '0 0 120 120', class: 'gauge-ring', 'aria-hidden': 'true', focusable: 'false' });
+  ring.append(
+    svg('circle', { cx: 60, cy: 60, r, class: 'gauge-track' }),
+    svg('circle', {
+      cx: 60, cy: 60, r, class: 'gauge-value',
+      'stroke-dasharray': `${c} ${c}`, 'stroke-dashoffset': c * (1 - pct / 100),
+      transform: 'rotate(-90 60 60)',
+      // 0%-nál a lekerekített vonalvég egy pöttyöt rajzolna; azt elrejtjük.
+      'stroke-opacity': pct > 0 ? 1 : 0,
+    }),
+  );
+  return el('div', {
+    class: 'gauge',
+    role: 'progressbar',
+    'aria-label': 'A csoport összesített haladása',
+    'aria-valuemin': '0',
+    'aria-valuemax': '100',
+    'aria-valuenow': String(pct),
+  },
+  el('div', { class: 'gauge-dial' }, ring, el('div', { class: 'gauge-pct', text: `${pct}%` })),
+  el('div', { class: 'gauge-label', text: 'Összesen' }),
+  el('div', { class: 'person-sub', text: total ? `${done} / ${total} feladat kész` : 'Még nincs kiosztott feladat' }));
+}
+
 export function renderDashboard(members) {
-  const list = document.getElementById('dash-people');
-  list.replaceChildren(...members.map((m) => {
+  const board = document.getElementById('dash-people');
+  let sumDone = 0;
+  let sumTotal = 0;
+  const cards = members.map((m) => {
     const { done, total } = progressOf(m);
+    sumDone += done;
+    sumTotal += total;
     const pct = total ? Math.round((done / total) * 100) : 0;
-    return el('li', { class: 'person', 'data-color': m.color },
+    return el('div', { class: 'person', 'data-color': m.color },
       figure(m.figure, pct),
       el('div', { class: 'person-name', text: m.name }),
       el('div', { class: 'person-pct', text: `${pct}%` }),
@@ -81,5 +114,14 @@ export function renderDashboard(members) {
         'aria-valuenow': String(pct),
       }, el('span', { style: `width:${pct}%` })),
       el('div', { class: 'person-sub', text: total ? `${done} / ${total} feladat kész` : 'Még nincs kiosztott feladat' }));
-  }));
+  });
+
+  // Két sor, arányosan: soronként fele-fele a tagoknak, a sor közepén az összesített jelző.
+  const perRow = Math.max(1, Math.ceil(members.length / 2));
+  const left = Math.ceil(perRow / 2);
+  const right = perRow - left;
+  board.style.setProperty('--left', left);
+  board.style.setProperty('--right', right);
+  board.style.setProperty('--gauge-col', left + 1);
+  board.replaceChildren(overallGauge(sumDone, sumTotal), ...cards);
 }

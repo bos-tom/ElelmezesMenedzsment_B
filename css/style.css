@@ -65,8 +65,26 @@ h1{font:800 clamp(28px,4.4vw,44px)/1.05 var(--f-display);margin:0;letter-spacing
 .dash-block{display:grid;gap:10px;padding-top:32px}
 .dash-block .note{margin:0;color:var(--muted);font-size:14px;max-width:72ch}
 
+/* Készültségi tábla: két sor, soronként fele-fele a tagoknak, középen (két sor magas) az összesített jelző.
+   A --left / --right / --gauge-col értékeket a dashboard.js állítja a tagok száma alapján. */
+.board{margin-top:6px;display:grid;gap:12px;grid-template-columns:repeat(var(--left,2),minmax(0,1fr)) minmax(190px,230px) repeat(var(--right,2),minmax(0,1fr))}
+.board .gauge{grid-column:var(--gauge-col,3);grid-row:1 / span 2}
+.gauge{display:grid;justify-items:center;align-content:center;gap:8px;padding:18px 12px;background:var(--surface);border:1px solid var(--line);border-top:4px solid var(--accent);border-radius:var(--r);text-align:center}
+.gauge-dial{position:relative;width:170px;max-width:100%;aspect-ratio:1}
+.gauge-ring{width:100%;height:100%;display:block}
+.gauge-track{fill:none;stroke:var(--sunk);stroke-width:12}
+.gauge-value{fill:none;stroke:var(--accent);stroke-width:12;stroke-linecap:round;transition:stroke-dashoffset .5s}
+.gauge-pct{position:absolute;inset:0;display:grid;place-items:center;font:800 44px/1 var(--f-display);font-variant-numeric:tabular-nums;color:var(--ink)}
+.gauge-label{font:700 18px/1.2 var(--f-display)}
+@media (max-width:900px){
+  .board{grid-template-columns:repeat(4,minmax(0,1fr))}
+  .board .gauge{grid-column:1 / -1;grid-row:auto}
+}
+@media (max-width:560px){
+  .board{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+
 /* Haladásjelző személyenként: a sziluett alulról, az illető csevegőszínével telik meg. */
-.people{list-style:none;margin:6px 0 0;padding:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:12px}
 .person{--p-color:var(--accent);background:var(--surface);border:1px solid var(--line);border-top:4px solid var(--p-color);border-radius:var(--r);padding:14px 12px 12px;display:grid;justify-items:center;gap:6px;text-align:center;min-width:0}
 .person .figure{width:72px;height:auto;display:block}
 .figure-base{fill:var(--line)}
