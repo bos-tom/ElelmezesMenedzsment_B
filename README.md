@@ -206,4 +206,4 @@ Helyi próba hamis Google-fiókokkal, a valódi Firebase-projekt érintése nél
 npm run dev
 ```
 
-Utána nyisd meg: http://localhost:5500/?emulator. Belépéskor az emulator saját ablaka jön fel. Adj meg `admin1@example.com` (becenév: Anna) vagy `admin2@example.com` (becenév nélkül) címet; ezek a próba-adminok, vagy bármilyen más címet a „Nincs hozzáférésed” képernyő kipróbálásához. Az `?emulator` nélkül és nem `localhost`-on az oldal mindig a valódi Firebase-projekthez kapcsolódik.
+Utána nyisd meg: http://localhost:5500/?emulator. Belépéskor az emulator saját ablaka jön fel. Adj meg a csoport egyik címét az `admin-config.local.json`-ból (a próbakörnyezet ezt tölti be), vagy bármilyen más címet a „Nincs hozzáférésed” képernyő kipróbálásához. Ha nincs `admin-config.local.json`, a próbakörnyezet két próbacímmel indul: `admin1@example.com` és `admin2@example.com`. Az `?emulator` nélkül és nem `localhost`-on az oldal mindig a valódi Firebase-projekthez kapcsolódik.

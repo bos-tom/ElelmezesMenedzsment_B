@@ -29,7 +29,7 @@ start "" /b powershell -NoProfile -WindowStyle Hidden -Command "for($i=0;$i -lt 
 echo.
 echo Döntési oldal – helyi próba
 echo   Cím:         %URL%
-echo   Belépés:     a csoport 8 címe (admin-config.local.json), vagy admin1@example.com / admin2@example.com
+echo   Belépés:     a csoport egyik címe (admin-config.local.json)
 echo   Leállítás:   zárd be ezt az ablakot (vagy Ctrl+C)
 echo.
 call npm run dev
