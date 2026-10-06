@@ -322,6 +322,12 @@ section.chat>p{margin:0;color:var(--muted);max-width:72ch;font-size:14px}
 .legend dd{margin:0;color:var(--muted)}
 .legend .note{color:var(--muted);margin:6px 0 0;max-width:80ch}
 .ai-note{background:var(--ai-soft);border:1px dashed var(--ai);border-radius:var(--r);padding:10px 12px;margin:10px 0 0;max-width:80ch;color:var(--ink)}
+/* Belépve: a projekt felirata a fejléc bal felső sarkában, hangsúlyosan. */
+body.in-app .site-title{display:flex;flex-wrap:wrap;align-items:baseline;gap:2px 12px;text-transform:none;letter-spacing:0}
+body.in-app .st-main{font:800 clamp(20px,2.6vw,26px)/1.1 var(--f-display);letter-spacing:-.01em;color:var(--ink)}
+body.in-app .st-sep{display:none}
+body.in-app .st-sub{font:600 13px/1.2 var(--f-mono);letter-spacing:.18em;text-transform:uppercase;color:var(--accent)}
+
 /* Belépés előtti oldal: nagy, középre rendezett cím; a fejléc alatti vonal a belépőablak alatt is megismétlődik. */
 body:not(.in-app) .topbar{justify-content:center;padding-block:28px 12px}
 body:not(.in-app) .site-title{display:grid;justify-items:center;gap:12px;text-align:center;text-transform:none;letter-spacing:0;color:var(--ink)}
