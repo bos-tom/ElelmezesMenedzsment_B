@@ -29,6 +29,7 @@ const ADMINS = hasLocal ? lower(local.admins) : TEST_ADMINS;
 const NAMES = hasLocal ? (local.names || {}) : TEST_NAMES;
 const LOG_VIEWERS = hasLocal ? lower(local.logViewers) : ['admin2@example.com'];
 const MALE = hasLocal ? lower(local.male) : ['admin2@example.com'];
+const COORDINATORS = hasLocal ? lower(local.coordinators) : ['admin2@example.com'];
 const ROOT = fileURLToPath(new URL('..', import.meta.url));
 const FIRESTORE = process.env.FIRESTORE_EMULATOR_HOST || '127.0.0.1:8080';
 
@@ -47,6 +48,7 @@ const res = await fetch(
         },
         logViewers: { arrayValue: { values: LOG_VIEWERS.map((e) => ({ stringValue: e })) } },
         male: { arrayValue: { values: MALE.map((e) => ({ stringValue: e })) } },
+        coordinators: { arrayValue: { values: COORDINATORS.map((e) => ({ stringValue: e })) } },
       },
     }),
   },

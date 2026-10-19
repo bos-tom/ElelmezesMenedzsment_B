@@ -30,6 +30,18 @@ service cloud.firestore {
            in get(/databases/$(database)/documents/config/app).data.get('logViewers', []);
     }
 
+    // A feladatokat a config/app.coordinators tömbben szereplő admin osztja ki.
+    function isCoordinator() {
+      return isAdmin()
+        && request.auth.token.email.lower()
+           in get(/databases/$(database)/documents/config/app).data.get('coordinators', []);
+    }
+
+    // Felhasználói azonosítók listája (kiosztásnál), legfeljebb 10 elem.
+    function uidList(v) {
+      return v is list && v.size() <= 10;
+    }
+
     function validId(v) {
       return v is string && v.matches('^[a-z0-9_]{1,40}$');
     }
@@ -159,6 +171,42 @@ service cloud.firestore {
         && (request.resource.data.endedAt == null || request.resource.data.endedAt == request.time);
 
       allow delete: if false;
+    }
+
+    // ---- signups (jelentkezés feladatra) ----------------------------------
+    // Kulcs: {taskId}__{role}__{uid}; role: kidolgozo vagy ellenorzo.
+    // Mindenki a saját nevében jelentkezik és vonja vissza a jelentkezését.
+    match /signups/{signupId} {
+      allow read: if isAdmin();
+
+      allow create: if isAdmin()
+        && request.resource.data.keys().hasOnly(['taskId', 'role', 'uid', 'createdAt'])
+        && request.resource.data.keys().hasAll(['taskId', 'role', 'uid', 'createdAt'])
+        && validId(request.resource.data.taskId)
+        && request.resource.data.role in ['kidolgozo', 'ellenorzo']
+        && request.resource.data.uid == request.auth.uid
+        && signupId == request.resource.data.taskId + '__' + request.resource.data.role + '__' + request.auth.uid
+        && request.resource.data.createdAt == request.time;
+
+      allow update: if false;
+      allow delete: if isAdmin() && resource.data.uid == request.auth.uid;
+    }
+
+    // ---- assignments (kiosztás) --------------------------------------------
+    // Feladatonként a kidolgozók és az ellenőrök; csak a koordinátor írhatja.
+    match /assignments/{taskId} {
+      allow read: if isAdmin();
+
+      allow create, update: if isCoordinator()
+        && validId(taskId)
+        && request.resource.data.keys().hasOnly(['workers', 'reviewers', 'updatedBy', 'updatedAt'])
+        && request.resource.data.keys().hasAll(['workers', 'reviewers', 'updatedBy', 'updatedAt'])
+        && uidList(request.resource.data.workers)
+        && uidList(request.resource.data.reviewers)
+        && request.resource.data.updatedBy == request.auth.uid
+        && request.resource.data.updatedAt == request.time;
+
+      allow delete: if isCoordinator();
     }
 
     // ---- Minden más tiltva -----------------------------------------------

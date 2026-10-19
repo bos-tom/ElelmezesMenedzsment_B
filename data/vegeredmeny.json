@@ -194,269 +194,415 @@
    "id": "koordinacio",
    "group": "Koordináció",
    "slide": "mind",
+   "size": "nagy",
+   "owner": "Berni",
    "title": "Koordináció",
-   "desc": "A munka összefogása a leadásig.",
+   "desc": "A munka összefogása a feladatok kiosztásától a leadásig.",
+   "output": "Kiosztott feladatok, követett határidők, kész bemutató és leadott anyag.",
    "steps": [
-    "Feladatok kiosztása és a felelősök egyeztetése",
-    "Részhatáridők követése (nov. 15.)",
-    "Kapcsolattartás az oktatóval (pl. tojáselőkészítő, speciális kérdések)",
-    "Az összefésülés megszervezése",
-    "A bemutató (nov. 19.) és a leadás (nov. 29.) ellenőrzése"
+    "A jelentkezések alapján a kidolgozók és az ellenőrök kiosztása (szóbeli egyeztetés után)",
+    "A részhatáridők kitűzése és követése (saját részek: nov. 15.)",
+    "Heti rövid állapotfelmérés: ki hol tart, hol akad el a munka",
+    "Kapcsolattartás az oktatóval (pl. elhagyható-e a tojáselőkészítő fertőtlenített tojásnál)",
+    "Az összefésülés és az ellenőrzési kör megszervezése",
+    "A bemutató (nov. 19.) és a Moodle-leadás (nov. 29.) ellenőrzése"
    ],
-   "owner": "Berni"
+   "sources": [
+    "Feladatleírás (FL) 3–5. oldal: bemutató és leadás"
+   ]
   },
   {
    "id": "intezmeny_dia",
    "group": "Intézmény és étkezők",
    "slide": "3.",
+   "size": "közepes",
    "title": "Az intézmény bemutatása",
-   "desc": "A diákon az intézmény konkrét adatai (a tényleges, nem a lehetséges létszámmal).",
+   "desc": "A tervezett iskola adatai a diákon, a tényleges (nem a lehetséges) étkezői létszámmal.",
+   "output": "1–2 dia: az intézmény adatai, az évfolyamonkénti létszám és a létszámterv táblázata.",
    "steps": [
-    "Intézménytípus, fenntartó, budapesti kerület és kitalált telek",
-    "Évfolyamonkénti létszám és korcsoportok (7–10, 11–14 év)",
-    "A létszámterv táblázata részétkezésenként",
-    "Az energiaarányok (65% / 50% / 35%, rendelet 5. §)",
-    "Étkeztetés módja: önkiszolgáló sor, referenciaadag, felügyelet"
+    "Intézménytípus, fenntartó (állami), budapesti kerület és a kitalált telek rövid leírása",
+    "Diákok évfolyamonként és korcsoportonként (7–10 év: 178 fő, 11–14 év: 182 fő)",
+    "A létszámterv táblázata részétkezésenként (tízórai, ebéd, uzsonna)",
+    "Az energiaarányok: 3 étkezés 65%, 2 étkezés 50%, csak ebéd 35% (rendelet 5. §)",
+    "Az étkeztetés módja: önkiszolgáló, terelőkorlátos sor, referenciaadag és adagolási felügyelet"
+   ],
+   "sources": [
+    "Feladatkiosztás fül: évfolyamok és létszámterv",
+    "FL 1. és 3. oldal",
+    "Rendelet 5. § (2)–(2a), 6. § (1b)"
    ]
   },
   {
    "id": "dolgozok_dia",
    "group": "Intézmény és étkezők",
    "slide": "3.",
+   "size": "kicsi",
    "title": "Dolgozók és étkező felnőttek",
    "desc": "Az iskola és a konyha dolgozói munkakörönként, az étkezésükkel.",
+   "output": "1 dia: munkakör-táblázat és a konyhai létszám indoklása.",
    "steps": [
-    "Pedagógusok és segítők munkakörönként",
-    "Technikai és gazdasági dolgozók",
-    "Konyhai személyzet és napi beosztás vázlata",
-    "Indoklás: miért elég 11 konyhai dolgozó"
+    "A pedagógusok és a nevelő-oktató munkát segítők munkakörönként (30 + 5 fő)",
+    "A technikai és gazdasági dolgozók (10 fő: takarító, karbantartó-fűtő, portás, kertész stb.)",
+    "A konyhai személyzet (11 fő) és a napi beosztás vázlata",
+    "Indoklás: miért elég 11 konyhai dolgozó a 416 főhöz",
+    "Melyik felnőtt mit eszik (ebéd mindenkinek, 6 pedagógus tízórai és uzsonna is)"
+   ],
+   "sources": [
+    "Feladatkiosztás fül: dolgozók és konyhai létszám",
+    "Rendelet 4. melléklet („15. évtől” oszlop)"
    ]
   },
   {
    "id": "nyersanyagnorma",
    "group": "Intézmény és étkezők",
    "slide": "3.",
+   "size": "közepes",
    "title": "Nyersanyagnorma",
-   "desc": "Egy élelmezési napra jutó nyersanyagköltség korcsoportonként (a feladatleírás kötelező eleme).",
+   "desc": "Egy élelmezési napra jutó nyersanyagköltség korcsoportonként. A feladatleírás kötelező eleme.",
+   "output": "Táblázat: nyersanyagnorma Ft/fő/nap a 7–10, a 11–14 évesekre és a felnőttekre, a számítás leírásával.",
    "steps": [
-    "Norma a 7–10 éveseknek",
-    "Norma a 11–14 éveseknek",
-    "Norma a felnőtteknek",
-    "Forrás és számítás leírása"
+    "Egy mintanap kiválasztása (tízórai, ebéd, uzsonna)",
+    "Az adagok a rendelet 4. melléklete szerint korcsoportonként",
+    "Nyersanyagárak összegyűjtése (bolti vagy nagykereskedelmi ár, forrással)",
+    "Norma kiszámítása a 7–10, a 11–14 évesekre és a felnőttekre",
+    "A számítás és a források rövid leírása a dián"
+   ],
+   "sources": [
+    "FL 1. oldal: „Nyersanyagnorma meghatározása”",
+    "Rendelet 1. és 4. melléklet",
+    "CÉL-rendelet előadás: a fenntartó határozza meg a normát"
    ]
   },
   {
    "id": "uzem_dia",
    "group": "Az üzem tervezése",
    "slide": "3.",
+   "size": "kicsi",
    "title": "Az élelmezési üzem bemutatása",
-   "desc": "Az üzem alapadatai a döntések szerint.",
+   "desc": "Az üzem alapadatai a szavazás szerint.",
+   "output": "1 dia az üzemről.",
    "steps": [
-    "Saját üzemeltetés, az iskolához kapcsolódó földszintes üzem",
-    "Csak villany, közművek",
-    "Diétás étkeztetés: négy allergiatípus, külön diétás főzőkabin"
+    "Saját üzemeltetés; az iskolához kapcsolódó, földszintes, helyben étkeztető konyha",
+    "Csak villany (az üstök saját gőzfejlesztővel), közművek",
+    "Diétás étkeztetés: négy allergiatípus, külön diétás főzőkabin",
+    "Hidegkonyha és tejkonyha külön, cukrászkonyha nincs"
+   ],
+   "sources": [
+    "Tervezési döntések: 9–11., 15–18., 21. döntés"
    ]
   },
   {
    "id": "helyiseglista",
    "group": "Az üzem tervezése",
    "slide": "–",
+   "size": "közepes",
    "title": "Helyiséglista",
-   "desc": "A teljes ételkészítési folyamat helyiségei.",
+   "desc": "A teljes ételkészítési folyamat helyiségei; ebből készül az alaprajz.",
+   "output": "Helyiséglista (táblázat): helyiség, feladata, kapcsolódó helyiségek, becsült méretarány.",
    "steps": [
-    "Áruátvétel és raktárak (földesáru-raktár is)",
-    "Előkészítők (zöldség, hús, tojás)",
-    "Főzőkonyha és diétás főzőkabin",
-    "Hideg- és tejkonyha",
-    "Tálaló és étterem",
-    "Mosogatók és hulladéktároló",
-    "Szociális helyiségek (öltöző, mosdó, iroda)"
+    "Áruátvétel és raktárak: szárazáru, földesáru, hűtők, fagyasztó",
+    "Előkészítők: zöldség (burgonyakoptatóval), hús, tojás",
+    "Főzőkonyha és külön diétás főzőkabin",
+    "Hidegkonyha és tejkonyha",
+    "Tálaló és étterem (önkiszolgáló sor)",
+    "Fogyasztói és üzemi edény mosogató, hűtött hulladéktároló",
+    "Szociális helyiségek: öltöző, mosdó, WC, zuhanyzó, élelmezésvezetői iroda"
+   ],
+   "sources": [
+    "FL 2. oldal: tervezési folyamat 1. pont",
+    "1. előadás (EA1): helyiségek, üzemséma"
    ]
   },
   {
    "id": "beszerzes_dia",
    "group": "Az üzem tervezése",
    "slide": "4.",
+   "size": "kicsi",
    "title": "Beszerzés",
    "desc": "Nyersanyagcsoportonként a szállítás gyakorisága és jellege.",
+   "output": "1 dia: táblázat a nyersanyagcsoportokról.",
    "steps": [
-    "Nyersanyagcsoportok listája",
-    "Előkészített vagy előkészítetlen",
-    "Napi / heti / havi szállítás",
-    "Hatása a raktárakra és a gépekre"
+    "Nyersanyagcsoportok: húsáru, húskészítmény, hal, tojás, tej és tejtermék, zöldség, gyümölcs, burgonya, szárazáru, konzerv, kenyér és pékáru, fagyasztott áru",
+    "Csoportonként: előkészített vagy előkészítetlen",
+    "Csoportonként: napi, heti vagy havi szállítás",
+    "Hatása a raktárakra és a gépekre (pl. friss zöldség: földesáru-raktár, burgonyakoptató)"
+   ],
+   "sources": [
+    "FL 3. oldal, 4. dia",
+    "5. előadás (EA5): áruátvétel, raktározás",
+    "Tervezési döntések: 12–14. döntés"
    ]
   },
   {
    "id": "uestkapacitas",
    "group": "Az üzem tervezése",
    "slide": "7.",
+   "size": "közepes",
    "title": "Üstkapacitás számítása",
-   "desc": "Az üstök mérete a létszámtervből és az adagokból.",
+   "desc": "Az üstök mérete a létszámtervből és az adagokból; a főzőkonyha gépeihez kell.",
+   "output": "Számítás: hány és mekkora üst kell (pl. 2 × 200 l, 1 × 100 l), indoklással.",
    "steps": [
-    "Adagmennyiségek korcsoportonként (4. melléklet)",
-    "Leves, főzelék, köret mennyisége literben",
-    "Üstök száma és mérete"
+    "Adagmennyiségek korcsoportonként a 4. mellékletből (leves, főzelék, köret)",
+    "Az egyszerre főzendő mennyiség literben (416 ebéd)",
+    "Ráhagyás a főzéshez és a diétás adagok levonása",
+    "Az üstök száma és mérete"
+   ],
+   "sources": [
+    "Rendelet 4. melléklet",
+    "6. sütő-főző előadás (EA7): üstök",
+    "FL 2. oldal: „ez függ a korcsoporttól…”"
    ]
   },
   {
    "id": "helyszinrajz",
    "group": "Rajzok",
    "slide": "5.",
+   "size": "közepes",
    "title": "Helyszínrajz",
-   "desc": "A kitalált budapesti telek az iskolaépülettel.",
+   "desc": "A kitalált budapesti telek az iskolaépülettel és a konyhával.",
+   "output": "draw.io helyszínrajz, képként a diára, a közművekkel.",
    "steps": [
-    "Telek és iskolaépület, égtájak",
-    "A nyersanyag beérkezése",
-    "A fogyasztók érkezése, kapcsolat az iskolával",
-    "Közművek és energiaforrás (villany, víz, csatorna)"
+    "A telek és az iskolaépület, égtájakkal",
+    "A konyha helye a tankönyvi tájolás szerint (raktár északon, főzőtér északkeleten stb.)",
+    "A nyersanyag beérkezése (gazdasági bejárat)",
+    "A fogyasztók érkezése az iskolából az étterembe",
+    "Közművek és energiaforrás: villany (3 fázis), víz, csatorna"
+   ],
+   "sources": [
+    "FL 1. és 3–4. oldal (5. dia)",
+    "1. előadás (EA1): telepítés, tájolás"
    ]
   },
   {
    "id": "alaprajz1",
    "group": "Rajzok",
    "slide": "6.",
+   "size": "nagy",
    "title": "Alaprajz 1: helyiségek és útvonalak",
-   "desc": "Helyiségek, kapcsolódásuk, egyirányú útvonalak.",
+   "desc": "Az üzem helyiségei, kapcsolódásuk és a nyersanyagok egyirányú útvonala.",
+   "output": "draw.io alaprajz a helyiségekkel és a nyilazott útvonalakkal.",
    "steps": [
-    "Helyiségek elrendezése a helyiséglista szerint",
-    "Tiszta, szennyezett és készétel útvonala (nem keresztezhetik egymást)",
+    "A helyiségek elrendezése a helyiséglista szerint",
+    "Megközelítő arányok (pl. a mosogató ne legyen nagyobb a főzőkonyhánál)",
+    "A tiszta, a szennyezett és a készétel útvonala, keresztezés nélkül",
     "Ajtók és átjárók jól láthatóan",
-    "Megközelítő arányok"
+    "Rétegek használata, hogy az Alaprajz 2 ugyanerre épüljön"
+   ],
+   "sources": [
+    "FL 2. oldal: 3. pont",
+    "1. előadás (EA1)"
+   ],
+   "dependsOn": [
+    "helyiseglista"
    ]
   },
   {
    "id": "alaprajz2",
    "group": "Rajzok",
    "slide": "8.",
+   "size": "közepes",
    "title": "Alaprajz 2: berendezésekkel",
-   "desc": "Ugyanaz az alaprajz minden géppel.",
+   "desc": "Ugyanaz az alaprajz minden géppel; útvonalak nélkül.",
+   "output": "draw.io alaprajz a gépekkel (négyzet vagy kör jelöléssel).",
    "steps": [
-    "Gépek berajzolása helyiségenként",
-    "Modulrendszerű elhelyezés",
-    "Egyirányú technológiai folyamat ellenőrzése"
+    "A gépek berajzolása helyiségenként a géplisták alapján",
+    "Modulrendszerű elhelyezés, kezelési helyek",
+    "Az egyirányú technológiai folyamat ellenőrzése",
+    "Csak a helyiségnevek, a kapcsolódások és a berendezések szerepeljenek"
+   ],
+   "sources": [
+    "FL 2. oldal: 5. pont, 4. oldal: 8. dia"
+   ],
+   "dependsOn": [
+    "alaprajz1"
    ]
   },
   {
    "id": "gep_raktar",
    "group": "Gépek helyiségenként",
    "slide": "7.",
+   "size": "közepes",
    "title": "Áruátvétel, raktárak, hűtők",
-   "desc": "Gépek darabszámmal és funkcióval.",
+   "desc": "A beérkező áru átvétele és tárolása.",
+   "output": "1 dia: a helyiségek gépei darabszámmal és funkcióval.",
    "steps": [
-    "Mérleg, áruátvétel",
-    "Szakosított hűtők (tejtermék, hús, hal, zöldség)",
-    "Fagyasztó",
-    "Földesáru- és szárazáru-raktár"
+    "Áruátvétel: mérleg, átvételi asztal",
+    "Szakosított hűtők: tejtermék, hús, hal, zöldség, előkészített alapanyag",
+    "Fagyasztószekrény vagy -kamra",
+    "Földesáru-raktár (friss zöldség, burgonya) és szárazáru-raktár polcokkal",
+    "Melyik hűtő mire szolgál (a feladatleírás külön kéri)"
+   ],
+   "sources": [
+    "5. előadás (EA5): áruátvétel, raktározás",
+    "FL 4. oldal: 7. dia"
    ]
   },
   {
    "id": "gep_elokeszito",
    "group": "Gépek helyiségenként",
    "slide": "7.",
+   "size": "közepes",
    "title": "Előkészítők",
    "desc": "Zöldség-, hús- és tojás-előkészítés.",
+   "output": "1 dia: a három előkészítő gépei darabszámmal.",
    "steps": [
     "Burgonyakoptató (1,5 m² betonkoszorús hely, homokfogó)",
-    "Zöldségtisztító és -daraboló gépek",
-    "Kis húselőkészítő",
-    "Tojás kezelése"
+    "Zöldségtisztító és -daraboló gépek, mosogató",
+    "Kis húselőkészítő (darabolt hús, fagyasztott halfilé)",
+    "Tojás kezelése (fertőtlenített tojás: kérdés az oktatónak)"
+   ],
+   "sources": [
+    "6. előadás (EA6): előkészítők",
+    "Tervezési döntések: 12–13. döntés"
    ]
   },
   {
    "id": "gep_fozokonyha",
    "group": "Gépek helyiségenként",
    "slide": "7.",
+   "size": "nagy",
    "title": "Főzőkonyha és diétás főzőkabin",
-   "desc": "Villamos főzőberendezések.",
+   "desc": "Villamos főzőberendezések; a legrészletesebb dia.",
+   "output": "1–2 dia: gépek darabszámmal, az üstök kapacitásával.",
    "steps": [
-    "Villamos üstök (a kiszámolt kapacitással)",
-    "Kombi sütő, főzőzsámoly, indukciós főzőlap",
-    "A diétás kabin saját berendezései"
+    "Villamos üstök a kiszámolt kapacitással",
+    "Kombi sütő (sütő-főző-pároló), villamos főzőzsámoly, indukciós főzőlap",
+    "Elszívás, kézmosók",
+    "A diétás kabin saját berendezései (főzőlap, hűtő, mosogató, edényzet)"
+   ],
+   "sources": [
+    "6. sütő-főző előadás (EA7)",
+    "FL 4. oldal: üstök mérete"
+   ],
+   "dependsOn": [
+    "uestkapacitas"
    ]
   },
   {
    "id": "gep_hideg_tej",
    "group": "Gépek helyiségenként",
    "slide": "7.",
+   "size": "kicsi",
    "title": "Hidegkonyha és tejkonyha",
-   "desc": "A tízórai és az uzsonna elkészítése.",
+   "desc": "A 256 tízórai és a 191 uzsonna elkészítése.",
+   "output": "1 dia: a két helyiség gépei.",
    "steps": [
-    "Hidegkonyhai munkaasztalok, szeletelő",
-    "Tejkonyhai berendezések",
-    "Hűtés"
+    "Hidegkonyhai munkaasztalok, szeletelőgép, hűtő",
+    "Tejkonyhai berendezések (tej melegítése, kakaó)",
+    "Kézmosó, edénytárolás"
+   ],
+   "sources": [
+    "1. előadás (EA1): üzemséma",
+    "7. előadás (EA8)"
    ]
   },
   {
    "id": "gep_talalo",
    "group": "Gépek helyiségenként",
    "slide": "7.",
+   "size": "közepes",
    "title": "Tálaló és étterem",
    "desc": "Önkiszolgáló, terelőkorlátos sor.",
+   "output": "1 dia: a tálaló és az étterem berendezése.",
    "steps": [
-    "Önkiszolgáló pult, melegen tartás",
-    "Referenciaadag-bemutató hely, adagolási felügyelet",
-    "Tálcák, étterem berendezése"
+    "Önkiszolgáló pultsor melegen tartással (bain-marie), tálcacsúszda, terelőkorlát",
+    "Referenciaadag-bemutató hely és adagolási felügyelet (rendelet)",
+    "Tálcák, evőeszköz-adagoló, szennyes tálca visszahordó",
+    "Az étterem asztalai, székei (hány fő egyszerre, hány turnusban)"
+   ],
+   "sources": [
+    "7. előadás (EA8): tálalás",
+    "Rendelet 6. § (1b), 16. § (8)"
    ]
   },
   {
    "id": "gep_mosogato",
    "group": "Gépek helyiségenként",
    "slide": "7.",
+   "size": "kicsi",
    "title": "Mosogatók és hulladék",
    "desc": "Edénymosogatás és hulladékkezelés.",
+   "output": "1 dia: a mosogatók gépei és a hulladéktároló.",
    "steps": [
-    "Folyamatos üzemű fogyasztói edény mosogatógép",
-    "Üzemi edény mosogató",
-    "Hűtött hulladéktároló"
+    "Folyamatos üzemű fogyasztói edény mosogatógép (3 fázis, vízlágyító, zsírfogó)",
+    "Üzemi edény mosogató (medencék vagy gép)",
+    "Hűtött hulladéktároló, napi elszállítás"
+   ],
+   "sources": [
+    "8. előadás (EA9): mosogatás",
+    "Írásos anyag (IR) 11–14. oldal"
    ]
   },
   {
    "id": "gep_szocialis",
    "group": "Gépek helyiségenként",
    "slide": "7.",
+   "size": "kicsi",
    "title": "Szociális helyiségek",
    "desc": "A 11 konyhai dolgozó helyiségei.",
+   "output": "1 dia: a szociális helyiségek berendezése.",
    "steps": [
-    "Öltöző (fekete-fehér rendszer)",
+    "Öltöző (utcai és munkaruha külön, fekete-fehér rendszer)",
     "Mosdó, WC, zuhanyzó",
     "Élelmezésvezetői iroda"
+   ],
+   "sources": [
+    "1. előadás (EA1): munkavédelem, szociális helyiségek",
+    "FL 2. oldal: „ne feledkezzenek meg a dolgozókról”"
    ]
   },
   {
    "id": "cimdia",
    "group": "Prezentáció",
    "slide": "1–2.",
+   "size": "kicsi",
    "title": "Címdia és egyéni feladatok",
    "desc": "A projekt címe, a csoporttagok és a munkamegosztás.",
+   "output": "2 dia.",
    "steps": [
-    "Cím és csoporttagok",
-    "Ki mit csinált",
-    "Hol és mire használtunk MI-t"
+    "Cím (a projekt címével egyezően) és minden csoporttag neve",
+    "Ki mit csinált (a kiosztás alapján)",
+    "Hol és mire használtunk MI-t (eszköz és felhasználás)"
+   ],
+   "sources": [
+    "FL 3. oldal: 1–2. dia"
    ]
   },
   {
    "id": "mi_dia",
    "group": "Prezentáció",
    "slide": "9.",
+   "size": "kicsi",
    "title": "MI-összefoglaló",
-   "desc": "Az utolsó dián részletesen.",
+   "desc": "Az utolsó dián részletesen; jelöletlen MI-használat visszadobást jelent.",
+   "output": "1 dia.",
    "steps": [
-    "Az MI-vel készült részek összegyűjtése",
-    "Eszköz és felhasználás megadása (a döntési oldal is)"
+    "Az MI-vel készült részek összegyűjtése a csoporttól",
+    "Eszköz és felhasználás megadása (a döntési oldal és a döntési lap is Claude-dal készült)"
+   ],
+   "sources": [
+    "FL 4. oldal: 9. dia",
+    "Bevezetés (BEV) 4. dia"
    ]
   },
   {
    "id": "osszefesules",
    "group": "Prezentáció",
    "slide": "mind",
+   "size": "nagy",
    "title": "Összefésülés, bemutató, leadás",
    "desc": "Egységes PowerPoint a részekből.",
+   "output": "Kész prezentáció pendrive-on (nov. 19.) és a javított változat a Moodle-ban (nov. 29.).",
    "steps": [
-    "A részek összefésülése egységes diasorrá (nov. 15. után)",
+    "A részek összefésülése egységes diasorrá a feladatleírás sorrendjében (nov. 15. után)",
+    "Egységes formátum, ábrák, források",
+    "Az ellenőrök visszajelzéseinek beépítése",
+    "Ki adja elő, próba",
     "Pendrive a nov. 19-i bemutatóra",
-    "Ki adja elő",
-    "Javítás a bemutató után",
-    "Feltöltés a Moodle-ba nov. 29-ig"
+    "Javítás a bemutató után, feltöltés a Moodle-ba nov. 29-ig"
+   ],
+   "sources": [
+    "FL 3–5. oldal"
    ]
   }
  ],

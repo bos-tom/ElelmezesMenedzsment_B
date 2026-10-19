@@ -111,6 +111,31 @@ a.final-q:hover{color:var(--accent);text-decoration:underline}
 .task-slide{font:500 11px/1.5 var(--f-mono);color:var(--muted);white-space:nowrap}
 .task-desc{margin:0;font-size:13.5px;color:var(--muted)}
 .task-owner{font:500 12px/1.4 var(--f-mono);color:var(--muted);border-top:1px dashed var(--line);padding-top:6px}
+/* Részletes feladatkártya: méret, elkészítendő, kiinduló anyag, jelentkezés, kiosztás */
+.task-list{grid-template-columns:repeat(auto-fill,minmax(min(340px,100%),1fr))}
+.task-meta{display:inline-flex;gap:6px;align-items:baseline;flex-wrap:wrap;justify-content:flex-end}
+.task-size{font:600 10.5px/1.6 var(--f-mono);text-transform:uppercase;letter-spacing:.04em;border-radius:999px;padding:0 7px;background:var(--sunk);color:var(--muted);white-space:nowrap}
+.task-size.size-nagy{background:var(--con);color:var(--surface)}
+.task-size.size-kozepes{background:var(--accent-soft);color:var(--accent)}
+.task-output,.task-src{margin:0;font-size:13px}
+.task-src{color:var(--muted)}
+.signup{display:grid;gap:8px}
+.signup-col{display:grid;gap:6px}
+.signup .votebar{padding-top:8px}
+.signup .pick{font-size:13px;padding:7px 14px}
+.pick.mine{background:var(--accent-soft);color:var(--accent);border-color:var(--accent);box-shadow:none}
+.pick.mine:hover:not(:disabled){background:var(--sunk);border-color:var(--accent)}
+.pick.signup-ellenorzo:not(.mine){background:var(--surface);color:var(--ink);border-color:var(--cta)}
+.pick.signup-ellenorzo:not(.mine):hover:not(:disabled){background:var(--sunk)}
+.assign-row{display:flex;gap:8px;align-items:center;justify-content:space-between;flex-wrap:wrap;border-top:1px dashed var(--line);padding-top:6px}
+.assign-row .task-owner{border:0;padding:0}
+.assign-panel .confirm{grid-template-columns:1fr 1fr}
+.assign-panel .actions{grid-column:1/-1;display:flex;gap:8px}
+.assign-panel .signed{font:500 11px/1.6 var(--f-mono);color:var(--pro)}
+.signup-howto{border:1px solid var(--accent);background:var(--accent-soft);border-radius:var(--r);padding:10px 14px;display:grid;gap:6px;font-size:14px}
+.signup-howto p{margin:0}
+#signup-matrix .data-table tr.me th,#signup-matrix .data-table tr.me td{background:var(--accent-soft)}
+#signup-matrix .data-table td.num{text-align:center}
 
 /* Készültségi tábla: két sor, soronként fele-fele a tagoknak, középen (két sor magas) az összesített jelző.
    A --left / --right / --gauge-col értékeket a dashboard.js állítja a tagok száma alapján. */

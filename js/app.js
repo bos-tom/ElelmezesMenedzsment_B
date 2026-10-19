@@ -23,6 +23,7 @@ import { createChatBox, subscribeMessages } from './chat.js';
 import { endSession, renderLog, startSession, subscribeLog } from './sessions.js';
 import { membersFrom, renderDashboard } from './dashboard.js';
 import { renderSummary } from './osszegzes.js';
+import { mountTasks, subscribeTasks } from './feladatok.js';
 
 const ID_RE = /^[a-z0-9_]{1,40}$/;
 
@@ -32,7 +33,10 @@ const store = {
   nickname: null,
   colorIndex: null,
   isLogViewer: false,
+  isCoordinator: false,
   sessions: [],
+  signups: new Map(),
+  assignments: new Map(),
   members: [],
   final: {},
   data: null,
@@ -47,6 +51,7 @@ let unsubs = [];
 const decisionUpdaters = [];
 const threadBoxes = [];
 let mainChat = null;
+let updateTasks = null;
 const summaryCells = new Map();
 const tocMarks = new Map();
 
@@ -349,6 +354,7 @@ function refresh() {
   let closedCount = 0;
 
   for (const u of decisionUpdaters) u();
+  updateTasks?.();
 
   for (const d of decisions) {
     const { counts, total, leaders } = tally(store, d.id);
@@ -441,9 +447,17 @@ function colorIndexFrom(config, user) {
 // A napló menüpont és oldal csak a config/app.logViewers-ben szereplő adminnak jelenik meg
 // (a szabályok is csak neki engedik olvasni).
 function isLogViewerFrom(config, user) {
-  const viewers = Array.isArray(config?.logViewers) ? config.logViewers : [];
+  return inList(config?.logViewers, user);
+}
+
+// A feladatokat a config/app.coordinators-ban szereplő admin osztja ki.
+function isCoordinatorFrom(config, user) {
+  return inList(config?.coordinators, user);
+}
+
+function inList(list, user) {
   const email = (user.email || '').toLowerCase();
-  return !!email && viewers.some((v) => typeof v === 'string' && v.toLowerCase() === email);
+  return !!email && Array.isArray(list) && list.some((v) => typeof v === 'string' && v.toLowerCase() === email);
 }
 
 function saveProfile(user) {
@@ -464,6 +478,8 @@ function stopListeners() {
   store.status = applyFinal(store, new Map());
   store.messages = [];
   store.sessions = [];
+  store.signups = new Map();
+  store.assignments = new Map();
 }
 
 // ---- Indulás ---------------------------------------------------------------
@@ -483,6 +499,7 @@ if (CONFIG_MISSING) {
     store.nickname = null;
     store.colorIndex = null;
     store.isLogViewer = false;
+    store.isCoordinator = false;
     renderUserbox();
     if (!user) {
       show('login');
@@ -497,6 +514,7 @@ if (CONFIG_MISSING) {
       store.nickname = nicknameFrom(snap.data(), user);
       store.colorIndex = colorIndexFrom(snap.data(), user);
       store.isLogViewer = store.isAdmin && isLogViewerFrom(snap.data(), user);
+      store.isCoordinator = store.isAdmin && isCoordinatorFrom(snap.data(), user);
       store.members = store.isAdmin ? membersFrom(snap.data()) : [];
     } catch (e) {
       if (e.code !== 'permission-denied') {
@@ -520,6 +538,7 @@ if (CONFIG_MISSING) {
         return;
       }
       buildPage();
+      if (store.data.final?.tasks) updateTasks = mountTasks(store);
       built = true;
     }
     if (store.user !== user) return;
@@ -527,6 +546,7 @@ if (CONFIG_MISSING) {
     renderUserbox();
     saveProfile(user).catch(() => {});
     unsubs.push(subscribeUsers(), subscribeVotes(store, scheduleRefresh), subscribeMessages(store, scheduleRefresh));
+    if (updateTasks) unsubs.push(subscribeTasks(store, scheduleRefresh));
     startSession(user.uid);
 
     // Napló: csak a naplót megtekintő adminnak; az állapot („Bent van”) félpercenként frissül.

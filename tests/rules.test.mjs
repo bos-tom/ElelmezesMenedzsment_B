@@ -62,6 +62,8 @@ beforeEach(async () => {
       admins: [ADMIN1.email, ADMIN2.email],
       // A naplót csak admin2 nézheti.
       logViewers: [ADMIN2.email],
+      // A feladatokat csak admin2 oszthatja ki.
+      coordinators: [ADMIN2.email],
     });
     await setDoc(doc(db, 'sessions/s_admin1'), {
       uid: 'admin1', startedAt: new Date(), lastSeenAt: new Date(), endedAt: null,
@@ -329,6 +331,60 @@ describe('Belépési napló (sessions)', () => {
   it('naplóbejegyzést senki nem törölhet', async () => {
     await assertFails(deleteDoc(doc(ctx(ADMIN2), 'sessions/s_admin1')));
     await assertFails(deleteDoc(doc(ctx(ADMIN1), 'sessions/s_admin1')));
+  });
+});
+
+describe('Jelentkezés feladatra (signups)', () => {
+  const signup = (taskId, role, uid) => ({ taskId, role, uid, createdAt: serverTimestamp() });
+
+  it('admin jelentkezhet kidolgozásra és ellenőrzésre is', async () => {
+    const db = ctx(ADMIN1);
+    await assertSucceeds(setDoc(doc(db, 'signups/helyszinrajz__kidolgozo__admin1'), signup('helyszinrajz', 'kidolgozo', 'admin1')));
+    await assertSucceeds(setDoc(doc(db, 'signups/helyszinrajz__ellenorzo__admin1'), signup('helyszinrajz', 'ellenorzo', 'admin1')));
+  });
+  it('más nevében nem lehet jelentkezni', async () => {
+    await assertFails(setDoc(doc(ctx(ADMIN1), 'signups/helyszinrajz__kidolgozo__admin2'), signup('helyszinrajz', 'kidolgozo', 'admin2')));
+    await assertFails(setDoc(doc(ctx(ADMIN1), 'signups/helyszinrajz__kidolgozo__admin1'), signup('helyszinrajz', 'kidolgozo', 'admin2')));
+  });
+  it('ismeretlen szerep, hibás kulcs vagy plusz mező elutasítva', async () => {
+    const db = ctx(ADMIN1);
+    await assertFails(setDoc(doc(db, 'signups/helyszinrajz__fonok__admin1'), signup('helyszinrajz', 'fonok', 'admin1')));
+    await assertFails(setDoc(doc(db, 'signups/masik__kidolgozo__admin1'), signup('helyszinrajz', 'kidolgozo', 'admin1')));
+    await assertFails(setDoc(doc(db, 'signups/helyszinrajz__kidolgozo__admin1'), { ...signup('helyszinrajz', 'kidolgozo', 'admin1'), x: 1 }));
+  });
+  it('nem admin nem jelentkezhet és nem olvas', async () => {
+    await assertFails(setDoc(doc(ctx(MEMBER), 'signups/helyszinrajz__kidolgozo__member1'), signup('helyszinrajz', 'kidolgozo', 'member1')));
+    await assertFails(getDocs(collection(ctx(MEMBER), 'signups')));
+  });
+  it('a saját jelentkezés visszavonható, másé nem', async () => {
+    await env.withSecurityRulesDisabled(async (c) => {
+      await setDoc(doc(c.firestore(), 'signups/alaprajz1__kidolgozo__admin2'), { taskId: 'alaprajz1', role: 'kidolgozo', uid: 'admin2', createdAt: new Date() });
+    });
+    await assertFails(deleteDoc(doc(ctx(ADMIN1), 'signups/alaprajz1__kidolgozo__admin2')));
+    await assertSucceeds(deleteDoc(doc(ctx(ADMIN2), 'signups/alaprajz1__kidolgozo__admin2')));
+  });
+});
+
+describe('Kiosztás (assignments)', () => {
+  const assign = (uid) => ({ workers: ['admin1'], reviewers: ['admin2'], updatedBy: uid, updatedAt: serverTimestamp() });
+
+  it('a koordinátor kioszthat és módosíthat', async () => {
+    const db = ctx(ADMIN2);
+    await assertSucceeds(setDoc(doc(db, 'assignments/helyszinrajz'), assign('admin2')));
+    await assertSucceeds(setDoc(doc(db, 'assignments/helyszinrajz'), { ...assign('admin2'), workers: [] }));
+  });
+  it('nem koordinátor admin nem oszthat ki', async () => {
+    await assertFails(setDoc(doc(ctx(ADMIN1), 'assignments/helyszinrajz'), assign('admin1')));
+  });
+  it('a kiosztást minden admin olvashatja', async () => {
+    await assertSucceeds(getDocs(collection(ctx(ADMIN1), 'assignments')));
+    await assertFails(getDocs(collection(ctx(MEMBER), 'assignments')));
+  });
+  it('hibás formátum elutasítva', async () => {
+    const db = ctx(ADMIN2);
+    await assertFails(setDoc(doc(db, 'assignments/helyszinrajz'), { ...assign('admin2'), workers: 'admin1' }));
+    await assertFails(setDoc(doc(db, 'assignments/helyszinrajz'), { ...assign('admin2'), updatedBy: 'admin1' }));
+    await assertFails(setDoc(doc(db, 'assignments/Hibas-Id'), assign('admin2')));
   });
 });
 

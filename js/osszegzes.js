@@ -45,18 +45,6 @@ function fillTable(id, table) {
   document.getElementById(`${id}-note`).textContent = table?.note || '';
 }
 
-function taskCard(t) {
-  return el('li', { class: 'task' + (t.owner ? ' assigned' : '') },
-    el('div', { class: 'task-head' },
-      el('span', { class: 'task-title', text: t.title }),
-      t.slide && t.slide !== '–' ? el('span', { class: 'task-slide', text: t.slide === 'mind' ? 'minden dia' : `${t.slide} dia` }) : null),
-    t.desc ? el('p', { class: 'task-desc', text: t.desc }) : null,
-    Array.isArray(t.steps) && t.steps.length
-      ? el('ol', { class: 'task-steps' }, ...t.steps.map((s) => el('li', { text: s })))
-      : null,
-    el('div', { class: 'task-owner' }, 'Felelős: ', t.owner ? el('b', { text: t.owner }) : 'még nincs kiosztva'));
-}
-
 export function renderSummary(store) {
   const final = store.data?.final;
   for (const box of document.querySelectorAll('.summary-box')) {
@@ -73,12 +61,7 @@ export function renderSummary(store) {
   document.getElementById('t-konyha').replaceChildren(...(k?.points || []).map((p) => el('li', { text: p })));
   document.getElementById('t-konyha-source').textContent = k?.source ? `Forrás: ${k.source}` : '';
 
-  // Határidők és a lebontott feladatok, csoportonként.
+  // Határidők. A feladatkártyákat a feladatok.js építi fel (jelentkezéssel, kiosztással).
   document.getElementById('task-deadlines').replaceChildren(...(final.deadlines || []).map((d) =>
     el('li', null, el('b', { text: `${fmtDate(d.date)}:` }), ` ${d.label}`, d.note ? el('span', { class: 'muted', text: ` (${d.note})` }) : null)));
-  const tasks = Array.isArray(final.tasks) ? final.tasks : [];
-  const order = [...new Set(tasks.map((t) => t.group))];
-  document.getElementById('task-groups').replaceChildren(...order.map((name) => el('section', { class: 'task-group' },
-    el('h3', { class: 'final-group-title', text: name }),
-    el('ul', { class: 'task-list' }, ...tasks.filter((t) => t.group === name).map(taskCard)))));
 }

@@ -94,6 +94,10 @@ Negyedik mező, a Dashboard sziluettjei (nem kötelező):
    - Field: **`male`**, Type: **array**
    - Elemei a férfi tagok címei (string, kisbetűvel). Ők férfi, mindenki más női sziluettet kap a Dashboard haladásjelzőjén.
 
+Ötödik mező, a feladatok koordinátora (nem kötelező):
+   - Field: **`coordinators`**, Type: **array**
+   - Elemei azoknak a címei (string, kisbetűvel), akik a Feladatkiosztás fülön a jelentkezések alapján kioszthatják a feladatokat (kidolgozók, ellenőrök). Jelenleg: Berni címe. Jelentkezni mindenki tud.
+
 A becenév jelenik meg mindenhol (szavazók, csevegő, fejléc) a Google-fiók neve helyett. Akinek nincs beceneve, annál a Google-név látszik. Az új becenév a következő belépéskor vagy újratöltéskor lép életbe.
 
 Később új tagot ugyanitt, egy új tömbelemmel (és ha kell, egy új `names`-elemmel) lehet felvenni. Az oldalt ehhez nem kell újra közzétenni, elég, ha az illető újratölti.
@@ -159,12 +163,14 @@ Ehhez a kódnak már fent kell lennie a GitHubon (push után).
 
 | Firestore | Tartalom | Ki írhatja |
 |---|---|---|
-| `config/app` | `admins`: az engedélyezett e-mailek; `names`: e-mail → becenév; `logViewers`: ki láthatja a naplót; `male`: férfi sziluett a Dashboardon | senki a weboldalról, csak a konzol |
+| `config/app` | `admins`: az engedélyezett e-mailek; `names`: e-mail → becenév; `logViewers`: ki láthatja a naplót; `male`: férfi sziluett a Dashboardon; `coordinators`: ki oszthatja ki a feladatokat | senki a weboldalról, csak a konzol |
 | `sessions/{id}` | belépési napló: ki, mikor lépett be, mikor volt utoljára aktív, mikor lépett ki | mindenki a sajátját (olvasni csak a `logViewers`) |
 | `users/{uid}` | név, profilkép, utolsó belépés | mindenki a sajátját |
 | `votes/{döntés}__{uid}` | a tag szavazata egy döntésben | mindenki a sajátját, lezárt döntésnél senki |
 | `status/{döntés}` | nyitott / lezárva, elfogadott opció, ki és mikor zárta le | admin |
 | `messages/{id}` | csevegőüzenet (1–1000 karakter), opcionális döntéscímkével | mindenki a saját nevében; módosítani nem lehet; törölni csak a szerző tudja |
+| `signups/{feladat}__{szerep}__{uid}` | jelentkezés egy feladatra kidolgozónak (`kidolgozo`) vagy ellenőrnek (`ellenorzo`) | mindenki a sajátját (jelentkezés és visszavonás) |
+| `assignments/{feladat}` | a kiosztás: kidolgozók és ellenőrök (legfeljebb 10–10 fő) | csak a `coordinators` |
 
 Szerepkörök: mivel csak adminok férnek hozzá, minden belépő tag szavazhat, írhat, lezárhat és újranyithat döntést. Csevegőüzenetet mindenki csak a sajátját törölheti. Ezért külön „Admin” jelvény sincs a felületen.
 
