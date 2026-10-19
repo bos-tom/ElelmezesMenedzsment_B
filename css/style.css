@@ -444,12 +444,18 @@ body:not(.in-app) .wrap::after{content:"";display:block;border-top:2px solid var
 
 /* Mérföldkövek: vízszintes idővonal (metróvonal), keskeny kijelzőn függőleges */
 .milestones{--n:5;--dot:40px}
-.ms-summary{margin:0 0 10px;font:500 12.5px/1.4 var(--f-mono);color:var(--muted)}
-.ms-track{position:relative;padding-top:26px}
-.ms-line{position:absolute;top:calc(26px + var(--dot)/2 - 3px);left:calc(50%/var(--n));right:calc(50%/var(--n));height:6px;border-radius:3px;background:var(--line)}
+.ms-summary{margin:0 0 10px;font:500 12.5px/1.4 var(--f-mono);color:var(--muted);display:flex;flex-wrap:wrap;align-items:center;gap:4px 6px}
+.ms-key{display:inline-block;width:22px;height:6px;border-radius:3px;margin-left:8px}
+.ms-key-done{background:var(--pro)}
+.ms-key-elapsed{background:var(--hatch),var(--line)}
+.ms-track{position:relative;padding-top:36px}
+.milestones{--hatch:repeating-linear-gradient(-45deg,color-mix(in srgb,var(--muted) 75%,transparent) 0 3px,transparent 3px 6px)}
+.ms-line{position:absolute;top:calc(36px + var(--dot)/2 - 3px);left:calc(50%/var(--n));right:calc(50%/var(--n));height:6px;border-radius:3px;background:var(--line)}
+.ms-line-elapsed{position:absolute;inset:0 auto 0 0;width:var(--p);border-radius:3px;background:var(--hatch)}
 .ms-line-done{position:absolute;inset:0 auto 0 0;width:var(--p);border-radius:3px;background:var(--pro)}
-.ms-today{position:absolute;left:var(--p);top:calc(3px - var(--dot)/2 - 24px);bottom:calc(3px - var(--dot)/2 - 4px);width:0;border-left:2px dashed var(--con)}
-.ms-today span{position:absolute;top:0;left:0;transform:translateX(-50%);font:700 11px/1.5 var(--f-mono);text-transform:uppercase;letter-spacing:.06em;color:var(--surface);background:var(--con);border-radius:999px;padding:0 7px;white-space:nowrap}
+.ms-today{position:absolute;left:var(--p);top:calc(3px - var(--dot)/2 - 36px);bottom:calc(3px - var(--dot)/2 - 8px);width:3px;margin-left:-1.5px;background:var(--con);border-radius:2px}
+.ms-today::after{content:'';position:absolute;left:50%;top:calc(var(--dot)/2 + 36px - 3px + 3px);width:14px;height:14px;transform:translate(-50%,-50%);border-radius:50%;background:var(--con);box-shadow:0 0 0 3px var(--surface)}
+.ms-today-pill{position:absolute;top:0;left:50%;transform:translateX(-50%);font:700 13px/1.6 var(--f-mono);text-transform:uppercase;letter-spacing:.05em;color:#fff;background:var(--con);border-radius:999px;padding:1px 10px;white-space:nowrap;box-shadow:0 2px 6px rgba(0,0,0,.25)}
 .ms-list{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(var(--n),minmax(0,1fr));gap:8px;position:relative}
 .ms{display:grid;justify-items:center;text-align:center;gap:2px;align-content:start}
 .ms-dot{width:var(--dot);height:var(--dot);margin-bottom:6px}
@@ -478,7 +484,8 @@ body:not(.in-app) .wrap::after{content:"";display:block;border-top:2px solid var
   .ms-dot{grid-row:1/span 8;margin:0;position:relative;z-index:1}
   .ms>*:not(.ms-dot):not(.ms-today-tag){grid-column:2}
   /* Szakasz a következő állomásig */
-  .ms:not(:last-child)::after{content:'';position:absolute;left:calc(34px + var(--dot)/2 - 3px);top:calc(var(--dot)/2);bottom:calc(-1 * var(--dot)/2);width:6px;background:var(--line)}
+  .ms:not(:last-child)::after{content:'';position:absolute;left:calc(34px + var(--dot)/2 - 3px);top:calc(var(--dot)/2);bottom:calc(-1 * var(--dot)/2);width:6px;background:var(--hatch) top/100% var(--e) no-repeat,var(--line)}
   .ms.seg-done::after{background:var(--pro)}
-  .ms-today-tag{display:block;position:absolute;left:0;top:calc(var(--dot) + 4px);font:700 10.5px/1.5 var(--f-mono);text-transform:uppercase;color:var(--surface);background:var(--con);border-radius:999px;padding:0 5px}
+  .ms-today-tag{display:block;position:absolute;left:-6px;top:calc(var(--dot)/2 + var(--e));transform:translateY(-50%);z-index:2;font:700 12px/1.6 var(--f-mono);text-transform:uppercase;color:#fff;background:var(--con);border-radius:999px;padding:0 7px;box-shadow:0 2px 6px rgba(0,0,0,.25)}
+  .ms-today-tag::after{content:'';position:absolute;left:100%;top:50%;width:40px;height:3px;margin-top:-1.5px;background:var(--con);border-radius:2px}
 }

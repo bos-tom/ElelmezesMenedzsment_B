@@ -117,7 +117,12 @@ export function renderMilestones(store) {
   // Keskeny kijelzőn (függőleges vonal) a „ma” címke annál az állomásnál van, amely után a mai nap következik.
   const todayIdx = Math.min(list.length - 1, Math.floor((pos / 100) * (list.length - 1) + 1e-9));
   const stations = items.map(({ m, r, done, state, late, manual }, i) => {
-    const li = el('li', { class: `ms ms-${state}${late ? ' late' : ''}${i < lastDone ? ' seg-done' : ''}` },
+    // Az eltelt idő aránya ezen a szakaszon (függőleges nézethez).
+    const elapsed = Math.max(0, Math.min(1, (pos / 100) * (list.length - 1) - i));
+    const li = el('li', {
+      class: `ms ms-${state}${late ? ' late' : ''}${i < lastDone ? ' seg-done' : ''}`,
+      style: `--e:${(elapsed * 100).toFixed(1)}%`,
+    },
       i === todayIdx ? el('span', { class: 'ms-today-tag', 'aria-hidden': 'true', text: 'ma' }) : null,
       stationDot(state, r.pct),
       el('div', { class: 'ms-date', text: dateFmt.format(dayOf(m.date)) }),
@@ -137,11 +142,17 @@ export function renderMilestones(store) {
   });
 
   const progress = lastDone < 0 ? 0 : (lastDone / (list.length - 1)) * 100;
+  // Rétegek: alul az eltelt idő (sraffozott), fölötte a kész mérföldkövek (zöld), legfelül a „ma”.
   const line = el('div', { class: 'ms-line', 'aria-hidden': 'true' },
+    el('span', { class: 'ms-line-elapsed', style: `--p:${pos}%` }),
     el('span', { class: 'ms-line-done', style: `--p:${progress}%` }),
-    el('span', { class: 'ms-today', style: `--p:${pos}%` }, el('span', { text: 'ma' })));
+    el('span', { class: 'ms-today', style: `--p:${pos}%` },
+      el('span', { class: 'ms-today-pill', text: `ma · ${dateFmt.format(today())}` })));
   box.style.setProperty('--n', list.length);
   box.replaceChildren(
-    el('p', { class: 'ms-summary', text: `${list.length} mérföldkőből ${doneCount} kész.` }),
+    el('p', { class: 'ms-summary' },
+      `${list.length} mérföldkőből ${doneCount} kész. `,
+      el('span', { class: 'ms-key ms-key-done' }), ' kész mérföldkövek ',
+      el('span', { class: 'ms-key ms-key-elapsed' }), ' eltelt idő'),
     el('div', { class: 'ms-track' }, line, el('ol', { class: 'ms-list' }, ...stations)));
 }
