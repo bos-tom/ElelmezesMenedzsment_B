@@ -124,6 +124,8 @@ export function renderMilestones(store) {
       style: `--e:${(elapsed * 100).toFixed(1)}%`,
     },
       i === todayIdx ? el('span', { class: 'ms-today-tag', 'aria-hidden': 'true', text: 'ma' }) : null,
+      // Az aktuális állomás fölött a haladás százaléka (a gyűrű ennyire telt meg).
+      state === 'active' && r.pct != null ? el('div', { class: 'ms-pct', text: `${r.pct}%` }) : null,
       stationDot(state, r.pct),
       el('div', { class: 'ms-date', text: dateFmt.format(dayOf(m.date)) }),
       el('div', { class: 'ms-label', text: m.label }),
