@@ -1,104 +1,104 @@
 {
  "closedAt": "2026-10-19",
- "note": "A szavazás lezárult. Hatan szavaztak mind a 24 kérdésben; a végeredmény a többségi szavazat, egy kivétellel (5. kérdés).",
+ "note": "A szavazás lezárult. Heten szavaztak mind a 24 kérdésben; a végeredmény a többségi szavazat, egy kivétellel (5. kérdés).",
  "results": {
   "intezmeny": {
    "option": "altalanos",
-   "votes": "6:0"
+   "votes": "7:0"
   },
   "varos": {
    "option": "budapest",
-   "votes": "5:1"
+   "votes": "6:1"
   },
   "etkezesek": {
    "option": "vegyes",
-   "votes": "6:0"
+   "votes": "7:0"
   },
   "letszam": {
    "option": "300_400",
-   "votes": "5:1"
+   "votes": "6:1"
   },
   "felnottek": {
    "option": "konyhai_dolgozok_is",
    "label": "Pedagógusok, a többi dolgozó és a konyhai dolgozók is",
-   "votes": "1:5",
-   "override": "A szavazás többsége (5:1) a „pedagógusok és a többi dolgozó” opció volt, de nem életszerű, hogy éppen az ételt készítő konyhai dolgozók nem étkeznek. Ezért a konyhai dolgozók is bekerülnek az étkezők közé."
+   "votes": "1:6",
+   "override": "A szavazás többsége (6:1) a „pedagógusok és a többi dolgozó” opció volt, de nem életszerű, hogy éppen az ételt készítő konyhai dolgozók nem étkeznek. Ezért a konyhai dolgozók is bekerülnek az étkezők közé."
   },
   "felnott_etkezes": {
    "option": "ebed_kisetkezes",
-   "votes": "5:1"
+   "votes": "6:1"
   },
   "letszamterv": {
    "option": "reggeli_nelkul",
-   "votes": "6:0"
+   "votes": "7:0"
   },
   "helyszin": {
    "option": "kitalalt",
-   "votes": "6:0"
+   "votes": "7:0"
   },
   "uzemeltetes": {
    "option": "sajat",
-   "votes": "6:0"
+   "votes": "7:0"
   },
   "elhelyezes": {
    "option": "kapcsolodo",
-   "votes": "6:0"
+   "votes": "7:0"
   },
   "szint": {
    "option": "foldszint",
-   "votes": "6:0"
+   "votes": "7:0"
   },
   "zoldseg": {
    "option": "friss",
-   "votes": "6:0"
+   "votes": "7:0"
   },
   "hus": {
    "option": "porciozott",
-   "votes": "6:0"
+   "votes": "7:0"
   },
   "gyakorisag": {
    "option": "napi",
-   "votes": "6:0"
+   "votes": "7:0"
   },
   "energia": {
    "option": "villany",
-   "votes": "6:0"
+   "votes": "7:0"
   },
   "dieta": {
    "option": "sajat",
-   "votes": "6:0"
+   "votes": "7:0"
   },
   "allergia": {
    "option": "alap4",
-   "votes": "6:0"
+   "votes": "7:0"
   },
   "dieta_konyha": {
    "option": "kabin",
-   "votes": "6:0"
+   "votes": "7:0"
   },
   "talalas": {
    "option": "onkiszolgalo",
-   "votes": "5:1"
+   "votes": "6:1"
   },
   "mosogatas": {
    "option": "folyamatos",
-   "votes": "6:0"
+   "votes": "7:0"
   },
   "kiegeszito": {
    "option": "hideg_tej",
-   "votes": "6:0"
+   "votes": "7:0"
   },
   "hulladek": {
    "option": "hutott",
-   "votes": "6:0"
+   "votes": "7:0"
   },
   "rajzeszkoz": {
    "option": "drawio",
-   "votes": "6:0"
+   "votes": "7:0"
   },
   "mi": {
    "option": "ellenorzott",
-   "votes": "6:0"
+   "votes": "7:0"
   }
  },
  "summary": [
