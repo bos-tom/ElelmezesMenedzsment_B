@@ -65,6 +65,39 @@ h1{font:800 clamp(28px,4.4vw,44px)/1.05 var(--f-display);margin:0;letter-spacing
 .dash-block{display:grid;gap:10px;padding-top:32px}
 .dash-block .note{margin:0;color:var(--muted);font-size:14px;max-width:72ch}
 
+/* Lezárt szavazás jelzése a döntések tetején. */
+.closed-banner{background:var(--pro-soft);border:1px solid var(--pro);border-radius:var(--r);padding:10px 14px;max-width:80ch;font-size:14.5px}
+.linkbtn{font:inherit;color:var(--accent);background:none;border:0;padding:0;text-decoration:underline;cursor:pointer}
+
+/* Végeredmény a Dashboardon. */
+.sub-title{font:700 18px/1.2 var(--f-display);margin:14px 0 0}
+.final-summary{margin:0;padding-left:20px;display:grid;gap:6px;max-width:90ch;font-size:15px}
+.final-groups{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(420px,100%),1fr));gap:12px;margin-top:6px}
+.final-group{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:12px 14px;min-width:0}
+.final-group-title{font:700 16px/1.25 var(--f-display);margin:0 0 8px;display:flex;gap:8px;align-items:baseline}
+.final-group-title .gid{font:500 12px/1 var(--f-mono);color:var(--accent)}
+.final-list{list-style:none;margin:0;padding:0;display:grid;gap:8px}
+.final-row{display:grid;grid-template-columns:2.2em minmax(0,1fr) auto;gap:2px 8px;align-items:baseline;font-size:14px}
+.final-num{font:500 12px/1.6 var(--f-mono);color:var(--muted);grid-row:span 2}
+.final-q{color:var(--muted)}
+.final-votes{font:600 11px/1.6 var(--f-mono);color:var(--pro);background:var(--pro-soft);padding:0 6px;border-radius:999px;white-space:nowrap;grid-column:3;grid-row:1}
+.final-a{grid-column:2 / -1;font-weight:600}
+.final-row.override .final-votes{color:var(--ai);background:var(--ai-soft)}
+.final-why{grid-column:2 / -1;font-size:13px;color:var(--ai);background:var(--ai-soft);border:1px dashed var(--ai);border-radius:4px;padding:4px 8px}
+#final-letszam .opt-table-wrap{max-width:760px;background:var(--surface)}
+
+/* Alfeladatok. */
+.deadlines{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;gap:6px 18px;font-size:14px}
+.deadlines .muted{color:var(--muted)}
+.task-groups{display:grid;gap:16px;margin-top:6px}
+.task-list{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(min(260px,100%),1fr));gap:10px}
+.task{background:var(--surface);border:1px solid var(--line);border-left:4px solid var(--accent);border-radius:var(--r);padding:10px 12px;display:grid;gap:6px;align-content:start}
+.task-head{display:flex;gap:8px;align-items:baseline;justify-content:space-between}
+.task-title{font:700 15px/1.25 var(--f-display)}
+.task-slide{font:500 11px/1.5 var(--f-mono);color:var(--muted);white-space:nowrap}
+.task-desc{margin:0;font-size:13.5px;color:var(--muted)}
+.task-owner{font:500 12px/1.4 var(--f-mono);color:var(--muted);border-top:1px dashed var(--line);padding-top:6px}
+
 /* Készültségi tábla: két sor, soronként fele-fele a tagoknak, középen (két sor magas) az összesített jelző.
    A --left / --right / --gauge-col értékeket a dashboard.js állítja a tagok száma alapján. */
 .board{margin-top:6px;display:grid;gap:12px;grid-template-columns:repeat(var(--left,2),minmax(0,1fr)) minmax(190px,230px) repeat(var(--right,2),minmax(0,1fr))}

@@ -42,11 +42,32 @@ export function subscribeVotes(store, onUpdate) {
         closedAt: closed && s.closedAt?.toDate ? s.closedAt.toDate() : null,
       });
     });
-    store.status = status;
+    store.status = applyFinal(store, status);
     onUpdate();
   }, listenError);
 
   return () => { unsubVotes(); unsubStatus(); };
+}
+
+// A data/vegeredmeny.json-ban rögzített végeredmény minden más állapotot felülír:
+// az ilyen döntés lezárt, a választott opcióval.
+export function applyFinal(store, status = new Map()) {
+  for (const [id, r] of Object.entries(store.final || {})) {
+    const dec = store.data?.byId.get(id);
+    if (!dec || !dec.optionsById.has(r?.option)) continue;
+    status.set(id, {
+      state: 'closed',
+      chosenOptionId: r.option,
+      closedBy: null,
+      closedAt: null,
+      final: true,
+      votes: typeof r.votes === 'string' ? r.votes : '',
+      // Önállóan is érthető megfogalmazás, ha az opció szövege önmagában nem az.
+      label: typeof r.label === 'string' && r.label.trim() ? r.label.trim() : dec.optionsById.get(r.option).label,
+      override: typeof r.override === 'string' ? r.override : '',
+    });
+  }
+  return status;
 }
 
 export function isClosed(store, decisionId) {
@@ -247,14 +268,19 @@ export function mountDecisionVoting(store, dec, { article, stateSlot, confirmSlo
 
     pill.className = 'pill ' + (closed ? 'closed' : 'open');
     pill.textContent = closed ? 'Lezárva' : 'Nyitott';
-    if (closed) {
+    if (closed && st.final) {
+      // A szavazás lezárásakor rögzített végeredmény (data/vegeredmeny.json).
+      note.textContent = `Végeredmény: ${st.label}` +
+        (st.override ? ` · a szavazástól eltérően (szavazás: ${st.votes}). ${st.override}` : ` · szavazás: ${st.votes}`);
+    } else if (closed) {
       const by = st.closedBy ? userName(store, st.closedBy) : '';
       note.textContent = `Döntés: ${dec.optionsById.get(chosen).label}` +
         (by ? ` · lezárta: ${by}` : '') + (st.closedAt ? `, ${formatFull(st.closedAt)}` : '');
     } else {
       note.textContent = `${total} szavazat`;
     }
-    toggleBtn.hidden = !store.isAdmin || mode !== 'idle';
+    // A végeredménnyel lezárt döntés nem nyitható újra a felületről.
+    toggleBtn.hidden = !store.isAdmin || mode !== 'idle' || !!st?.final;
     toggleBtn.textContent = closed ? 'Döntés újranyitása' : 'Döntés lezárása';
   }
 

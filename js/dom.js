@@ -15,7 +15,18 @@ export function el(tag, attrs, ...kids) {
   return n;
 }
 
-const timeFmt = new Intl.DateTimeFormat('hu-HU', { hour: '2-digit', minute: '2-digit' });
+// Táblázat adatból (pl. létszámterv): { caption, cols[], rows[][], lastRowTotal }.
+export function dataTable(t) {
+  if (!t || !Array.isArray(t.cols) || !Array.isArray(t.rows)) return null;
+  const table = el('table', { class: 'opt-table' },
+    t.caption ? el('caption', { text: t.caption }) : null,
+    el('thead', null, el('tr', null, ...t.cols.map((c) => el('th', { scope: 'col', text: String(c) })))),
+    el('tbody', null, ...t.rows.map((r, i) => el('tr', { class: t.lastRowTotal && i === t.rows.length - 1 ? 'total' : null },
+      ...r.map((c, j) => (j === 0 ? el('th', { scope: 'row', text: String(c) }) : el('td', { text: String(c) })))))));
+  return el('div', { class: 'opt-table-wrap', role: 'region', 'aria-label': t.caption || 'Táblázat', tabindex: '0' }, table);
+}
+
+const timeFmt =new Intl.DateTimeFormat('hu-HU', { hour: '2-digit', minute: '2-digit' });
 const dateTimeFmt = new Intl.DateTimeFormat('hu-HU', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' });
 const fullFmt = new Intl.DateTimeFormat('hu-HU', { dateStyle: 'long', timeStyle: 'short' });
 

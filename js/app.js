@@ -17,11 +17,11 @@ import {
   signInWithRedirect,
   signOut,
 } from './firebase.js';
-import { avatar, el, notify } from './dom.js';
-import { isClosed, mountDecisionVoting, subscribeVotes, tally } from './votes.js';
+import { avatar, dataTable, el, notify } from './dom.js';
+import { applyFinal, isClosed, mountDecisionVoting, subscribeVotes, tally } from './votes.js';
 import { createChatBox, subscribeMessages } from './chat.js';
 import { endSession, renderLog, startSession, subscribeLog } from './sessions.js';
-import { membersFrom, renderDashboard } from './dashboard.js';
+import { membersFrom, renderDashboard, renderFinal } from './dashboard.js';
 
 const ID_RE = /^[a-z0-9_]{1,40}$/;
 
@@ -33,6 +33,7 @@ const store = {
   isLogViewer: false,
   sessions: [],
   members: [],
+  final: {},
   data: null,
   users: new Map(),
   votes: new Map(),
@@ -164,6 +165,11 @@ async function login() {
 
 document.addEventListener('click', (e) => {
   // A csevegő döntéscímkéje a döntéshez ugrik, és kinyitja annak hozzászólás-ablakát.
+  const goto = e.target.closest('[data-goto]');
+  if (goto) {
+    showView(goto.dataset.goto);
+    return;
+  }
   const tag = e.target.closest('a.dtag');
   if (tag) {
     const thread = document.querySelector(`${tag.getAttribute('href')} details.thread`);
@@ -195,7 +201,13 @@ async function loadData() {
       byId.set(d.id, dec);
     }
   }
-  return { raw, decisions, byId };
+  // A szavazás végeredménye (ha már lezárult). Hiánya nem hiba: akkor minden döntés nyitott.
+  let final = null;
+  try {
+    const fr = await fetch('data/vegeredmeny.json', { cache: 'no-cache' });
+    if (fr.ok) final = await fr.json();
+  } catch { /* nincs végeredmény */ }
+  return { raw, decisions, byId, final };
 }
 
 // ---- Statikus oldal --------------------------------------------------------
@@ -215,17 +227,6 @@ function argList(items, kind) {
       el('span', null, t, srcChip(code, loc))));
   }
   return ul;
-}
-
-// Opcióhoz tartozó táblázat (pl. létszámterv): { caption, cols[], rows[][], lastRowTotal }.
-function optTable(t) {
-  if (!t || !Array.isArray(t.cols) || !Array.isArray(t.rows)) return null;
-  const table = el('table', { class: 'opt-table' },
-    t.caption ? el('caption', { text: t.caption }) : null,
-    el('thead', null, el('tr', null, ...t.cols.map((c) => el('th', { scope: 'col', text: String(c) })))),
-    el('tbody', null, ...t.rows.map((r, i) => el('tr', { class: t.lastRowTotal && i === t.rows.length - 1 ? 'total' : null },
-      ...r.map((c, j) => (j === 0 ? el('th', { scope: 'row', text: String(c) }) : el('td', { text: String(c) })))))));
-  return el('div', { class: 'opt-table-wrap', role: 'region', 'aria-label': t.caption || 'Táblázat', tabindex: '0' }, table);
 }
 
 function buildDecision(dec) {
@@ -254,7 +255,7 @@ function buildDecision(dec) {
   for (const o of dec.options) {
     const h = el('div', { class: 'opt-head' }, el('h4', { text: o.label }));
     const slot = el('div', { class: 'vote-slot' });
-    const card = el('div', { class: 'opt' }, h, optTable(o.table), argList(o.pros, 'pro'), argList(o.cons, 'con'), slot);
+    const card = el('div', { class: 'opt' }, h, dataTable(o.table), argList(o.pros, 'pro'), argList(o.cons, 'con'), slot);
     cards.set(o.id, { card, head: h, slot });
     opts.append(card);
   }
@@ -277,8 +278,19 @@ function buildDecision(dec) {
 }
 
 function buildPage() {
-  const { raw, decisions } = store.data;
+  const { raw, decisions, final } = store.data;
   document.getElementById('f-count').textContent = `${decisions.length} kérdés, ${raw.groups.length} témában`;
+
+  // Lezárt szavazás: jelzés a döntések tetején, a végeredmény a Dashboardon.
+  if (final?.results) {
+    const date = final.closedAt ? new Date(`${final.closedAt}T12:00:00`) : null;
+    const when = date ? new Intl.DateTimeFormat('hu-HU', { dateStyle: 'long' }).format(date) : '';
+    document.querySelector('#view-dontesek .view-head').append(el('div', { class: 'closed-banner', role: 'note' },
+      el('strong', { text: `A szavazás lezárult${when ? ` (${when})` : ''}.` }),
+      ' Minden döntésnél a végeredmény látszik; szavazni már nem lehet. Az összesítés és a feladatok a ',
+      el('button', { type: 'button', class: 'linkbtn', 'data-goto': 'dashboard', text: 'Dashboardon' }),
+      ' vannak.'));
+  }
 
   const groupsEl = document.getElementById('groups');
   const toc = document.getElementById('toc');
@@ -354,8 +366,9 @@ function refresh() {
     }
     c.count.textContent = String(total);
     if (closed) {
-      const chosen = d.optionsById.get(store.status.get(d.id).chosenOptionId);
-      c.state.replaceChildren(el('span', { class: 'pill closed', text: 'Lezárva' }), ' ', chosen.label);
+      const st = store.status.get(d.id);
+      const label = st.label || d.optionsById.get(st.chosenOptionId).label;
+      c.state.replaceChildren(el('span', { class: 'pill closed', text: 'Lezárva' }), ' ', label);
     } else {
       c.state.replaceChildren(el('span', { class: 'pill open', text: 'Nyitott' }));
     }
@@ -447,7 +460,7 @@ function stopListeners() {
   unsubs = [];
   store.users = new Map();
   store.votes = new Map();
-  store.status = new Map();
+  store.status = applyFinal(store, new Map());
   store.messages = [];
   store.sessions = [];
 }
@@ -499,6 +512,8 @@ if (CONFIG_MISSING) {
     if (!built) {
       try {
         store.data = await loadData();
+        store.final = store.data.final?.results || {};
+        store.status = applyFinal(store, store.status);
       } catch {
         showError('Nem sikerült betölteni a döntések listáját (data/dontesek.json). Töltsd újra az oldalt.');
         return;
@@ -523,6 +538,7 @@ if (CONFIG_MISSING) {
 
     show('app');
     renderDashboard(store.members);
+    renderFinal(store);
     // Megnyitáskor mindig a Tervezési döntések fül.
     showView('dontesek', { scroll: false });
     refresh();

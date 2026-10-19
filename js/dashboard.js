@@ -2,7 +2,7 @@
 // A tagok listája a config/app.admins sorrendjét követi (ugyanaz, mint a csevegőszíneké).
 // Sziluett: a config/app.male listában szereplők férfi, a többiek női sziluettet kapnak.
 // A haladás egyelőre mindenkinél 0%; később a személyes feladatlista kipipált elemeiből számoljuk.
-import { el } from './dom.js';
+import { dataTable, el } from './dom.js';
 
 const SVG_NS = 'http://www.w3.org/2000/svg';
 
@@ -124,4 +124,66 @@ export function renderDashboard(members) {
   board.style.setProperty('--right', right);
   board.style.setProperty('--gauge-col', left + 1);
   board.replaceChildren(overallGauge(sumDone, sumTotal), ...cards);
+}
+
+// ---- A szavazás végeredménye és az alfeladatok (data/vegeredmeny.json) -------------------
+
+const dateFmt = new Intl.DateTimeFormat('hu-HU', { month: 'long', day: 'numeric' });
+const fmtDate = (iso) => {
+  const d = new Date(`${iso}T12:00:00`);
+  return Number.isNaN(d.getTime()) ? iso : dateFmt.format(d);
+};
+
+export function renderFinal(store) {
+  const final = store.data?.final;
+  const finalBox = document.getElementById('dash-final');
+  const tasksBox = document.getElementById('dash-tasks');
+  if (!final?.results) {
+    finalBox.hidden = true;
+    tasksBox.hidden = true;
+    return;
+  }
+
+  // Összefoglaló és döntésenkénti végeredmény, témánként.
+  document.getElementById('final-note').textContent = final.note || '';
+  document.getElementById('final-summary').replaceChildren(
+    ...(final.summary || []).map((s) => el('li', { text: s })));
+
+  const groups = store.data.raw.groups.map((g) => {
+    const rows = store.data.decisions.filter((d) => d.group === g && final.results[d.id]).map((d) => {
+      const r = final.results[d.id];
+      const opt = d.optionsById.get(r.option);
+      if (!opt) return null;
+      return el('li', { class: 'final-row' + (r.override ? ' override' : '') },
+        el('span', { class: 'final-num', text: `${d.num}.` }),
+        el('span', { class: 'final-q', text: d.title }),
+        el('span', { class: 'final-a', text: r.label || opt.label }),
+        el('span', { class: 'final-votes', text: r.override ? `szavazás ${r.votes} · felülírva` : r.votes }),
+        r.override ? el('span', { class: 'final-why', text: r.override }) : null);
+    }).filter(Boolean);
+    return rows.length ? el('section', { class: 'final-group' },
+      el('h3', { class: 'final-group-title' }, el('span', { class: 'gid', text: g.id }), g.title),
+      el('ol', { class: 'final-list' }, ...rows)) : null;
+  }).filter(Boolean);
+  document.getElementById('final-results').replaceChildren(...groups);
+
+  document.getElementById('final-letszam').replaceChildren(dataTable(final.letszamterv) || '');
+  document.getElementById('final-letszam-note').textContent = final.letszamterv?.note || '';
+  finalBox.hidden = false;
+
+  // Alfeladatok csoportosítva; a kiosztás a Feladatkiosztás fülön következik.
+  document.getElementById('task-deadlines').replaceChildren(...(final.deadlines || []).map((d) =>
+    el('li', null, el('b', { text: `${fmtDate(d.date)}:` }), ` ${d.label}`, d.note ? el('span', { class: 'muted', text: ` (${d.note})` }) : null)));
+
+  const tasks = Array.isArray(final.tasks) ? final.tasks : [];
+  const order = [...new Set(tasks.map((t) => t.group))];
+  document.getElementById('task-groups').replaceChildren(...order.map((name) => el('section', { class: 'task-group' },
+    el('h3', { class: 'final-group-title', text: name }),
+    el('ul', { class: 'task-list' }, ...tasks.filter((t) => t.group === name).map((t) => el('li', { class: 'task' },
+      el('div', { class: 'task-head' },
+        el('span', { class: 'task-title', text: t.title }),
+        t.slide && t.slide !== '–' ? el('span', { class: 'task-slide', text: `${t.slide} dia` }) : null),
+      el('p', { class: 'task-desc', text: t.desc }),
+      el('div', { class: 'task-owner', text: 'Felelős: még nincs kiosztva' })))))));
+  tasksBox.hidden = !tasks.length;
 }

@@ -1,0 +1,82 @@
+{
+ "closedAt": "2026-10-19",
+ "note": "A szavazás lezárult. Hatan szavaztak mind a 24 kérdésben; a végeredmény a többségi szavazat, egy kivétellel (5. kérdés).",
+ "results": {
+  "intezmeny": { "option": "altalanos", "votes": "6:0" },
+  "varos": { "option": "budapest", "votes": "5:1" },
+  "etkezesek": { "option": "vegyes", "votes": "6:0" },
+  "letszam": { "option": "300_400", "votes": "5:1" },
+  "felnottek": {
+   "option": "konyhai_dolgozok_is",
+   "label": "Pedagógusok, a többi dolgozó és a konyhai dolgozók is",
+   "votes": "1:5",
+   "override": "A szavazás többsége (5:1) a „pedagógusok és a többi dolgozó” opció volt, de nem életszerű, hogy éppen az ételt készítő konyhai dolgozók nem étkeznek. Ezért a konyhai dolgozók is bekerülnek az étkezők közé."
+  },
+  "felnott_etkezes": { "option": "ebed_kisetkezes", "votes": "5:1" },
+  "letszamterv": { "option": "reggeli_nelkul", "votes": "6:0" },
+  "helyszin": { "option": "kitalalt", "votes": "6:0" },
+  "uzemeltetes": { "option": "sajat", "votes": "6:0" },
+  "elhelyezes": { "option": "kapcsolodo", "votes": "6:0" },
+  "szint": { "option": "foldszint", "votes": "6:0" },
+  "zoldseg": { "option": "friss", "votes": "6:0" },
+  "hus": { "option": "porciozott", "votes": "6:0" },
+  "gyakorisag": { "option": "napi", "votes": "6:0" },
+  "energia": { "option": "villany", "votes": "6:0" },
+  "dieta": { "option": "sajat", "votes": "6:0" },
+  "allergia": { "option": "alap4", "votes": "6:0" },
+  "dieta_konyha": { "option": "kabin", "votes": "6:0" },
+  "talalas": { "option": "onkiszolgalo", "votes": "5:1" },
+  "mosogatas": { "option": "folyamatos", "votes": "6:0" },
+  "kiegeszito": { "option": "hideg_tej", "votes": "6:0" },
+  "hulladek": { "option": "hutott", "votes": "6:0" },
+  "rajzeszkoz": { "option": "drawio", "votes": "6:0" },
+  "mi": { "option": "ellenorzott", "votes": "6:0" }
+ },
+ "summary": [
+  "Budapesti, megnevezett kerületben fekvő, kitalált telkű általános iskola (6–14 év), 360 diákkal; fenntartó állami, a konyhát az intézmény maga üzemelteti.",
+  "A konyha az iskolaépülethez kapcsolódik, egy szinten, földszinten; helyben étkeztetés étteremmel, önkiszolgáló, terelőkorlátos sorral (referenciaadag-bemutatással és adagolást segítő felügyelettel).",
+  "Csak villannyal főzünk (az üstök saját gőzfejlesztővel). Külön helyiség a hidegkonyha és a tejkonyha, cukrászkonyha nincs; folyamatos üzemű mosogatógép, hűtött hulladéktároló.",
+  "Nyersanyag: friss, előkészítetlen zöldség és burgonya (burgonyakoptató és földesáru-raktár kell), darabolt hús, fagyasztott halfilé, fertőtlenített tojás; naponta tej, kenyér, zöldség-gyümölcs, hetente hús, tojás, fagyasztott áru, havonta szárazáru, konzerv.",
+  "Diéta: saját konyhán, külön diétás főzőkabinban, a négy leggyakoribb ételallergiára és -intoleranciára (glutén, laktóz, tejfehérje, tojás).",
+  "Étkezők: a diákok, a pedagógusok, a többi dolgozó és a konyhai dolgozók; tízórai, ebéd, uzsonna, reggeli nincs. Rajz: draw.io; MI csak előkészítésre és ellenőrzésre, tananyagból igazolva és jelölve."
+ ],
+ "letszamterv": {
+  "caption": "Véglegesített létszámterv: étkezők száma naponta (fő)",
+  "cols": ["Csoport", "Létszám", "Tízórai", "Ebéd", "Uzsonna"],
+  "rows": [
+   ["Alsó tagozat (7–10 év)", "180", "150", "180", "120"],
+   ["Felső tagozat (11–14 év)", "180", "85", "180", "45"],
+   ["Pedagógusok", "32", "6", "32", "6"],
+   ["Egyéb dolgozók", "14", "–", "14", "–"],
+   ["Konyhai dolgozók", "10", "–", "10", "–"],
+   ["Összesen", "416", "241", "416", "171"]
+  ],
+  "lastRowTotal": true,
+  "note": "A megszavazott A) változat arányai 360 diákra (300–400 fő) átszámolva. Ebéd mindenkinek; tízórait és uzsonnát a diákok egy része és hat pedagógus kér; reggeli nincs. A felnőttek adagja a rendelet 4. mellékletének „15. évtől” oszlopa szerint. Az egyéb dolgozók: pedagógiai asszisztens, takarító, karbantartó, kertész, portás, adminisztráció; a konyhai dolgozók: élelmezésvezető, szakácsok, diétás szakács, konyhai kisegítők. A számok javaslatok, a csoport módosíthatja."
+ },
+ "deadlines": [
+  { "label": "Saját részek elkészülte", "date": "2026-11-15", "note": "két héttel a leadás előtt, hogy az összefésülésre maradjon idő" },
+  { "label": "Tanórai bemutató", "date": "2026-11-19", "note": "11:30, pendrive-ról" },
+  { "label": "Leadás (Moodle)", "date": "2026-11-29", "note": "23:59, a bemutató utáni javításokkal" }
+ ],
+ "tasks": [
+  { "id": "intezmeny_dia", "group": "Intézmény és üzem", "slide": "3.", "title": "Az intézmény bemutatása", "desc": "Intézménytípus, fenntartó, város és telek, korcsoportok, a létszámterv táblázata, részétkezések aránya (65% / 50% / 35%, rendelet 5. §), étkeztetés módja (önkiszolgáló)." },
+  { "id": "uzem_dia", "group": "Intézmény és üzem", "slide": "3.", "title": "Az élelmezési üzem bemutatása", "desc": "Saját üzemeltetés, kapcsolódó épület, földszint, csak villany, diétás étkeztetés és a négy allergiatípus, külön diétás főzőkabin." },
+  { "id": "nyersanyagnorma", "group": "Intézmény és üzem", "slide": "3.", "title": "Nyersanyagnorma meghatározása", "desc": "Egy élelmezési napra jutó nyersanyagköltség korcsoportonként (7–10 év, 11–14 év, felnőtt), a feladatleírás alapinformációi szerint." },
+  { "id": "helyiseglista", "group": "Tervezés", "slide": "–", "title": "Helyiséglista", "desc": "A teljes ételkészítési folyamat helyiségei: áruátvétel, raktárak, előkészítők, főzőkonyha, diétás kabin, hideg- és tejkonyha, tálaló, étterem, mosogatók, hulladéktároló, valamint a dolgozók szociális helyiségei." },
+  { "id": "beszerzes_dia", "group": "Tervezés", "slide": "4.", "title": "Beszerzés", "desc": "Nyersanyagcsoportonként: előkészített vagy előkészítetlen, napi / heti / havi szállítás, és hogy ez milyen raktárt és gépet igényel." },
+  { "id": "helyszinrajz", "group": "Rajzok", "slide": "5.", "title": "Helyszínrajz", "desc": "Kitalált budapesti telek égtájakkal; nyersanyag beérkezése, a fogyasztók érkezése, kapcsolat az iskolaépülettel; energiaforrások és közművek (villany, víz, csatorna)." },
+  { "id": "alaprajz1", "group": "Rajzok", "slide": "6.", "title": "Alaprajz 1: helyiségek és útvonalak", "desc": "Az üzem helyiségei, kapcsolódásuk és a nyersanyagok egyirányú útvonala (tiszta, szennyezett és készétel útja nem keresztezheti egymást), jól látható ajtókkal." },
+  { "id": "gep_raktar", "group": "Gépek helyiségenként", "slide": "7.", "title": "Áruátvétel, raktárak, hűtők", "desc": "Gépek és berendezések darabszámmal és funkcióval: mérleg, szakosított hűtők (tejtermék, hús, hal, zöldség), fagyasztó, földesáru-raktár, szárazáru-raktár." },
+  { "id": "gep_elokeszito", "group": "Gépek helyiségenként", "slide": "7.", "title": "Előkészítők", "desc": "Zöldség-előkészítő burgonyakoptatóval (1,5 m² betonkoszorús hely homokfogóval), kis húselőkészítő, tojás kezelése; gépek darabszámmal." },
+  { "id": "gep_fozokonyha", "group": "Gépek helyiségenként", "slide": "7.", "title": "Főzőkonyha és diétás főzőkabin", "desc": "Villamos üstök kapacitással (a létszámtervből számolva), kombi sütő, főzőzsámoly, indukciós főzőlap; a diétás kabin saját berendezései." },
+  { "id": "gep_hideg_tej", "group": "Gépek helyiségenként", "slide": "7.", "title": "Hidegkonyha és tejkonyha", "desc": "A tízórai és az uzsonna elkészítésének berendezései darabszámmal." },
+  { "id": "gep_talalo", "group": "Gépek helyiségenként", "slide": "7.", "title": "Tálaló és étterem", "desc": "Önkiszolgáló, terelőkorlátos sor; referenciaadag-bemutató hely, adagolást segítő felügyelet; melegen tartás, tálcák, étterem." },
+  { "id": "gep_mosogato", "group": "Gépek helyiségenként", "slide": "7.", "title": "Mosogatók és hulladék", "desc": "Folyamatos üzemű fogyasztói edény mosogatógép, üzemi edény mosogató, hűtött hulladéktároló." },
+  { "id": "gep_szocialis", "group": "Gépek helyiségenként", "slide": "7.", "title": "Szociális helyiségek", "desc": "Öltöző, mosdó, WC, iroda (élelmezésvezető) berendezései." },
+  { "id": "alaprajz2", "group": "Rajzok", "slide": "8.", "title": "Alaprajz 2: berendezésekkel", "desc": "Ugyanaz az alaprajz minden géppel; csak a helyiségek nevei, kapcsolódásuk és a berendezések (az útvonal itt nem kell)." },
+  { "id": "cimdia", "group": "Prezentáció", "slide": "1–2.", "title": "Címdia és egyéni feladatok", "desc": "A projekt címe, minden csoporttag neve; a második dián ki mit csinált, és hol használt MI-t (melyik eszközt, mire)." },
+  { "id": "mi_dia", "group": "Prezentáció", "slide": "9.", "title": "MI-összefoglaló", "desc": "Részletesen: melyik részben, mire használtunk MI-t (ide tartozik a döntési oldal is, amely Claude-dal készült)." },
+  { "id": "osszefesules", "group": "Prezentáció", "slide": "mind", "title": "Összefésülés és bemutató", "desc": "Egységes PowerPoint a részekből, pendrive a november 19-i bemutatóra, utána a javítások és a feltöltés a Moodle-ba november 29-ig." }
+ ]
+}
