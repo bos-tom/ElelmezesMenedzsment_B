@@ -144,8 +144,8 @@ function taskCard(store, t, titles) {
         el('span', { text: userName(store, u) }),
         signed.has(u) ? el('span', { class: 'signed', text: 'jelentkezett' }) : null)));
     const form = el('form', { class: 'confirm' },
-      group('workers', a.workers, s.kidolgozo, 'Kidolgozók'),
-      group('reviewers', a.reviewers, s.ellenorzo, 'Ellenőrök'));
+      group('workers', a.workers, s.kidolgozo, 'Kidolgozók (több is választható)'),
+      group('reviewers', a.reviewers, s.ellenorzo, 'Ellenőrök (több is választható)'));
     const save = el('button', { class: 'btn primary', type: 'submit', text: 'Kiosztás mentése' });
     const cancel = el('button', { class: 'btn', type: 'button', text: 'Mégse' });
     cancel.addEventListener('click', closePanel);
@@ -187,8 +187,8 @@ function taskCard(store, t, titles) {
     const assigned = a && (a.workers.length || a.reviewers.length);
     card.classList.toggle('assigned', !!assigned);
     assignLine.replaceChildren(assigned
-      ? el('span', null, 'Kiosztva · kidolgozó: ', el('b', { text: names(store, a.workers).join(', ') || '–' }),
-        ' · ellenőr: ', el('b', { text: names(store, a.reviewers).join(', ') || '–' }))
+      ? el('span', null, `Kiosztva · ${a.workers.length > 1 ? 'kidolgozók' : 'kidolgozó'}: `, el('b', { text: names(store, a.workers).join(', ') || '–' }),
+        ` · ${a.reviewers.length > 1 ? 'ellenőrök' : 'ellenőr'}: `, el('b', { text: names(store, a.reviewers).join(', ') || '–' }))
       : 'Még nincs kiosztva');
     assignBtn.hidden = !store.isCoordinator || !panel.hidden;
     assignBtn.textContent = assigned ? 'Kiosztás módosítása' : 'Kiosztás';
