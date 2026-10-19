@@ -21,7 +21,8 @@ import { avatar, dataTable, el, notify } from './dom.js';
 import { applyFinal, isClosed, mountDecisionVoting, subscribeVotes, tally } from './votes.js';
 import { createChatBox, subscribeMessages } from './chat.js';
 import { endSession, renderLog, startSession, subscribeLog } from './sessions.js';
-import { membersFrom, renderDashboard, renderFinal } from './dashboard.js';
+import { membersFrom, renderDashboard } from './dashboard.js';
+import { renderSummary } from './osszegzes.js';
 
 const ID_RE = /^[a-z0-9_]{1,40}$/;
 
@@ -287,9 +288,9 @@ function buildPage() {
     const when = date ? new Intl.DateTimeFormat('hu-HU', { dateStyle: 'long' }).format(date) : '';
     document.querySelector('#view-dontesek .view-head').append(el('div', { class: 'closed-banner', role: 'note' },
       el('strong', { text: `A szavazás lezárult${when ? ` (${when})` : ''}.` }),
-      ' Minden döntésnél a végeredmény látszik; szavazni már nem lehet. Az összesítés és a feladatok a ',
-      el('button', { type: 'button', class: 'linkbtn', 'data-goto': 'dashboard', text: 'Dashboardon' }),
-      ' vannak.'));
+      ' Minden döntésnél a végeredmény látszik; szavazni már nem lehet. Alább a feladatösszesítés, a feladatok a ',
+      el('button', { type: 'button', class: 'linkbtn', 'data-goto': 'feladatok', text: 'Feladatkiosztás' }),
+      ' fülön vannak.'));
   }
 
   const groupsEl = document.getElementById('groups');
@@ -538,7 +539,7 @@ if (CONFIG_MISSING) {
 
     show('app');
     renderDashboard(store.members);
-    renderFinal(store);
+    renderSummary(store);
     // Megnyitáskor mindig a Tervezési döntések fül.
     showView('dontesek', { scroll: false });
     refresh();
