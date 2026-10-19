@@ -762,5 +762,39 @@
    "Napi beosztás (vázlat): 6:00-tól 2 kisegítő a hideg- és tejkonyhán (tízórai 9:30-ig); szakácsok és 1 kisegítő az előkészítésen és a főzésen; a diétás szakács a kabinban; 11:45–14:00 tálalás 2 kisegítővel és 1 szakáccsal (referenciaadag, adagolási felügyelet); a folyamatos mosogatógépet 1 kisegítő kezeli; délután az uzsonna (15:00) és a takarítás. Szabadság és betegség esetén a kisegítők helyettesítik egymást."
   ],
   "source": "Füzesgyarmati Napközi Konyha beszámolója (2026. március); Kölcsey Ferenc Általános Iskola (Törökszentmiklós) munkaterve 2025/26. Az egy dolgozóra jutó adagszám MI-becslés."
- }
+ },
+ "milestones": [
+  {
+   "id": "konkretizalas",
+   "label": "A feladat konkretizálása",
+   "sub": "szavazás a 24 tervezési döntésről",
+   "date": "2026-10-19",
+   "auto": "final"
+  },
+  {
+   "id": "kiosztas",
+   "label": "Feladatkiosztás",
+   "sub": "jelentkezés, egyeztetés, kiosztás",
+   "date": "2026-10-26",
+   "auto": "assignments"
+  },
+  {
+   "id": "kidolgozas",
+   "label": "Kidolgozás",
+   "sub": "a saját részek elkészülnek",
+   "date": "2026-11-15"
+  },
+  {
+   "id": "bemutato",
+   "label": "Összefésülés és bemutató",
+   "sub": "tanórai bemutató 11:30",
+   "date": "2026-11-19"
+  },
+  {
+   "id": "leadas",
+   "label": "Javítás és leadás",
+   "sub": "Moodle, 23:59",
+   "date": "2026-11-29"
+  }
+ ]
 }

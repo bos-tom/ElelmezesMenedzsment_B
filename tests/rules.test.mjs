@@ -388,6 +388,31 @@ describe('Kiosztás (assignments)', () => {
   });
 });
 
+describe('Mérföldkövek (milestones)', () => {
+  const mark = (uid, done = true) => ({ done, updatedBy: uid, updatedAt: serverTimestamp() });
+
+  it('a koordinátor késznek jelölheti és visszavonhatja', async () => {
+    const db = ctx(ADMIN2);
+    await assertSucceeds(setDoc(doc(db, 'milestones/bemutato'), mark('admin2')));
+    await assertSucceeds(setDoc(doc(db, 'milestones/bemutato'), mark('admin2', false)));
+  });
+  it('nem koordinátor admin nem jelölhet', async () => {
+    await assertFails(setDoc(doc(ctx(ADMIN1), 'milestones/bemutato'), mark('admin1')));
+  });
+  it('minden admin olvashatja, más nem', async () => {
+    await assertSucceeds(getDocs(collection(ctx(ADMIN1), 'milestones')));
+    await assertFails(getDocs(collection(ctx(MEMBER), 'milestones')));
+  });
+  it('hibás formátum és törlés elutasítva', async () => {
+    const db = ctx(ADMIN2);
+    await assertFails(setDoc(doc(db, 'milestones/bemutato'), { ...mark('admin2'), done: 'igen' }));
+    await assertFails(setDoc(doc(db, 'milestones/bemutato'), { ...mark('admin2'), extra: 1 }));
+    await assertFails(setDoc(doc(db, 'milestones/Hibas-Id'), mark('admin2')));
+    await assertSucceeds(setDoc(doc(db, 'milestones/leadas'), mark('admin2')));
+    await assertFails(deleteDoc(doc(db, 'milestones/leadas')));
+  });
+});
+
 describe('A config nem írható', () => {
   it('admin sem írhatja', async () => {
     await assertFails(setDoc(doc(ctx(ADMIN1), 'config/app'), { admins: [ADMIN1.email, MEMBER.email] }));

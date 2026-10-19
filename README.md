@@ -171,6 +171,7 @@ Ehhez a kódnak már fent kell lennie a GitHubon (push után).
 | `messages/{id}` | csevegőüzenet (1–1000 karakter), opcionális döntéscímkével | mindenki a saját nevében; módosítani nem lehet; törölni csak a szerző tudja |
 | `signups/{feladat}__{szerep}__{uid}` | jelentkezés egy feladatra kidolgozónak (`kidolgozo`) vagy ellenőrnek (`ellenorzo`) | mindenki a sajátját (jelentkezés és visszavonás) |
 | `assignments/{feladat}` | a kiosztás: kidolgozók és ellenőrök (legfeljebb 10–10 fő) | csak a `coordinators` |
+| `milestones/{mérföldkő}` | a Dashboard mérföldkövének kézi „kész” jelölése (`done`) | csak a `coordinators` |
 
 Szerepkörök: mivel csak adminok férnek hozzá, minden belépő tag szavazhat, írhat, lezárhat és újranyithat döntést. Csevegőüzenetet mindenki csak a sajátját törölheti. Ezért külön „Admin” jelvény sincs a felületen.
 

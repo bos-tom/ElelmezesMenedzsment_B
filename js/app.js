@@ -24,6 +24,7 @@ import { endSession, renderLog, startSession, subscribeLog } from './sessions.js
 import { membersFrom, renderDashboard } from './dashboard.js';
 import { renderSummary } from './osszegzes.js';
 import { mountTasks, subscribeTasks } from './feladatok.js';
+import { renderMilestones, subscribeMilestones } from './merfoldkovek.js';
 
 const ID_RE = /^[a-z0-9_]{1,40}$/;
 
@@ -37,6 +38,7 @@ const store = {
   sessions: [],
   signups: new Map(),
   assignments: new Map(),
+  milestoneMarks: new Map(),
   members: [],
   final: {},
   data: null,
@@ -355,6 +357,7 @@ function refresh() {
 
   for (const u of decisionUpdaters) u();
   updateTasks?.();
+  renderMilestones(store);
 
   for (const d of decisions) {
     const { counts, total, leaders } = tally(store, d.id);
@@ -480,6 +483,7 @@ function stopListeners() {
   store.sessions = [];
   store.signups = new Map();
   store.assignments = new Map();
+  store.milestoneMarks = new Map();
 }
 
 // ---- Indulás ---------------------------------------------------------------
@@ -547,6 +551,12 @@ if (CONFIG_MISSING) {
     saveProfile(user).catch(() => {});
     unsubs.push(subscribeUsers(), subscribeVotes(store, scheduleRefresh), subscribeMessages(store, scheduleRefresh));
     if (updateTasks) unsubs.push(subscribeTasks(store, scheduleRefresh));
+    if (store.data.final?.milestones) {
+      unsubs.push(subscribeMilestones(store, scheduleRefresh));
+      // Éjfélkor a „ma” jelölő és a hátralévő napok is továbblépnek.
+      const t = setInterval(() => renderMilestones(store), 10 * 60_000);
+      unsubs.push(() => clearInterval(t));
+    }
     startSession(user.uid);
 
     // Napló: csak a naplót megtekintő adminnak; az állapot („Bent van”) félpercenként frissül.
