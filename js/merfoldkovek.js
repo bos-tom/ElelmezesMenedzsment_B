@@ -82,22 +82,23 @@ function stationDot(state, pct) {
   return root;
 }
 
-// A „ma” jelölő helye: két szomszédos állomás között a dátumok arányában (egyenlő közű állomások).
-function todayPosition(list) {
-  const t = today().getTime();
-  const times = list.map((m) => dayOf(m.date).getTime());
-  if (t <= times[0]) return 0;
-  if (t >= times[times.length - 1]) return 100;
-  const i = times.findIndex((x, k) => t >= x && t < times[k + 1]);
-  const frac = (t - times[i]) / (times[i + 1] - times[i]);
-  return ((i + frac) / (list.length - 1)) * 100;
+// Helyzet az idővonalon (0–100): a dátum aránya az első és az utolsó mérföldkő között.
+function timeScale(list) {
+  const t0 = dayOf(list[0].date).getTime();
+  const t1 = dayOf(list[list.length - 1].date).getTime();
+  return (time) => Math.max(0, Math.min(100, ((time - t0) / (t1 - t0)) * 100));
 }
+
+// A vonal a doboz szélei előtt ennyi százalékkal kezdődik és végződik (a szélső megállók köre elférjen).
+const INSET = 4;
+const onLine = (p) => INSET + (p * (100 - 2 * INSET)) / 100;
 
 export function renderMilestones(store) {
   const box = document.getElementById('dash-milestones');
   const list = store.data?.final?.milestones;
   if (!box || !Array.isArray(list) || list.length < 2) return;
   const marks = store.milestoneMarks || new Map();
+  const scale = timeScale(list);
 
   let activeFound = false;
   const items = list.map((m) => {
@@ -108,28 +109,51 @@ export function renderMilestones(store) {
     if (done) state = 'done';
     else if (!activeFound) { state = 'active'; activeFound = true; }
     const late = !done && dayOf(m.date) < today();
-    return { m, r, done, state, late, manual: !r.auto };
+    return { m, r, done, state, late, manual: !r.auto, at: scale(dayOf(m.date).getTime()) };
   });
   const doneCount = items.filter((x) => x.done).length;
   const lastDone = items.reduce((k, x, i) => (x.done ? i : k), -1);
+  const pos = scale(today().getTime());
+  const n = list.length;
 
-  const pos = todayPosition(list);
-  // Keskeny kijelzőn (függőleges vonal) a „ma” címke annál az állomásnál van, amely után a mai nap következik.
-  const todayIdx = Math.min(list.length - 1, Math.floor((pos / 100) * (list.length - 1) + 1e-9));
-  const stations = items.map(({ m, r, done, state, late, manual }, i) => {
-    // Az eltelt idő aránya ezen a szakaszon (függőleges nézethez).
-    const elapsed = Math.max(0, Math.min(1, (pos / 100) * (list.length - 1) - i));
-    const li = el('li', {
-      class: `ms ms-${state}${late ? ' late' : ''}${i < lastDone ? ' seg-done' : ''}`,
-      style: `--e:${(elapsed * 100).toFixed(1)}%`,
-    },
-      i === todayIdx ? el('span', { class: 'ms-today-tag', 'aria-hidden': 'true', text: 'ma' }) : null,
-      // Az aktuális állomás fölött a haladás százaléka (a gyűrű ennyire telt meg).
-      state === 'active' && r.pct != null ? el('div', { class: 'ms-pct', text: `${r.pct}%` }) : null,
-      stationDot(state, r.pct),
+  // 1. Az idővonal: a megállók a kiszabott idő arányában, alul az eltelt idő, fölötte a kész szakasz.
+  const dots = items.map(({ r, state, at }) => el('div', {
+    class: `ms-stop ms-${state}`, style: `--x:${onLine(at)}%`,
+  },
+    state === 'active' && r.pct != null ? el('div', { class: 'ms-pct', text: `${r.pct}%` }) : null,
+    stationDot(state, r.pct)));
+  const axis = el('div', { class: 'ms-axis', 'aria-hidden': 'true' },
+    el('div', { class: 'ms-line' },
+      el('span', { class: 'ms-line-elapsed', style: `--p:${pos}%` }),
+      el('span', { class: 'ms-line-done', style: `--p:${lastDone < 0 ? 0 : items[lastDone].at}%` })),
+    el('span', { class: 'ms-today', style: `--x:${onLine(pos)}%;--p:${pos}%` },
+      el('span', { class: 'ms-today-pill', text: `ma · ${dateFmt.format(today())}` })),
+    ...dots);
+
+  // 2. Vezetővonalak a megállóktól az egyenlő közű kártyákig.
+  const SVG = 'http://www.w3.org/2000/svg';
+  const leaders = document.createElementNS(SVG, 'svg');
+  leaders.setAttribute('class', 'ms-leaders');
+  leaders.setAttribute('viewBox', '0 0 100 30');
+  leaders.setAttribute('preserveAspectRatio', 'none');
+  leaders.setAttribute('aria-hidden', 'true');
+  items.forEach(({ state, at }, i) => {
+    const x0 = onLine(at);
+    const x1 = ((i + 0.5) / n) * 100;
+    const p = document.createElementNS(SVG, 'path');
+    p.setAttribute('d', `M${x0} 0 C${x0} 15 ${x1} 15 ${x1} 30`);
+    p.setAttribute('class', `ms-leader ms-${state}`);
+    p.setAttribute('vector-effect', 'non-scaling-stroke');
+    leaders.append(p);
+  });
+
+  // 3. A kártyák a részletekkel.
+  const cards = items.map(({ m, r, done, state, late, manual }) => {
+    const li = el('li', { class: `ms ms-${state}${late ? ' late' : ''}` },
       el('div', { class: 'ms-date', text: dateFmt.format(dayOf(m.date)) }),
       el('div', { class: 'ms-label', text: m.label }),
       m.sub ? el('div', { class: 'ms-sub', text: m.sub }) : null,
+      state === 'active' && r.pct != null ? el('div', { class: 'ms-pct-inline', text: `${r.pct}% kész` }) : null,
       r.text ? el('div', { class: 'ms-metric', text: r.text }) : null,
       r.extra && !done ? el('div', { class: 'ms-sub', text: r.extra }) : null,
       el('div', { class: 'ms-days', text: daysText(m.date, done) }));
@@ -143,18 +167,11 @@ export function renderMilestones(store) {
     return li;
   });
 
-  const progress = lastDone < 0 ? 0 : (lastDone / (list.length - 1)) * 100;
-  // Rétegek: alul az eltelt idő (sraffozott), fölötte a kész mérföldkövek (zöld), legfelül a „ma”.
-  const line = el('div', { class: 'ms-line', 'aria-hidden': 'true' },
-    el('span', { class: 'ms-line-elapsed', style: `--p:${pos}%` }),
-    el('span', { class: 'ms-line-done', style: `--p:${progress}%` }),
-    el('span', { class: 'ms-today', style: `--p:${pos}%` },
-      el('span', { class: 'ms-today-pill', text: `ma · ${dateFmt.format(today())}` })));
-  box.style.setProperty('--n', list.length);
+  box.style.setProperty('--n', n);
   box.replaceChildren(
     el('p', { class: 'ms-summary' },
-      `${list.length} mérföldkőből ${doneCount} kész. `,
+      `${n} mérföldkőből ${doneCount} kész. `,
       el('span', { class: 'ms-key ms-key-done' }), ' kész mérföldkövek ',
       el('span', { class: 'ms-key ms-key-elapsed' }), ' eltelt idő'),
-    el('div', { class: 'ms-track' }, line, el('ol', { class: 'ms-list' }, ...stations)));
+    axis, leaders, el('ol', { class: 'ms-list' }, ...cards));
 }

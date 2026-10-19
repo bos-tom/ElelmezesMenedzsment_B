@@ -442,56 +442,58 @@ body:not(.in-app) .wrap::after{content:"";display:block;border-top:2px solid var
 }
 @media (prefers-reduced-motion:no-preference){html{scroll-behavior:smooth}}
 
-/* Mérföldkövek: vízszintes idővonal (metróvonal), keskeny kijelzőn függőleges */
-.milestones{--n:5;--dot:40px}
-.ms-summary{margin:0 0 10px;font:500 12.5px/1.4 var(--f-mono);color:var(--muted);display:flex;flex-wrap:wrap;align-items:center;gap:4px 6px}
+/* Mérföldkövek: idővonal, a megállók a kiszabott idő arányában; alatta egyenlő közű kártyák,
+   a megállóktól vezetővonallal. Keskeny kijelzőn a kártyák egymás alatt. */
+.milestones{--n:5;--dot:34px;--big:46px;--axis-y:72px;--hatch:repeating-linear-gradient(-45deg,color-mix(in srgb,var(--muted) 75%,transparent) 0 3px,transparent 3px 6px)}
+.ms-summary{margin:0 0 6px;font:500 12.5px/1.4 var(--f-mono);color:var(--muted);display:flex;flex-wrap:wrap;align-items:center;gap:4px 6px}
 .ms-key{display:inline-block;width:22px;height:6px;border-radius:3px;margin-left:8px}
 .ms-key-done{background:var(--pro)}
 .ms-key-elapsed{background:var(--hatch),var(--line)}
-.ms-track{position:relative;padding-top:56px}
-.milestones{--hatch:repeating-linear-gradient(-45deg,color-mix(in srgb,var(--muted) 75%,transparent) 0 3px,transparent 3px 6px)}
-.ms-line{position:absolute;top:calc(56px + var(--dot)/2 - 3px);left:calc(50%/var(--n));right:calc(50%/var(--n));height:6px;border-radius:3px;background:var(--line)}
-.ms-line-elapsed{position:absolute;inset:0 auto 0 0;width:var(--p);border-radius:3px;background:var(--hatch)}
-.ms-line-done{position:absolute;inset:0 auto 0 0;width:var(--p);border-radius:3px;background:var(--pro)}
-.ms-today{position:absolute;left:var(--p);top:calc(3px - var(--dot)/2 - 56px);bottom:calc(3px - var(--dot)/2 - 8px);width:3px;margin-left:-1.5px;background:var(--con);border-radius:2px}
-.ms-today::after{content:'';position:absolute;left:50%;top:calc(var(--dot)/2 + 56px);width:14px;height:14px;transform:translate(-50%,-50%);border-radius:50%;background:var(--con);box-shadow:0 0 0 3px var(--surface)}
-.ms-today-pill{position:absolute;top:0;left:50%;transform:translateX(-50%);font:700 13px/1.6 var(--f-mono);text-transform:uppercase;letter-spacing:.05em;color:#fff;background:var(--con);border-radius:999px;padding:1px 10px;white-space:nowrap;box-shadow:0 2px 6px rgba(0,0,0,.25)}
-.ms-list{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(var(--n),minmax(0,1fr));gap:8px;position:relative}
-.ms{position:relative;display:grid;justify-items:center;text-align:center;gap:2px;align-content:start}
-/* Az aktuális állomás nagyobb; a középpontja a vonalon marad */
-.ms-active{--big:56px}
-.ms-active .ms-dot{width:var(--big);height:var(--big);margin:calc((var(--dot) - var(--big))/2) 0 calc(6px + (var(--dot) - var(--big))/2)}
-.ms-pct{position:absolute;top:calc((var(--dot) - var(--big))/2 - 22px);left:50%;transform:translateX(-50%);font:700 15px/1.3 var(--f-mono);color:var(--accent)}
-.ms-dot{width:var(--dot);height:var(--dot);margin-bottom:6px}
+.ms-axis{position:relative;height:calc(var(--axis-y) + var(--big)/2 + 4px)}
+.ms-line{position:absolute;left:4%;right:4%;top:var(--axis-y);height:6px;margin-top:-3px;border-radius:3px;background:var(--line)}
+.ms-line-elapsed,.ms-line-done{position:absolute;inset:0 auto 0 0;width:var(--p);border-radius:3px}
+.ms-line-elapsed{background:var(--hatch)}
+.ms-line-done{background:var(--pro)}
+.ms-today{position:absolute;left:var(--x);top:0;height:calc(var(--axis-y) + 16px);width:3px;margin-left:-1.5px;background:var(--con);border-radius:2px}
+.ms-today::after{content:'';position:absolute;left:50%;top:var(--axis-y);width:14px;height:14px;transform:translate(-50%,-50%);border-radius:50%;background:var(--con);box-shadow:0 0 0 3px var(--surface)}
+.ms-today-pill{position:absolute;top:0;left:0;transform:translateX(calc(-1 * var(--p)));font:700 13px/1.6 var(--f-mono);text-transform:uppercase;letter-spacing:.05em;color:#fff;background:var(--con);border-radius:999px;padding:1px 10px;white-space:nowrap;box-shadow:0 2px 6px rgba(0,0,0,.25)}
+.ms-stop{position:absolute;left:var(--x);top:var(--axis-y);transform:translate(-50%,-50%);width:var(--dot);height:var(--dot)}
+.ms-stop.ms-active{width:var(--big);height:var(--big);z-index:1}
+.ms-dot{display:block;width:100%;height:100%}
 .ms-dot-bg{fill:var(--surface);stroke:var(--line);stroke-width:4}
 .ms-done .ms-dot-bg{fill:var(--pro);stroke:var(--pro)}
 .ms-check{fill:none;stroke:var(--surface);stroke-width:4;stroke-linecap:round;stroke-linejoin:round}
 .ms-active .ms-dot-bg{stroke:var(--accent-soft)}
 .ms-ring{fill:none;stroke:var(--accent);stroke-width:4;stroke-linecap:round}
 .ms-core{fill:var(--accent)}
+.ms-pct{position:absolute;bottom:100%;left:50%;transform:translateX(-50%);margin-bottom:2px;font:700 15px/1.3 var(--f-mono);color:var(--accent)}
+.ms-leaders{display:block;width:100%;height:30px;overflow:visible}
+.ms-leader{fill:none;stroke:var(--line);stroke-width:2;stroke-dasharray:3 3}
+.ms-leader.ms-done{stroke:var(--pro)}
+.ms-leader.ms-active{stroke:var(--accent);stroke-dasharray:none}
+.ms-list{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(var(--n),minmax(0,1fr));gap:8px}
+.ms{display:grid;justify-items:center;text-align:center;gap:2px;align-content:start;background:var(--surface);border:1px solid var(--line);border-top:4px solid var(--line);border-radius:var(--r);padding:8px 6px 10px}
+.ms.ms-done{border-top-color:var(--pro)}
+.ms.ms-active{border-top-color:var(--accent);box-shadow:0 0 0 1px var(--accent)}
 .ms-date{font:600 12px/1.4 var(--f-mono);color:var(--muted)}
 .ms-label{font:700 14.5px/1.25 var(--f-display)}
 .ms-sub{font-size:12.5px;color:var(--muted)}
 .ms-metric{font:600 12.5px/1.4 var(--f-mono);color:var(--accent);margin-top:2px}
 .ms-done .ms-metric{color:var(--pro)}
+.ms-pct-inline{display:none;font:700 13px/1.4 var(--f-mono);color:var(--accent)}
 .ms-days{font:500 11.5px/1.6 var(--f-mono);color:var(--muted);border-radius:999px;padding:0 8px;background:var(--sunk);margin-top:2px}
 .ms-done .ms-days{background:var(--pro);color:var(--surface)}
 .ms.late .ms-days{background:var(--con);color:var(--surface)}
 .ms .btn.small{margin-top:6px}
 .ms-pending .ms-label{color:var(--muted)}
-.ms-today-tag{display:none}
 @media (max-width:700px){
-  .ms-track{padding:0}
-  .ms-line{display:none}
-  .ms-list{grid-template-columns:minmax(0,1fr);gap:0}
-  .ms{position:relative;grid-template-columns:var(--dot) minmax(0,1fr);justify-items:start;text-align:left;column-gap:12px;padding:0 0 18px 34px}
-  .ms-dot{grid-row:1/span 8;margin:0;position:relative;z-index:1}
-  .ms-active .ms-dot{margin:calc((var(--dot) - var(--big))/2)}
-  .ms-pct{position:static;transform:none;grid-column:2}
-  .ms>*:not(.ms-dot):not(.ms-today-tag){grid-column:2}
-  /* Szakasz a következő állomásig */
-  .ms:not(:last-child)::after{content:'';position:absolute;left:calc(34px + var(--dot)/2 - 3px);top:calc(var(--dot)/2);bottom:calc(-1 * var(--dot)/2);width:6px;background:var(--hatch) top/100% var(--e) no-repeat,var(--line)}
-  .ms.seg-done::after{background:var(--pro)}
-  .ms-today-tag{display:block;position:absolute;left:-6px;top:calc(var(--dot)/2 + var(--e));transform:translateY(-50%);z-index:0;font:700 12px/1.6 var(--f-mono);text-transform:uppercase;color:#fff;background:var(--con);border-radius:999px;padding:0 7px;box-shadow:0 2px 6px rgba(0,0,0,.25)}
-  .ms-today-tag::after{content:'';position:absolute;left:100%;top:50%;width:40px;height:3px;margin-top:-1.5px;background:var(--con);border-radius:2px}
+  .milestones{--dot:18px;--big:24px;--axis-y:40px}
+  .ms-today-pill{font-size:11.5px;padding:0 7px}
+  .ms-pct,.ms-leaders{display:none}
+  .ms-axis{margin-bottom:10px}
+  .ms-list{grid-template-columns:minmax(0,1fr)}
+  .ms{justify-items:start;text-align:left;border-top-width:1px;border-left:4px solid var(--line);padding:8px 12px}
+  .ms.ms-done{border-left-color:var(--pro);border-top-color:var(--line)}
+  .ms.ms-active{border-left-color:var(--accent);border-top-color:var(--accent)}
+  .ms-pct-inline{display:block}
 }
