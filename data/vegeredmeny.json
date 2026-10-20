@@ -200,10 +200,8 @@
    "desc": "A munka összefogása a feladatok kiosztásától a leadásig.",
    "output": "Kiosztott feladatok, követett határidők, kész bemutató és leadott anyag.",
    "steps": [
-    "A jelentkezések alapján a kidolgozók és az ellenőrök kiosztása (szóbeli egyeztetés után, okt. 21.)",
     "A részhatáridők követése (saját részek: nov. 15.); a P1–P8 sorrendje miatt a korai részek (P1, P3, P4) előbb kellenek",
     "Heti rövid állapotfelmérés: ki hol tart, hol akad el a munka",
-    "Kapcsolattartás az oktatóval (pl. elhagyható-e a tojáselőkészítő fertőtlenített tojásnál)",
     "Az ellenőrzési kör megszervezése",
     "A bemutató (nov. 19.) és a javított változat Moodle-leadásának (nov. 29.) ellenőrzése"
    ],
@@ -309,15 +307,14 @@
    "group": "I. Projektfeladat – tervezési folyamat és tervrajzok",
    "slide": "5.",
    "size": "közepes",
-   "title": "P5 · Helyszínrajz",
-   "desc": "FL „Tervrajzok – Helyszínrajz”: hol érkeznek a nyersanyagok, hol érkezik a fogyasztó, a kapcsolat az iskolaépülettel, égtájak; a diára az energiaforrások és a közművek is.",
-   "output": "draw.io helyszínrajz képként, a közművekkel; ebből készül az 5. dia.",
+   "title": "P5/a · Helyszínrajz",
+   "desc": "FL „Tervrajzok – Helyszínrajz”: hol érkeznek a nyersanyagok, hol érkezik a fogyasztó, a kapcsolat az iskolaépülettel, égtájak.",
+   "output": "draw.io helyszínrajz képként; ebből készül az 5. dia (a P5/b energiaforrásaival és közműveivel együtt).",
    "steps": [
     "A telek és az iskolaépület, égtájakkal",
     "A konyha helye a tankönyvi tájolás szerint (raktár északon, főzőtér északkeleten stb.)",
     "A nyersanyag beérkezése (gazdasági bejárat) és a fogyasztók érkezése az iskolából az étterembe",
-    "A konyha és az iskolaépület kapcsolata",
-    "Energiaforrások és közművek: villany (3 fázis), víz, csatorna"
+    "A konyha és az iskolaépület kapcsolata"
    ],
    "sources": [
     "FL 1. oldal: Helyszínrajz; 3–4. oldal: 5. dia",
@@ -325,6 +322,31 @@
    ],
    "dependsOn": [
     "p1_intezmeny"
+   ]
+  },
+  {
+   "id": "p5b_kozmuvek_legtechnika",
+   "group": "I. Projektfeladat – tervezési folyamat és tervrajzok",
+   "slide": "5.",
+   "size": "közepes",
+   "title": "P5/b · Energiaforrások, közművek és légtechnika",
+   "desc": "Az 5. dián a feladatleírás kéri a rendelkezésre álló energiaforrásokat és közműveket, mert ezek határozzák meg, milyen gépek használhatók az üzemben.",
+   "output": "Az energiaforrások, a közművek és a szellőzés rövid leírása (táblázat vagy ábra) az 5. diához.",
+   "steps": [
+    "Villamos energia: 3 fázis, a csak villannyal főző konyha teljesítményigénye (üstök, kombi sütő, mosogatógép)",
+    "Víz: hideg- és melegvíz-ellátás, vízlágyítás a mosogatógéphez",
+    "Csatorna: padlóösszefolyók, zsírfogó, a burgonyakoptató homokfogója",
+    "Szellőzőrendszer: elszívóernyők a főzőberendezések fölött, friss levegő befúvása, pára- és hőelszívás a főzőkonyhában és a mosogatóban",
+    "Túlnyomásos légtechnika a főzőkonyhából nyíló diétás főzőkabin ajtajánál, hogy a főzőkonyha levegője (allergénnel szennyezett pára, por) ne jusson be a kabinba"
+   ],
+   "sources": [
+    "FL 3–4. oldal: 5. dia (energiaforrások és közművek)",
+    "1. alkalom előadásai: víz, csatorna, fűtés; világítás, elektromos ellátás",
+    "Tervezési döntések: energia (csak villany), diétás főzőkabin"
+   ],
+   "dependsOn": [
+    "p1_intezmeny",
+    "p3_helyiseglista"
    ]
   },
   {

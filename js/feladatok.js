@@ -197,28 +197,23 @@ function taskCard(store, t, titles) {
   return { card, update };
 }
 
-// Személyenkénti összesítés: ki hány helyre jelentkezett, és mit kapott.
+// Személyenkénti összesítés: ki hány feladatra jelentkezett kidolgozónak, illetve ellenőrnek.
 function renderMatrix(store, tasks) {
   const count = (fn) => tasks.reduce((n, t) => n + (fn(t) ? 1 : 0), 0);
   const people = [...store.users.keys()].sort(byName(store));
   const rows = people.map((u) => {
     const sig = (role) => count((t) => store.signups.get(t.id)?.[role].has(u));
-    const asg = (key) => count((t) => store.assignments.get(t.id)?.[key].includes(u));
     return el('tr', { class: u === store.user?.uid ? 'me' : null },
       el('th', { scope: 'row', text: userName(store, u) }),
       el('td', { class: 'num', text: String(sig('kidolgozo')) }),
-      el('td', { class: 'num', text: String(sig('ellenorzo')) }),
-      el('td', { class: 'num', text: String(asg('workers')) }),
-      el('td', { class: 'num', text: String(asg('reviewers')) }));
+      el('td', { class: 'num', text: String(sig('ellenorzo')) }));
   });
   document.getElementById('signup-matrix').replaceChildren(
     el('div', { class: 'table-wrap' }, el('table', { class: 'data-table' },
       el('thead', null, el('tr', null,
         el('th', { scope: 'col', text: 'Név' }),
         el('th', { scope: 'col', text: 'Jelentkezés: kidolgozás' }),
-        el('th', { scope: 'col', text: 'Jelentkezés: ellenőrzés' }),
-        el('th', { scope: 'col', text: 'Kiosztva: kidolgozó' }),
-        el('th', { scope: 'col', text: 'Kiosztva: ellenőr' }))),
+        el('th', { scope: 'col', text: 'Jelentkezés: ellenőrzés' }))),
       el('tbody', null, ...rows))));
 }
 
