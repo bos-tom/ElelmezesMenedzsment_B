@@ -76,13 +76,17 @@ async function saveAssignment(store, taskId, workers, reviewers) {
 // A feladat rövid neve a táblázatban és a Dashboardon: „P1”, „P7/a”, vagy a teljes cím.
 export const shortName = (t) => (t.title.includes(' · ') ? t.title.split(' · ')[0] : t.title);
 
-// Kinek mi van kiosztva: { work: [feladat], review: [feladat] }.
+// Kinek mi van kiosztva: { work, review, owned }. Az owned a felelősként megnevezett feladat
+// (pl. a koordináció: owner „Berni”), a becenév alapján.
 export function assignedTo(store, uid) {
-  const tasks = (store.data?.final?.tasks || []).filter((t) => !t.owner);
+  const all = store.data?.final?.tasks || [];
+  const tasks = all.filter((t) => !t.owner);
   const a = (t) => store.assignments.get(t.id);
+  const name = store.users.get(uid)?.displayName;
   return {
     work: tasks.filter((t) => a(t)?.workers.includes(uid)),
     review: tasks.filter((t) => a(t)?.reviewers.includes(uid)),
+    owned: name ? all.filter((t) => t.owner === name) : [],
   };
 }
 
@@ -216,14 +220,16 @@ function renderMatrix(store, tasks) {
   const people = [...store.users.keys()].sort(byName(store));
   const rows = people.map((u) => {
     const sig = (role) => count((t) => store.signups.get(t.id)?.[role].has(u));
-    const { work, review } = assignedTo(store, u);
+    const { work, review, owned } = assignedTo(store, u);
     const list = (label, ts) => (ts.length ? el('div', null, `${label}: `, el('b', { text: ts.map(shortName).join(', ') })) : null);
     return el('tr', { class: u === store.user?.uid ? 'me' : null },
       el('th', { scope: 'row', text: userName(store, u) }),
       el('td', { class: 'num', text: String(sig('kidolgozo')) }),
       el('td', { class: 'num', text: String(sig('ellenorzo')) }),
       el('td', { class: 'assigned-cell' },
-        work.length || review.length ? [list('kidolgozó', work), list('ellenőr', review)] : el('span', { class: 'muted', text: '–' })));
+        work.length || review.length || owned.length
+          ? [list('felelős', owned), list('kidolgozó', work), list('ellenőr', review)]
+          : el('span', { class: 'muted', text: '–' })));
   });
   document.getElementById('signup-matrix').replaceChildren(
     el('div', { class: 'table-wrap' }, el('table', { class: 'data-table' },

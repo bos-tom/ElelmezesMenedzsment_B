@@ -77,9 +77,11 @@ function taskLine(store, t) {
     el('b', { text: shortName(t) }), ` · ${STATES[st].label.toLowerCase()}${v ? ` (v${v})` : ''}`);
 }
 
-function assignedBlock(store, work, review) {
-  if (!work.length && !review.length) return el('div', { class: 'person-sub', text: 'Nincs kiosztott feladat' });
+function assignedBlock(store, work, review, owned = []) {
+  if (!work.length && !review.length && !owned.length) return el('div', { class: 'person-sub', text: 'Nincs kiosztott feladat' });
   return el('div', { class: 'person-tasks' },
+    owned.length ? el('div', { class: 'ptask-head', text: 'Felelős' }) : null,
+    owned.length ? el('ul', { class: 'ptasks' }, ...owned.map((t) => el('li', { class: 'ptask owner' }, el('b', { text: t.title }), ' · folyamatos'))) : null,
     work.length ? el('div', { class: 'ptask-head', text: 'Kidolgozó' }) : null,
     work.length ? el('ul', { class: 'ptasks' }, ...work.map((t) => taskLine(store, t))) : null,
     review.length ? el('div', { class: 'ptask-head', text: 'Ellenőr' }) : null,
@@ -120,7 +122,7 @@ export function renderDashboard(members, store) {
   const assigned = tasks.filter((t) => store.assignments?.get(t.id)?.workers.length).length;
   const cards = members.map((m) => {
     const uid = uidOf(store, m);
-    const { work, review } = uid ? assignedTo(store, uid) : { work: [], review: [] };
+    const { work, review, owned } = uid ? assignedTo(store, uid) : { work: [], review: [], owned: [] };
     const pct = progressPct(store, work);
     return el('div', { class: 'person', 'data-color': m.color },
       figure(m.figure, pct),
@@ -135,7 +137,7 @@ export function renderDashboard(members, store) {
         'aria-valuenow': String(pct),
       }, el('span', { style: `width:${pct}%` })) : null,
       work.length ? el('div', { class: 'person-sub', text: 'a saját feladataiból' }) : null,
-      assignedBlock(store, work, review));
+      assignedBlock(store, work, review, owned));
   });
 
   // Két sor, arányosan: soronként fele-fele a tagoknak, a sor közepén az összesített jelző.
