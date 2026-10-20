@@ -1,35 +1,88 @@
 {
  "_megjegyzes": "A közös Google Drive-mappa linkjei. A mappák csak a megosztott tagoknak nyílnak meg. Ha egy link még null, az oldal azt írja: a mappa még nincs létrehozva.",
- "root": null,
+ "root": "https://drive.google.com/drive/folders/1OeA0-RC5WTC1dUAvo-cuG_HonVwUuqha",
  "kiindulo": [
   {
    "id": "feladatleiras",
    "title": "Feladatleírás",
    "desc": "Élelmezési menedzsment B projektfeladat leírás – 2026: alapinformációk, tervezési folyamat, a prezentáció 9 pontja.",
-   "url": null
+   "url": "https://drive.google.com/drive/folders/1MyWJZ42YJvZLymABVYagybERB9idzgPD"
   },
   {
    "id": "jogszabalyok",
    "title": "Jogszabályok",
    "desc": "37/2014. (IV. 30.) EMMI rendelet (közétkeztetés), NNGYK diétás igazolássablonok.",
-   "url": null
+   "url": "https://drive.google.com/drive/folders/1msofMRNJsHt0T2iAaPcXz0mnoDXtxa_7"
   },
   {
    "id": "tananyag",
    "title": "Tananyag",
    "desc": "Az előző félév előadásai (helyiségek, közművek, raktár, előkészítők, sütő-főző, tálalás, mosogatás), írásos anyag, CÉL-rendelet.",
-   "url": null
+   "url": "https://drive.google.com/drive/folders/1LMECwmc-UYlObyzOB7Xpgxt86ga4dCj7"
   },
   {
    "id": "dontesek",
    "title": "Döntések és adatok",
-   "desc": "A 24 tervezési döntés végeredménye, a létszámterv, a dolgozók és a telek adatai.",
-   "url": null
+   "desc": "A 24 tervezési döntés végeredménye, az évfolyamok, a létszámterv és a dolgozók adatai (Google-dokumentum).",
+   "url": "https://drive.google.com/drive/folders/1ec0ZpcBFU6x-Aoky4SKnhbmnEPBCirnY"
   }
  ],
  "prezentacio": {
-  "munka": null,
-  "vegleges": null
+  "munka": "https://drive.google.com/drive/folders/1XdHcPJwseIjLTehb98Q0MnGwlS-O67Ht",
+  "vegleges": "https://drive.google.com/drive/folders/1lGCAGXiWWRIBFMCNQ__40Uw5F_T9u_Pw"
  },
- "folders": {}
+ "folders": {
+  "p1_intezmeny": {
+   "munka": "https://drive.google.com/drive/folders/1cgsOe_ad3gCmDbMdEgYyJ7G1NBfjVVT4",
+   "vegleges": "https://drive.google.com/drive/folders/1FposfdbVtGy2qikUkoxl6WKw8D_uQrhd"
+  },
+  "p2_uzem_norma": {
+   "munka": "https://drive.google.com/drive/folders/1pFGeWM8x9tv5GiSEJU14LwBC3aGuqkOD",
+   "vegleges": "https://drive.google.com/drive/folders/1faUnhToWsE88AZ78k-hOxWIaaZzXIm4f"
+  },
+  "p3_helyiseglista": {
+   "munka": "https://drive.google.com/drive/folders/1wXh6KJGLWmsTIsbyvmAHN4pA8pmTTFjv",
+   "vegleges": "https://drive.google.com/drive/folders/1TZSQtTtlLeybLouV_6wR5jxmSUSSCSoY"
+  },
+  "p4_beerkezo_aruk": {
+   "munka": "https://drive.google.com/drive/folders/1HoQQAibB4aXNcd0VXFnsWrCV5_cox3w7",
+   "vegleges": "https://drive.google.com/drive/folders/1ESYneNSN2aN_qpoXqfgBlXZWxUs8rAai"
+  },
+  "p5_helyszinrajz": {
+   "munka": "https://drive.google.com/drive/folders/1UYw4RduIcO9vQP4xIpkCigk-W2Fl13cK",
+   "vegleges": "https://drive.google.com/drive/folders/1klhAasVCKWC6gbghuXK9aWKrDHqFIV5a"
+  },
+  "p5b_kozmuvek_legtechnika": {
+   "munka": "https://drive.google.com/drive/folders/1Qkki5uw1H3Dbrtbz7lvjURZ4RImcakVy",
+   "vegleges": "https://drive.google.com/drive/folders/1RR_k-3MAvagIckOK11pgs0dD0iqTYDqC"
+  },
+  "p6_alaprajz": {
+   "munka": "https://drive.google.com/drive/folders/1qtBLeeJqxic_FKFrSdVPcKXCr_hzbFEh",
+   "vegleges": "https://drive.google.com/drive/folders/1fSofZ5V0gNEMad0FXw0I1L1-QnRcMSoC"
+  },
+  "p7a_raktar_elokeszito": {
+   "munka": "https://drive.google.com/drive/folders/1ORRo0qi35_mOc8nN9yQNvIFKiNXExFll",
+   "vegleges": "https://drive.google.com/drive/folders/1X6TpMIG4bn93G3qZX2_I2P86QUAtGZ8F"
+  },
+  "p7b_fozo_hideg": {
+   "munka": "https://drive.google.com/drive/folders/1xqErX22MNkK0ZM_mZWSCcwNWFWOGZsHi",
+   "vegleges": "https://drive.google.com/drive/folders/1njBJqfl9Eo6ZMj811yXsKjdn1EDECMV3"
+  },
+  "p7c_talalo_mosogato_szoc": {
+   "munka": "https://drive.google.com/drive/folders/1khQ8MIUJC07953Tb7LorQaLpi2oX4Hdw",
+   "vegleges": "https://drive.google.com/drive/folders/11gFZIji7cmpHpafzWYCuWvRZDTlMG6wt"
+  },
+  "p8_gepek_alaprajzon": {
+   "munka": "https://drive.google.com/drive/folders/1SaQeM_E5WVygWKFr59jPbunW0sjWYqxf",
+   "vegleges": "https://drive.google.com/drive/folders/1sdJm4lEUumRf_ylyNCFbH8QrNhTRCQhw"
+  },
+  "pr_szerkeszto": {
+   "munka": "https://drive.google.com/drive/folders/1XdHcPJwseIjLTehb98Q0MnGwlS-O67Ht",
+   "vegleges": "https://drive.google.com/drive/folders/1lGCAGXiWWRIBFMCNQ__40Uw5F_T9u_Pw"
+  },
+  "pr_eloado": {
+   "munka": "https://drive.google.com/drive/folders/1XdHcPJwseIjLTehb98Q0MnGwlS-O67Ht",
+   "vegleges": "https://drive.google.com/drive/folders/1lGCAGXiWWRIBFMCNQ__40Uw5F_T9u_Pw"
+  }
+ }
 }
