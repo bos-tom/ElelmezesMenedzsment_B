@@ -76,10 +76,10 @@ function show(name) {
 // ---- Menü (nézetek) -----------------------------------------------------------
 
 const VIEWS = ['dashboard', 'dontesek', 'feladatok', 'feltoltesek', 'naplo'];
-let currentView = 'dontesek';
+let currentView = 'dashboard';
 
 function showView(name, { scroll = true } = {}) {
-  if (!VIEWS.includes(name) || (name === 'naplo' && !store.isLogViewer)) name = 'dontesek';
+  if (!VIEWS.includes(name) || (name === 'naplo' && !store.isLogViewer)) name = 'dashboard';
   currentView = name;
   for (const v of VIEWS) document.getElementById(`view-${v}`).hidden = v !== name;
   for (const b of document.querySelectorAll('#mainnav [data-view]')) {
@@ -570,9 +570,11 @@ if (CONFIG_MISSING) {
     show('app');
     renderDashboard(store.members);
     renderSummary(store);
-    // Megnyitáskor mindig a Tervezési döntések fül.
-    showView('dontesek', { scroll: false });
+    // Megnyitáskor a Dashboard a kezdőoldal; egy döntésre mutató link (#azonosító) a Tervezési döntések fület nyitja.
+    const target = location.hash ? document.getElementById(location.hash.slice(1)) : null;
+    const startView = target?.closest('.view')?.id.replace(/^view-/, '');
+    showView(VIEWS.includes(startView) ? startView : 'dashboard', { scroll: false });
     refresh();
-    if (location.hash) document.getElementById(location.hash.slice(1))?.scrollIntoView();
+    target?.scrollIntoView();
   });
 }
