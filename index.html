@@ -103,12 +103,22 @@
   <section class="view" id="view-feladatok" aria-labelledby="feladatok-title" hidden>
     <div class="view-head">
       <h1 id="feladatok-title">Feladatkiosztás</h1>
-      <p class="lede">A szavazással konkretizált feladat, a tervezett intézmény adatai és a feladatrészek lépésenként.</p>
+      <p class="lede">Két rész: előbb a kiinduló adatok (a tervezési döntések eredménye), alatta a kiosztandó feladatok.</p>
     </div>
+
+    <!-- 1. rész: kiinduló adatok -->
+    <section class="part part-context" aria-labelledby="kiindulo-title">
+      <div class="part-head">
+        <span class="part-num" aria-hidden="true">1</span>
+        <div>
+          <h2 class="part-title" id="kiindulo-title">Kiinduló adatok</h2>
+          <p class="part-sub">A tervezési döntések eredménye és a tervezett intézmény adatai. Ezekre épülnek a feladatok.</p>
+        </div>
+      </div>
     <div class="summary-box" data-summary="tasks"></div>
 
     <section class="dash-block" aria-labelledby="intezmeny-adatai-title">
-      <h2 class="block-title" id="intezmeny-adatai-title">A tervezett intézmény adatai</h2>
+      <h3 class="block-title" id="intezmeny-adatai-title">A tervezett intézmény adatai</h3>
       <h3 class="sub-title">Diákok évfolyamonként</h3>
       <div id="t-evfolyamok"></div>
       <p class="note" id="t-evfolyamok-note"></p>
@@ -122,9 +132,17 @@
       <ul class="final-summary" id="t-konyha"></ul>
       <p class="note" id="t-konyha-source"></p>
     </section>
+    </section>
 
-    <section class="dash-block" aria-labelledby="alfeladatok-title">
-      <h2 class="block-title" id="alfeladatok-title">Feladatok</h2>
+    <!-- 2. rész: a kiosztandó feladatok -->
+    <section class="part part-tasks" aria-labelledby="alfeladatok-title">
+      <div class="part-head">
+        <span class="part-num" aria-hidden="true">2</span>
+        <div>
+          <h2 class="part-title" id="alfeladatok-title">Feladatok</h2>
+          <p class="part-sub">A kiosztandó részfeladatok a feladatleírás szerint: itt kell jelentkezni.</p>
+        </div>
+      </div>
       <ul class="deadlines" id="task-deadlines"></ul>
       <div class="signup-howto" role="note">
         <p><strong>A feladat két része, a feladatleírás szerint:</strong> <b>I. Projektfeladat</b>, vagyis az élelmezési üzem megtervezése (P1–P8: az alapinformációk, majd a tervezési folyamat lépései és a tervrajzok), és <b>II. Prezentáció</b> (szerkesztés és előadás). A prezentáció diái a projektfeladat részeiből készülnek; minden kártya jobb felső sarkában látszik, melyik diához ad anyagot.</p>
