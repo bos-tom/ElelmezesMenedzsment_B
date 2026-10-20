@@ -31,6 +31,7 @@ async function setMark(store, id, done) {
 function measure(store, m) {
   const final = store.data?.final;
   const tasks = (final?.tasks || []).filter((t) => !t.owner);
+  if (m.auto === 'start') return { auto: true, pct: 100, text: '' };
   if (m.auto === 'final') {
     const n = Object.keys(final?.results || {}).length;
     return { auto: n > 0, pct: n > 0 ? 100 : 0, text: `${n} döntés lezárva` };
@@ -148,11 +149,14 @@ export function renderMilestones(store) {
   });
 
   // 3. A kártyák a részletekkel.
-  const cards = items.map(({ m, r, done, state, late, manual }) => {
+  const cards = items.map(({ m, r, done, state, late, manual }, i) => {
+    // A szakaszra kiszabott idő: napok az előző megállótól.
+    const span = i > 0 ? Math.round((dayOf(m.date) - dayOf(list[i - 1].date)) / DAY) : 0;
     const li = el('li', { class: `ms ms-${state}${late ? ' late' : ''}` },
       el('div', { class: 'ms-date', text: dateFmt.format(dayOf(m.date)) }),
       el('div', { class: 'ms-label', text: m.label }),
       m.sub ? el('div', { class: 'ms-sub', text: m.sub }) : null,
+      span ? el('div', { class: 'ms-span', text: `${span} nap` }) : null,
       state === 'active' && r.pct != null ? el('div', { class: 'ms-pct-inline', text: `${r.pct}% kész` }) : null,
       r.text ? el('div', { class: 'ms-metric', text: r.text }) : null,
       r.extra && !done ? el('div', { class: 'ms-sub', text: r.extra }) : null,

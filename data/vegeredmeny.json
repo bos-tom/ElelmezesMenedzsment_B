@@ -671,6 +671,13 @@
  },
  "milestones": [
   {
+   "id": "indulas",
+   "label": "Indulás",
+   "sub": "elindult a döntési oldal, kezdődik a szavazás",
+   "date": "2026-10-06",
+   "auto": "start"
+  },
+  {
    "id": "konkretizalas",
    "label": "A feladat konkretizálása",
    "sub": "szavazás a 24 tervezési döntésről",

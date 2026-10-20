@@ -480,6 +480,7 @@ body:not(.in-app) .wrap::after{content:"";display:block;border-top:2px solid var
 .ms-sub{font-size:12.5px;color:var(--muted)}
 .ms-metric{font:600 12.5px/1.4 var(--f-mono);color:var(--accent);margin-top:2px}
 .ms-done .ms-metric{color:var(--pro)}
+.ms-span{font:600 12px/1.5 var(--f-mono);color:var(--ink);border:1px solid var(--line);border-radius:999px;padding:0 8px;margin-top:2px}
 .ms-pct-inline{display:none;font:700 13px/1.4 var(--f-mono);color:var(--accent)}
 .ms-days{font:500 11.5px/1.6 var(--f-mono);color:var(--muted);border-radius:999px;padding:0 8px;background:var(--sunk);margin-top:2px}
 .ms-done .ms-days{background:var(--pro);color:var(--surface)}
