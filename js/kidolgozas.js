@@ -250,7 +250,8 @@ export function mountWork(store) {
     for (const c of cards) c.update();
     const count = (s) => tasks.filter((t) => stateOf(store, t.id) === s).length;
     summary.replaceChildren(
-      el('span', { class: 'work-total' }, 'A projekt készültsége: ', el('b', { text: `${progressPct(store, tasks)}%` })),
+      el('span', { class: 'work-total' }, 'A projekt készültsége: ', el('b', { text: `${progressPct(store, tasks)}%` }),
+        el('span', { class: 'work-total-note', text: ` (a ${tasks.length} feladat állapota alapján, súlyozva; kiosztva: ${tasks.filter((t) => store.assignments.get(t.id)?.workers.length).length} / ${tasks.length})` })),
       ...Object.entries(STATES).map(([id, s]) => el('span', { class: `work-count state-${id}` },
         el('b', { text: String(count(id)) }), ` ${s.label.toLowerCase()}`)));
   };
