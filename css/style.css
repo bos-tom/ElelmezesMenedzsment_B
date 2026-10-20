@@ -445,8 +445,12 @@ body:not(.in-app) .wrap::after{content:"";display:block;border-top:2px solid var
 /* Mérföldkövek: idővonal, a megállók a kiszabott idő arányában; alatta egyenlő közű kártyák,
    a megállóktól vezetővonallal. Keskeny kijelzőn a kártyák egymás alatt. */
 .milestones{--n:5;--dot:34px;--big:46px;--axis-y:72px;--hatch:repeating-linear-gradient(-45deg,color-mix(in srgb,var(--muted) 75%,transparent) 0 3px,transparent 3px 6px)}
-.ms-summary{margin:0 0 6px;font:500 12.5px/1.4 var(--f-mono);color:var(--muted);display:flex;flex-wrap:wrap;align-items:center;gap:4px 6px}
-.ms-key{display:inline-block;width:22px;height:6px;border-radius:3px;margin-left:8px}
+.ms-summary{margin:0 0 8px;display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:6px 24px}
+.ms-count{margin:0;font:700 20px/1.2 var(--f-display);color:var(--ink)}
+.ms-count b{font:800 32px/1 var(--f-display);color:var(--pro);margin-right:4px}
+.ms-legend{margin:0;display:flex;flex-wrap:wrap;gap:6px 18px;font:600 14px/1.4 var(--f-body);color:var(--ink)}
+.ms-legend>span{display:inline-flex;align-items:center;gap:8px}
+.ms-key{display:inline-block;width:32px;height:8px;border-radius:4px}
 .ms-key-done{background:var(--pro)}
 .ms-key-elapsed{background:var(--hatch),var(--line)}
 .ms-axis{position:relative;height:calc(var(--axis-y) + var(--big)/2 + 4px)}

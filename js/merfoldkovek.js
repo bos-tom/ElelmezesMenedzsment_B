@@ -173,9 +173,10 @@ export function renderMilestones(store) {
 
   box.style.setProperty('--n', n);
   box.replaceChildren(
-    el('p', { class: 'ms-summary' },
-      `${n} mérföldkőből ${doneCount} kész. `,
-      el('span', { class: 'ms-key ms-key-done' }), ' kész mérföldkövek ',
-      el('span', { class: 'ms-key ms-key-elapsed' }), ' eltelt idő'),
+    el('div', { class: 'ms-summary' },
+      el('p', { class: 'ms-count' }, el('b', { text: `${doneCount} / ${n}` }), ' mérföldkő kész'),
+      el('p', { class: 'ms-legend' },
+        el('span', null, el('span', { class: 'ms-key ms-key-done' }), 'kész mérföldkövek'),
+        el('span', null, el('span', { class: 'ms-key ms-key-elapsed' }), 'eltelt idő'))),
     axis, leaders, el('ol', { class: 'ms-list' }, ...cards));
 }
