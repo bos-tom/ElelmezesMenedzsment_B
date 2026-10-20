@@ -1,8 +1,8 @@
 // Dashboard: személyenkénti haladásjelző sziluettel.
 // A tagok listája a config/app.admins sorrendjét követi (ugyanaz, mint a csevegőszíneké).
 // Sziluett: a config/app.male listában szereplők férfi, a többiek női sziluettet kapnak.
-// A kártyán a tag kiosztott feladatai látszanak (kidolgozó, ellenőr); a haladás a kidolgozandó
-// feladatokból számol, a kész jelölés még nincs, így egyelőre 0%.
+// A kártyán a tag kiosztott feladatai látszanak (kidolgozó, ellenőr); a haladás:
+// a kidolgozandó feladataiból hány „kész” (a koordinátor jelöli a Feladatok kidolgozása fülön).
 import { el } from './dom.js';
 import { assignedTo, shortName } from './feladatok.js';
 
@@ -66,11 +66,12 @@ function uidOf(store, member) {
   return null;
 }
 
-// Kiosztott feladatok és haladás: a kidolgozandó feladatok száma; a kész jelölés még nincs.
+// Kiosztott feladatok és haladás: a kidolgozandó feladatokból a „kész” állapotúak.
 function progressOf(store, member) {
   const uid = uidOf(store, member);
   const { work, review } = uid ? assignedTo(store, uid) : { work: [], review: [] };
-  return { done: 0, total: work.length, work, review };
+  const done = work.filter((t) => store.taskStatus?.get(t.id) === 'kesz').length;
+  return { done, total: work.length, work, review };
 }
 
 function assignedLines(work, review) {

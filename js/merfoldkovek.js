@@ -47,8 +47,16 @@ function measure(store, m) {
     };
   }
   if (m.id === 'kidolgozas') {
-    const steps = tasks.reduce((n, t) => n + (t.steps?.length || 0), 0);
-    return { auto: false, pct: null, text: `${tasks.length} feladat, ${steps} lépés` };
+    // A „Feladatok kidolgozása” fül állapotaiból: a kész feladatok aránya.
+    const st = (t) => store.taskStatus?.get(t.id) || 'nincs';
+    const done = tasks.filter((t) => st(t) === 'kesz').length;
+    const started = tasks.filter((t) => st(t) !== 'nincs').length;
+    return {
+      auto: tasks.length > 0 && done === tasks.length,
+      pct: tasks.length ? Math.round((done / tasks.length) * 100) : 0,
+      text: `${tasks.length} feladatból ${done} kész`,
+      extra: `${started} feladatra van feltöltött anyag`,
+    };
   }
   return { auto: false, pct: null, text: '' };
 }

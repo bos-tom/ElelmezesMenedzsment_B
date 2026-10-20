@@ -25,7 +25,7 @@
       <button type="button" class="navbtn" data-view="dashboard">Dashboard</button>
       <button type="button" class="navbtn" data-view="dontesek">Tervezési döntések</button>
       <button type="button" class="navbtn" data-view="feladatok">Feladatkiosztás</button>
-      <button type="button" class="navbtn" data-view="feltoltesek">Feltöltések</button>
+      <button type="button" class="navbtn" data-view="kidolgozas">Feladatok kidolgozása</button>
       <button type="button" class="navbtn" data-view="naplo" hidden>Napló</button>
     </nav>
     <!-- Visszaszámlálók: belépés előtt itt, belépve a Dashboardon (app.js mozgatja).
@@ -88,7 +88,7 @@
     <div class="dash-grid" id="dash-countdowns"></div>
     <section class="dash-block" aria-labelledby="merfoldko-title">
       <h2 class="block-title" id="merfoldko-title">Mérföldkövek</h2>
-      <p class="note">A kész állomás zöld pipát kap, a folyamatban lévő gyűrűje a haladással töltődik, a „ma” jelölő mutatja, hol tartunk az időben; minden kártyán látszik a szakaszra kiszabott idő (napok az előző megállótól). Az indulás, a feladat konkretizálása (lezárt szavazás) és a feladatkiosztás (minden feladat kiosztva) magától teljesül, a többit a koordinátor jelöli késznek.</p>
+      <p class="note">A kész állomás zöld pipát kap, a folyamatban lévő gyűrűje a haladással töltődik, a „ma” jelölő mutatja, hol tartunk az időben; minden kártyán látszik a szakaszra kiszabott idő (napok az előző megállótól). Az indulás, a feladat konkretizálása (lezárt szavazás) a feladatkiosztás (minden feladat kiosztva) és a kidolgozás (minden feladat kész) magától teljesül, a többit a koordinátor jelöli késznek.</p>
       <div class="milestones" id="dash-milestones"></div>
     </section>
     <section class="dash-block" aria-labelledby="haladas-title">
@@ -155,12 +155,39 @@
     </section>
   </section>
 
-  <section class="view" id="view-feltoltesek" aria-labelledby="feltoltesek-title" hidden>
+  <!-- Feladatok kidolgozása: a közös Drive-mappa, a feltöltött anyagok és az állapotok (js/kidolgozas.js). -->
+  <section class="view" id="view-kidolgozas" aria-labelledby="kidolgozas-title" hidden>
     <div class="view-head">
-      <h1 id="feltoltesek-title">Feltöltések</h1>
-      <p class="lede">Ide tölti fel mindenki a saját részét, és itt látszik, ki hol tart.</p>
+      <h1 id="kidolgozas-title">Feladatok kidolgozása</h1>
+      <p class="lede">A közös Google Drive-mappa: felül a kiinduló anyagok, alatta feladatonként a kidolgozott anyagok és az, hogy hol tart a munka.</p>
     </div>
-    <p class="placeholder">Hamarosan.</p>
+
+    <section class="part part-context" aria-labelledby="work-sources-title">
+      <div class="part-head">
+        <span class="part-num" aria-hidden="true">1</span>
+        <div>
+          <h2 class="part-title" id="work-sources-title">Kiinduló anyagok</h2>
+          <p class="part-sub">A korábban összegyűjtött, felhasználható anyagok a közös mappa „00 Kiinduló anyagok” részében.</p>
+        </div>
+      </div>
+      <div class="work-folders" id="work-root"></div>
+      <ul class="sources" id="work-sources"></ul>
+    </section>
+
+    <section class="part part-tasks" aria-labelledby="work-title">
+      <div class="part-head">
+        <span class="part-num" aria-hidden="true">2</span>
+        <div>
+          <h2 class="part-title" id="work-title">Kidolgozott anyagok</h2>
+          <p class="part-sub">Feladatonként a „01 Kidolgozott anyagok” mappa: munka és végleges almappa.</p>
+        </div>
+      </div>
+      <div class="signup-howto" role="note">
+        <p><strong>Hogyan működik?</strong> 1. A kidolgozó feltölti a fájlt a feladat Drive-mappájába (a félkész a „munka”, a kész a „végleges” almappába), majd az oldalon a <b>Feltöltöttem</b> gombbal bejegyzi a címét és a linkjét: ekkor a feladat <b>feltöltve</b> állapotú. 2. Az ellenőr átnézi, a kidolgozó kijavítja, és az ellenőr az <b>Ellenőriztem</b> gombbal jelzi: <b>ellenőrizve</b>. 3. Végül Berni (a koordinátor) elfogadja: <b>kész</b>. A kész feladatok töltik a Dashboard sziluettjeit és a „Kidolgozás” mérföldkövet.</p>
+      </div>
+      <p class="work-summary" id="work-summary"></p>
+      <div class="task-groups" id="work-groups"></div>
+    </section>
   </section>
 
   <section class="view" id="view-naplo" aria-labelledby="naplo-title" hidden>

@@ -156,7 +156,7 @@ Ehhez a kódnak már fent kell lennie a GitHubon (push után).
 ## Mire figyelj
 
 - **A `data/dontesek.json` nyilvános.** A GitHub Pages minden fájlt belépés nélkül kiszolgál, így a kérdések és az érvek letölthetők. A szavazatok, a nevek és a csevegés viszont a Firestore-ban vannak, azokat csak az adminok látják.
-- A tartalmat (kérdések, opciók, érvek) a `data/dontesek.json` adja. A döntések és opciók `id`-jére vannak kötve a szavazatok, ezeket ne nevezd át.
+- A tartalmat (kérdések, opciók, érvek) a `data/dontesek.json` adja. A közös Google Drive-mappa linkjei a `data/kidolgozas.json`-ban vannak (a mappák csak a megosztott tagoknak nyílnak meg). A döntések és opciók `id`-jére vannak kötve a szavazatok, ezeket ne nevezd át.
 - E-mail-cím nem kerül sem az adatbázisba (a `config/app` kivételével), sem a felületre; a tagoknál csak a név és a profilkép látszik.
 
 ## Hogyan működik
@@ -172,6 +172,8 @@ Ehhez a kódnak már fent kell lennie a GitHubon (push után).
 | `signups/{feladat}__{szerep}__{uid}` | jelentkezés egy feladatra kidolgozónak (`kidolgozo`) vagy ellenőrnek (`ellenorzo`) | mindenki a sajátját (jelentkezés és visszavonás) |
 | `assignments/{feladat}` | a kiosztás: kidolgozók és ellenőrök (legfeljebb 10–10 fő) | csak a `coordinators` |
 | `milestones/{mérföldkő}` | a Dashboard mérföldkövének kézi „kész” jelölése (`done`) | csak a `coordinators` |
+| `submissions/{id}` | a Drive-ba feltöltött anyag címe és linkje (csak Google Drive/Docs link) | a feladat kidolgozója vagy a koordinátor; törölni a bejegyző |
+| `taskStatus/{feladat}` | a feladat állapota: nincs → feltöltve → ellenőrizve → kész | „feltöltve”: a kidolgozó, „ellenőrizve”: az ellenőr, bármelyik: a koordinátor |
 
 Szerepkörök: mivel csak adminok férnek hozzá, minden belépő tag szavazhat, írhat, lezárhat és újranyithat döntést. Csevegőüzenetet mindenki csak a sajátját törölheti. Ezért külön „Admin” jelvény sincs a felületen.
 

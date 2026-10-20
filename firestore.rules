@@ -37,6 +37,19 @@ service cloud.firestore {
            in get(/databases/$(database)/documents/config/app).data.get('coordinators', []);
     }
 
+    // A feladat kiosztott kidolgozója, illetve ellenőre-e a belépett tag.
+    function assignment(taskId) {
+      return get(/databases/$(database)/documents/assignments/$(taskId)).data;
+    }
+    function isWorker(taskId) {
+      return exists(/databases/$(database)/documents/assignments/$(taskId))
+        && request.auth.uid in assignment(taskId).workers;
+    }
+    function isReviewer(taskId) {
+      return exists(/databases/$(database)/documents/assignments/$(taskId))
+        && request.auth.uid in assignment(taskId).reviewers;
+    }
+
     // Felhasználói azonosítók listája (kiosztásnál), legfeljebb 10 elem.
     function uidList(v) {
       return v is list && v.size() <= 10;
@@ -221,6 +234,49 @@ service cloud.firestore {
         && request.resource.data.done is bool
         && request.resource.data.updatedBy == request.auth.uid
         && request.resource.data.updatedAt == request.time;
+
+      allow delete: if false;
+    }
+
+    // ---- submissions (feltöltött anyagok) ----------------------------------
+    // A kidolgozó (vagy a koordinátor) jegyzi be a Drive-ba feltöltött anyag címét és linkjét.
+    // Csak Google Drive / Docs link lehet. Törölni csak a bejegyző tudja.
+    match /submissions/{submissionId} {
+      allow read: if isAdmin();
+
+      allow create: if isAdmin()
+        && request.resource.data.keys().hasOnly(['taskId', 'uid', 'title', 'url', 'createdAt'])
+        && request.resource.data.keys().hasAll(['taskId', 'uid', 'title', 'url', 'createdAt'])
+        && validId(request.resource.data.taskId)
+        && request.resource.data.uid == request.auth.uid
+        && request.resource.data.title is string
+        && request.resource.data.title.size() >= 1
+        && request.resource.data.title.size() <= 120
+        && request.resource.data.url is string
+        && request.resource.data.url.size() <= 500
+        && request.resource.data.url.matches('^https://(drive|docs)[.]google[.]com/.*')
+        && request.resource.data.createdAt == request.time
+        && (isCoordinator() || isWorker(request.resource.data.taskId));
+
+      allow update: if false;
+      allow delete: if isAdmin() && resource.data.uid == request.auth.uid;
+    }
+
+    // ---- taskStatus (a feladatok állapota) ---------------------------------
+    // nincs / feltoltve: a kidolgozó; ellenorizve: az ellenőr; kesz: csak a koordinátor.
+    // A koordinátor bármelyik állapotot beállíthatja.
+    match /taskStatus/{taskId} {
+      allow read: if isAdmin();
+
+      allow create, update: if isAdmin()
+        && validId(taskId)
+        && request.resource.data.keys().hasOnly(['state', 'updatedBy', 'updatedAt'])
+        && request.resource.data.keys().hasAll(['state', 'updatedBy', 'updatedAt'])
+        && request.resource.data.updatedBy == request.auth.uid
+        && request.resource.data.updatedAt == request.time
+        && (isCoordinator()
+          || (request.resource.data.state in ['nincs', 'feltoltve'] && isWorker(taskId))
+          || (request.resource.data.state == 'ellenorizve' && isReviewer(taskId)));
 
       allow delete: if false;
     }

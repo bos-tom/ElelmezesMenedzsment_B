@@ -413,6 +413,52 @@ describe('Mérföldkövek (milestones)', () => {
   });
 });
 
+describe('Kidolgozás: feltöltött anyagok és állapot', () => {
+  // admin1 a p6 kidolgozója és a p3 ellenőre; admin2 a koordinátor.
+  beforeEach(async () => {
+    await env.withSecurityRulesDisabled(async (c) => {
+      const db = c.firestore();
+      await setDoc(doc(db, 'assignments/p6'), { workers: ['admin1'], reviewers: [], updatedBy: 'admin2', updatedAt: new Date() });
+      await setDoc(doc(db, 'assignments/p3'), { workers: [], reviewers: ['admin1'], updatedBy: 'admin2', updatedAt: new Date() });
+    });
+  });
+  const sub = (uid, taskId, url = 'https://drive.google.com/file/d/abc/view') => ({
+    taskId, uid, title: 'Alaprajz v1', url, createdAt: serverTimestamp(),
+  });
+  const st = (uid, state) => ({ state, updatedBy: uid, updatedAt: serverTimestamp() });
+
+  it('a kidolgozó bejegyezheti a feltöltött anyagot, más nem', async () => {
+    await assertSucceeds(setDoc(doc(ctx(ADMIN1), 'submissions/s1'), sub('admin1', 'p6')));
+    await assertFails(setDoc(doc(ctx(ADMIN1), 'submissions/s2'), sub('admin1', 'p3')));
+    await assertSucceeds(setDoc(doc(ctx(ADMIN2), 'submissions/s3'), sub('admin2', 'p6')));
+    await assertFails(setDoc(doc(ctx(MEMBER), 'submissions/s4'), sub('member1', 'p6')));
+  });
+  it('csak Google Drive-link, és a saját nevében', async () => {
+    await assertFails(setDoc(doc(ctx(ADMIN1), 'submissions/s1'), sub('admin1', 'p6', 'https://example.com/x')));
+    await assertFails(setDoc(doc(ctx(ADMIN1), 'submissions/s1'), sub('admin2', 'p6')));
+    await assertSucceeds(setDoc(doc(ctx(ADMIN1), 'submissions/s1'), sub('admin1', 'p6', 'https://docs.google.com/presentation/d/x/edit')));
+  });
+  it('a bejegyzést csak a szerző törölheti', async () => {
+    await assertSucceeds(setDoc(doc(ctx(ADMIN1), 'submissions/s1'), sub('admin1', 'p6')));
+    await assertFails(deleteDoc(doc(ctx(ADMIN2), 'submissions/s1')));
+    await assertSucceeds(deleteDoc(doc(ctx(ADMIN1), 'submissions/s1')));
+  });
+  it('állapot: a kidolgozó „feltöltve”, az ellenőr „ellenőrizve”, a „kész” csak a koordinátoré', async () => {
+    await assertSucceeds(setDoc(doc(ctx(ADMIN1), 'taskStatus/p6'), st('admin1', 'feltoltve')));
+    await assertFails(setDoc(doc(ctx(ADMIN1), 'taskStatus/p6'), st('admin1', 'ellenorizve')));
+    await assertFails(setDoc(doc(ctx(ADMIN1), 'taskStatus/p6'), st('admin1', 'kesz')));
+    await assertSucceeds(setDoc(doc(ctx(ADMIN1), 'taskStatus/p3'), st('admin1', 'ellenorizve')));
+    await assertFails(setDoc(doc(ctx(ADMIN1), 'taskStatus/p3'), st('admin1', 'feltoltve')));
+    await assertSucceeds(setDoc(doc(ctx(ADMIN2), 'taskStatus/p6'), st('admin2', 'kesz')));
+    await assertFails(setDoc(doc(ctx(ADMIN1), 'taskStatus/p6'), { ...st('admin1', 'feltoltve'), extra: 1 }));
+  });
+  it('minden admin olvashatja, más nem', async () => {
+    await assertSucceeds(getDocs(collection(ctx(ADMIN1), 'taskStatus')));
+    await assertSucceeds(getDocs(collection(ctx(ADMIN1), 'submissions')));
+    await assertFails(getDocs(collection(ctx(MEMBER), 'submissions')));
+  });
+});
+
 describe('A config nem írható', () => {
   it('admin sem írhatja', async () => {
     await assertFails(setDoc(doc(ctx(ADMIN1), 'config/app'), { admins: [ADMIN1.email, MEMBER.email] }));

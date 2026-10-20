@@ -1,0 +1,35 @@
+{
+ "_megjegyzes": "A közös Google Drive-mappa linkjei. A mappák csak a megosztott tagoknak nyílnak meg. Ha egy link még null, az oldal azt írja: a mappa még nincs létrehozva.",
+ "root": null,
+ "kiindulo": [
+  {
+   "id": "feladatleiras",
+   "title": "Feladatleírás",
+   "desc": "Élelmezési menedzsment B projektfeladat leírás – 2026: alapinformációk, tervezési folyamat, a prezentáció 9 pontja.",
+   "url": null
+  },
+  {
+   "id": "jogszabalyok",
+   "title": "Jogszabályok",
+   "desc": "37/2014. (IV. 30.) EMMI rendelet (közétkeztetés), NNGYK diétás igazolássablonok.",
+   "url": null
+  },
+  {
+   "id": "tananyag",
+   "title": "Tananyag",
+   "desc": "Az előző félév előadásai (helyiségek, közművek, raktár, előkészítők, sütő-főző, tálalás, mosogatás), írásos anyag, CÉL-rendelet.",
+   "url": null
+  },
+  {
+   "id": "dontesek",
+   "title": "Döntések és adatok",
+   "desc": "A 24 tervezési döntés végeredménye, a létszámterv, a dolgozók és a telek adatai.",
+   "url": null
+  }
+ ],
+ "prezentacio": {
+  "munka": null,
+  "vegleges": null
+ },
+ "folders": {}
+}

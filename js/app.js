@@ -25,6 +25,7 @@ import { membersFrom, renderDashboard } from './dashboard.js';
 import { renderSummary } from './osszegzes.js';
 import { mountTasks, subscribeTasks } from './feladatok.js';
 import { renderMilestones, subscribeMilestones } from './merfoldkovek.js';
+import { mountWork, subscribeWork } from './kidolgozas.js';
 
 const ID_RE = /^[a-z0-9_]{1,40}$/;
 
@@ -39,6 +40,8 @@ const store = {
   signups: new Map(),
   assignments: new Map(),
   milestoneMarks: new Map(),
+  submissions: new Map(),
+  taskStatus: new Map(),
   members: [],
   final: {},
   data: null,
@@ -54,6 +57,7 @@ const decisionUpdaters = [];
 const threadBoxes = [];
 let mainChat = null;
 let updateTasks = null;
+let updateWork = null;
 const summaryCells = new Map();
 const tocMarks = new Map();
 
@@ -75,7 +79,7 @@ function show(name) {
 
 // ---- Menü (nézetek) -----------------------------------------------------------
 
-const VIEWS = ['dashboard', 'dontesek', 'feladatok', 'feltoltesek', 'naplo'];
+const VIEWS = ['dashboard', 'dontesek', 'feladatok', 'kidolgozas', 'naplo'];
 let currentView = 'dashboard';
 
 function showView(name, { scroll = true } = {}) {
@@ -215,7 +219,13 @@ async function loadData() {
     const fr = await fetch('data/vegeredmeny.json', { cache: 'no-cache' });
     if (fr.ok) final = await fr.json();
   } catch { /* nincs végeredmény */ }
-  return { raw, decisions, byId, final };
+  // A közös Drive-mappa linkjei a kidolgozáshoz (hiánya nem hiba).
+  let drive = null;
+  try {
+    const kr = await fetch('data/kidolgozas.json', { cache: 'no-cache' });
+    if (kr.ok) drive = await kr.json();
+  } catch { /* nincs mappa */ }
+  return { raw, decisions, byId, final, drive };
 }
 
 // ---- Statikus oldal --------------------------------------------------------
@@ -357,6 +367,7 @@ function refresh() {
 
   for (const u of decisionUpdaters) u();
   updateTasks?.();
+  updateWork?.();
   renderMilestones(store);
   renderDashboard(store.members, store);
 
@@ -485,6 +496,8 @@ function stopListeners() {
   store.signups = new Map();
   store.assignments = new Map();
   store.milestoneMarks = new Map();
+  store.submissions = new Map();
+  store.taskStatus = new Map();
 }
 
 // ---- Indulás ---------------------------------------------------------------
@@ -543,7 +556,10 @@ if (CONFIG_MISSING) {
         return;
       }
       buildPage();
-      if (store.data.final?.tasks) updateTasks = mountTasks(store);
+      if (store.data.final?.tasks) {
+        updateTasks = mountTasks(store);
+        updateWork = mountWork(store);
+      }
       built = true;
     }
     if (store.user !== user) return;
@@ -551,7 +567,7 @@ if (CONFIG_MISSING) {
     renderUserbox();
     saveProfile(user).catch(() => {});
     unsubs.push(subscribeUsers(), subscribeVotes(store, scheduleRefresh), subscribeMessages(store, scheduleRefresh));
-    if (updateTasks) unsubs.push(subscribeTasks(store, scheduleRefresh));
+    if (updateTasks) unsubs.push(subscribeTasks(store, scheduleRefresh), subscribeWork(store, scheduleRefresh));
     if (store.data.final?.milestones) {
       unsubs.push(subscribeMilestones(store, scheduleRefresh));
       // Éjfélkor a „ma” jelölő és a hátralévő napok is továbblépnek.
