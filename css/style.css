@@ -512,3 +512,7 @@ body:not(.in-app) .wrap::after{content:"";display:block;border-top:2px solid var
 .part-tasks .part-num{background:var(--accent)}
 .part-tasks .part-title{color:var(--accent)}
 @media (max-width:560px){.part-context{padding:0 12px 16px}.part-num{width:40px;height:40px;font-size:20px}}
+.person-tasks{font-size:12.5px;line-height:1.4;color:var(--muted);display:grid;gap:2px}
+.person-tasks b{color:var(--ink)}
+.assigned-cell{white-space:normal!important;font-size:13px;line-height:1.4}
+.assigned-cell b{font-weight:600}

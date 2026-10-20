@@ -358,6 +358,7 @@ function refresh() {
   for (const u of decisionUpdaters) u();
   updateTasks?.();
   renderMilestones(store);
+  renderDashboard(store.members, store);
 
   for (const d of decisions) {
     const { counts, total, leaders } = tally(store, d.id);
@@ -568,7 +569,7 @@ if (CONFIG_MISSING) {
     }
 
     show('app');
-    renderDashboard(store.members);
+    renderDashboard(store.members, store);
     renderSummary(store);
     // Megnyitáskor a Dashboard a kezdőoldal; egy döntésre mutató link (#azonosító) a Tervezési döntések fület nyitja.
     const target = location.hash ? document.getElementById(location.hash.slice(1)) : null;

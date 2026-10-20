@@ -1,8 +1,10 @@
 // Dashboard: személyenkénti haladásjelző sziluettel.
 // A tagok listája a config/app.admins sorrendjét követi (ugyanaz, mint a csevegőszíneké).
 // Sziluett: a config/app.male listában szereplők férfi, a többiek női sziluettet kapnak.
-// A haladás egyelőre mindenkinél 0%; később a személyes feladatlista kipipált elemeiből számoljuk.
+// A kártyán a tag kiosztott feladatai látszanak (kidolgozó, ellenőr); a haladás a kidolgozandó
+// feladatokból számol, a kész jelölés még nincs, így egyelőre 0%.
 import { el } from './dom.js';
+import { assignedTo, shortName } from './feladatok.js';
 
 const SVG_NS = 'http://www.w3.org/2000/svg';
 
@@ -58,9 +60,23 @@ export function membersFrom(config) {
   });
 }
 
-// Egyelőre nincs feladatlista: mindenkinél 0 / 0.
-function progressOf(/* member */) {
-  return { done: 0, total: 0 };
+// A tag felhasználói azonosítója a becenév alapján (a users-ben a becenév a displayName).
+function uidOf(store, member) {
+  for (const [uid, u] of store?.users || []) if (u.displayName === member.name) return uid;
+  return null;
+}
+
+// Kiosztott feladatok és haladás: a kidolgozandó feladatok száma; a kész jelölés még nincs.
+function progressOf(store, member) {
+  const uid = uidOf(store, member);
+  const { work, review } = uid ? assignedTo(store, uid) : { work: [], review: [] };
+  return { done: 0, total: work.length, work, review };
+}
+
+function assignedLines(work, review) {
+  if (!work.length && !review.length) return el('div', { class: 'person-sub', text: 'Még nincs kiosztott feladat' });
+  const line = (label, ts) => (ts.length ? el('div', null, `${label}: `, el('b', { text: ts.map(shortName).join(', ') })) : null);
+  return el('div', { class: 'person-tasks' }, line('Kidolgozó', work), line('Ellenőr', review));
 }
 
 // Összesített haladás: kör alakú jelző a tábla közepén.
@@ -92,12 +108,12 @@ function overallGauge(done, total) {
   el('div', { class: 'person-sub', text: total ? `${done} / ${total} feladat kész` : 'Még nincs kiosztott feladat' }));
 }
 
-export function renderDashboard(members) {
+export function renderDashboard(members, store) {
   const board = document.getElementById('dash-people');
   let sumDone = 0;
   let sumTotal = 0;
   const cards = members.map((m) => {
-    const { done, total } = progressOf(m);
+    const { done, total, work, review } = progressOf(store, m);
     sumDone += done;
     sumTotal += total;
     const pct = total ? Math.round((done / total) * 100) : 0;
@@ -113,7 +129,8 @@ export function renderDashboard(members) {
         'aria-valuemax': '100',
         'aria-valuenow': String(pct),
       }, el('span', { style: `width:${pct}%` })),
-      el('div', { class: 'person-sub', text: total ? `${done} / ${total} feladat kész` : 'Még nincs kiosztott feladat' }));
+      total ? el('div', { class: 'person-sub', text: `${done} / ${total} feladat kész` }) : null,
+      assignedLines(work, review));
   });
 
   // Két sor, arányosan: soronként fele-fele a tagoknak, a sor közepén az összesített jelző.

@@ -73,6 +73,19 @@ async function saveAssignment(store, taskId, workers, reviewers) {
   }
 }
 
+// A feladat rövid neve a táblázatban és a Dashboardon: „P1”, „P7/a”, vagy a teljes cím.
+export const shortName = (t) => (t.title.includes(' · ') ? t.title.split(' · ')[0] : t.title);
+
+// Kinek mi van kiosztva: { work: [feladat], review: [feladat] }.
+export function assignedTo(store, uid) {
+  const tasks = (store.data?.final?.tasks || []).filter((t) => !t.owner);
+  const a = (t) => store.assignments.get(t.id);
+  return {
+    work: tasks.filter((t) => a(t)?.workers.includes(uid)),
+    review: tasks.filter((t) => a(t)?.reviewers.includes(uid)),
+  };
+}
+
 // ---- Felület -----------------------------------------------------------------
 
 const names = (store, uids) => [...uids].sort(byName(store)).map((u) => userName(store, u));
@@ -203,17 +216,22 @@ function renderMatrix(store, tasks) {
   const people = [...store.users.keys()].sort(byName(store));
   const rows = people.map((u) => {
     const sig = (role) => count((t) => store.signups.get(t.id)?.[role].has(u));
+    const { work, review } = assignedTo(store, u);
+    const list = (label, ts) => (ts.length ? el('div', null, `${label}: `, el('b', { text: ts.map(shortName).join(', ') })) : null);
     return el('tr', { class: u === store.user?.uid ? 'me' : null },
       el('th', { scope: 'row', text: userName(store, u) }),
       el('td', { class: 'num', text: String(sig('kidolgozo')) }),
-      el('td', { class: 'num', text: String(sig('ellenorzo')) }));
+      el('td', { class: 'num', text: String(sig('ellenorzo')) }),
+      el('td', { class: 'assigned-cell' },
+        work.length || review.length ? [list('kidolgozó', work), list('ellenőr', review)] : el('span', { class: 'muted', text: '–' })));
   });
   document.getElementById('signup-matrix').replaceChildren(
     el('div', { class: 'table-wrap' }, el('table', { class: 'data-table' },
       el('thead', null, el('tr', null,
         el('th', { scope: 'col', text: 'Név' }),
         el('th', { scope: 'col', text: 'Jelentkezés: kidolgozás' }),
-        el('th', { scope: 'col', text: 'Jelentkezés: ellenőrzés' }))),
+        el('th', { scope: 'col', text: 'Jelentkezés: ellenőrzés' }),
+        el('th', { scope: 'col', text: 'Kiosztott feladatok' }))),
       el('tbody', null, ...rows))));
 }
 
