@@ -93,7 +93,8 @@
     </section>
     <section class="dash-block" aria-labelledby="haladas-title">
       <h2 class="block-title" id="haladas-title">A feladatok készültsége</h2>
-      <p class="note">Középen az egész csoport haladása, körülötte személyenként: a kártyán látszik, kinek mi van kiosztva kidolgozónak és ellenőrnek, és a sziluett annyira telik meg, amennyi a kidolgozandó feladataiból kész.</p>
+      <p class="note">Középen <b>a projekt készültsége</b>: mind a kiosztandó feladatból számol, a még ki nem osztott feladat is beleszámít (0%-kal). Körülötte személyenként a kiosztott feladatok az állapotukkal, és a sziluett annyira telik meg, amennyire a tag <b>saját</b> kidolgozandó feladatai elkészültek. Az állapotok súlya:</p>
+      <ul class="weights"><li>nincs még anyag <b>0%</b></li><li>folyamatban <b>25%</b></li><li>ellenőrzésre leadva <b>50%</b></li><li>javítás kell <b>50%</b></li><li>ellenőrizve <b>75%</b></li><li>kész <b>100%</b></li></ul>
       <div class="board" id="dash-people"></div>
     </section>
   </section>
@@ -183,7 +184,8 @@
         </div>
       </div>
       <div class="signup-howto" role="note">
-        <p><strong>Hogyan működik?</strong> 1. A kidolgozó feltölti a fájlt a feladat Drive-mappájába (a félkész a „munka”, a kész a „végleges” almappába), majd az oldalon a <b>Feltöltöttem</b> gombbal bejegyzi a címét és a linkjét: ekkor a feladat <b>feltöltve</b> állapotú. 2. Az ellenőr átnézi, a kidolgozó kijavítja, és az ellenőr az <b>Ellenőriztem</b> gombbal jelzi: <b>ellenőrizve</b>. 3. Végül Berni (a koordinátor) elfogadja: <b>kész</b>. A kész feladatok töltik a Dashboard sziluettjeit és a „Kidolgozás” mérföldkövet.</p>
+        <p><strong>Hogyan működik?</strong> 1. A kidolgozó a <b>munka</b> mappában dolgozik; minden elkészült változatot feltölt, és a <b>Feltöltöttem</b> gombbal bejegyzi (v1, v2, …): a feladat <b>folyamatban</b> van. 2. Ha kész a változat, <b>Ellenőrzésre leadja</b>. 3. Az ellenőr átnézi: ha rendben, <b>Ellenőriztem</b>; ha nem, <b>Javítás kell</b>, rövid megjegyzéssel, és a kör új verzióval kezdődik újra. 4. Végül Berni (a koordinátor) a végleges mappába került anyagot <b>késznek</b> jelöli.</p>
+        <p><strong>Készültség:</strong> nincs még anyag 0%, folyamatban 25%, ellenőrzésre leadva és javítás kell 50%, ellenőrizve 75%, kész 100%. Ez tölti a Dashboard köreit, sziluettjeit és a „Kidolgozás” mérföldkövet.</p>
       </div>
       <p class="work-summary" id="work-summary"></p>
       <div class="task-groups" id="work-groups"></div>

@@ -443,14 +443,20 @@ describe('Kidolgozás: feltöltött anyagok és állapot', () => {
     await assertFails(deleteDoc(doc(ctx(ADMIN2), 'submissions/s1')));
     await assertSucceeds(deleteDoc(doc(ctx(ADMIN1), 'submissions/s1')));
   });
-  it('állapot: a kidolgozó „feltöltve”, az ellenőr „ellenőrizve”, a „kész” csak a koordinátoré', async () => {
-    await assertSucceeds(setDoc(doc(ctx(ADMIN1), 'taskStatus/p6'), st('admin1', 'feltoltve')));
+  it('állapot: a kidolgozó folyamatban/leadva, az ellenőr javítás/ellenőrizve, a kész csak a koordinátoré', async () => {
+    await assertSucceeds(setDoc(doc(ctx(ADMIN1), 'taskStatus/p6'), st('admin1', 'folyamatban')));
+    await assertSucceeds(setDoc(doc(ctx(ADMIN1), 'taskStatus/p6'), st('admin1', 'leadva')));
     await assertFails(setDoc(doc(ctx(ADMIN1), 'taskStatus/p6'), st('admin1', 'ellenorizve')));
     await assertFails(setDoc(doc(ctx(ADMIN1), 'taskStatus/p6'), st('admin1', 'kesz')));
+    await assertSucceeds(setDoc(doc(ctx(ADMIN1), 'taskStatus/p3'), { ...st('admin1', 'javitas'), note: 'Az ajtók nem látszanak.' }));
     await assertSucceeds(setDoc(doc(ctx(ADMIN1), 'taskStatus/p3'), st('admin1', 'ellenorizve')));
-    await assertFails(setDoc(doc(ctx(ADMIN1), 'taskStatus/p3'), st('admin1', 'feltoltve')));
+    await assertFails(setDoc(doc(ctx(ADMIN1), 'taskStatus/p3'), st('admin1', 'leadva')));
     await assertSucceeds(setDoc(doc(ctx(ADMIN2), 'taskStatus/p6'), st('admin2', 'kesz')));
-    await assertFails(setDoc(doc(ctx(ADMIN1), 'taskStatus/p6'), { ...st('admin1', 'feltoltve'), extra: 1 }));
+  });
+  it('hibás állapot, túl hosszú megjegyzés, idegen mező elutasítva', async () => {
+    await assertFails(setDoc(doc(ctx(ADMIN2), 'taskStatus/p6'), st('admin2', 'feltoltve')));
+    await assertFails(setDoc(doc(ctx(ADMIN1), 'taskStatus/p3'), { ...st('admin1', 'javitas'), note: 'x'.repeat(501) }));
+    await assertFails(setDoc(doc(ctx(ADMIN1), 'taskStatus/p6'), { ...st('admin1', 'folyamatban'), extra: 1 }));
   });
   it('minden admin olvashatja, más nem', async () => {
     await assertSucceeds(getDocs(collection(ctx(ADMIN1), 'taskStatus')));

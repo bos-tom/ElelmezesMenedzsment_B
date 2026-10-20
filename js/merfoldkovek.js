@@ -4,6 +4,7 @@
 // a többit a koordinátor jelöli késznek (milestones/{id}, lásd firestore.rules).
 import { collection, db, doc, onSnapshot, serverTimestamp, setDoc } from './firebase.js';
 import { el, notify } from './dom.js';
+import { progressPct, stateOf } from './kidolgozas.js';
 
 const DAY = 86_400_000;
 const dateFmt = new Intl.DateTimeFormat('hu-HU', { month: 'short', day: 'numeric' });
@@ -47,15 +48,14 @@ function measure(store, m) {
     };
   }
   if (m.id === 'kidolgozas') {
-    // A „Feladatok kidolgozása” fül állapotaiból: a kész feladatok aránya.
-    const st = (t) => store.taskStatus?.get(t.id) || 'nincs';
-    const done = tasks.filter((t) => st(t) === 'kesz').length;
-    const started = tasks.filter((t) => st(t) !== 'nincs').length;
+    // A „Feladatok kidolgozása” fül állapotaiból, súlyozva; a ki nem osztott feladat is beleszámít.
+    const done = tasks.filter((t) => stateOf(store, t.id) === 'kesz').length;
+    const started = tasks.filter((t) => stateOf(store, t.id) !== 'nincs').length;
     return {
       auto: tasks.length > 0 && done === tasks.length,
-      pct: tasks.length ? Math.round((done / tasks.length) * 100) : 0,
+      pct: progressPct(store, tasks),
       text: `${tasks.length} feladatból ${done} kész`,
-      extra: `${started} feladatra van feltöltött anyag`,
+      extra: `${started} feladaton folyik munka`,
     };
   }
   return { auto: false, pct: null, text: '' };

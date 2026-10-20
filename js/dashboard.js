@@ -1,10 +1,12 @@
 // Dashboard: személyenkénti haladásjelző sziluettel.
 // A tagok listája a config/app.admins sorrendjét követi (ugyanaz, mint a csevegőszíneké).
 // Sziluett: a config/app.male listában szereplők férfi, a többiek női sziluettet kapnak.
-// A kártyán a tag kiosztott feladatai látszanak (kidolgozó, ellenőr); a haladás:
-// a kidolgozandó feladataiból hány „kész” (a koordinátor jelöli a Feladatok kidolgozása fülön).
+// Középen a projekt egészének készültsége: mind a kiosztandó feladat, súlyozva az állapot szerint
+// (a ki nem osztott feladat 0%-kal számít). A tag kártyáján a saját feladatai az állapotukkal, és
+// a saját kidolgozandó feladatainak súlyozott készültsége.
 import { el } from './dom.js';
 import { assignedTo, shortName } from './feladatok.js';
+import { STATES, progressPct, stateOf, versionsOf } from './kidolgozas.js';
 
 const SVG_NS = 'http://www.w3.org/2000/svg';
 
@@ -60,29 +62,32 @@ export function membersFrom(config) {
   });
 }
 
+
 // A tag felhasználói azonosítója a becenév alapján (a users-ben a becenév a displayName).
 function uidOf(store, member) {
   for (const [uid, u] of store?.users || []) if (u.displayName === member.name) return uid;
   return null;
 }
 
-// Kiosztott feladatok és haladás: a kidolgozandó feladatokból a „kész” állapotúak.
-function progressOf(store, member) {
-  const uid = uidOf(store, member);
-  const { work, review } = uid ? assignedTo(store, uid) : { work: [], review: [] };
-  const done = work.filter((t) => store.taskStatus?.get(t.id) === 'kesz').length;
-  return { done, total: work.length, work, review };
+// Feladat az állapotával, pl. „P6 · ellenőrzésre leadva (v2)”.
+function taskLine(store, t) {
+  const st = stateOf(store, t.id);
+  const v = versionsOf(store, t.id);
+  return el('li', { class: `ptask state-${st}` },
+    el('b', { text: shortName(t) }), ` · ${STATES[st].label.toLowerCase()}${v ? ` (v${v})` : ''}`);
 }
 
-function assignedLines(work, review) {
-  if (!work.length && !review.length) return el('div', { class: 'person-sub', text: 'Még nincs kiosztott feladat' });
-  const line = (label, ts) => (ts.length ? el('div', null, `${label}: `, el('b', { text: ts.map(shortName).join(', ') })) : null);
-  return el('div', { class: 'person-tasks' }, line('Kidolgozó', work), line('Ellenőr', review));
+function assignedBlock(store, work, review) {
+  if (!work.length && !review.length) return el('div', { class: 'person-sub', text: 'Nincs kiosztott feladat' });
+  return el('div', { class: 'person-tasks' },
+    work.length ? el('div', { class: 'ptask-head', text: 'Kidolgozó' }) : null,
+    work.length ? el('ul', { class: 'ptasks' }, ...work.map((t) => taskLine(store, t))) : null,
+    review.length ? el('div', { class: 'ptask-head', text: 'Ellenőr' }) : null,
+    review.length ? el('ul', { class: 'ptasks' }, ...review.map((t) => taskLine(store, t))) : null);
 }
 
-// Összesített haladás: kör alakú jelző a tábla közepén.
-function overallGauge(done, total) {
-  const pct = total ? Math.round((done / total) * 100) : 0;
+// A projekt készültsége: kör alakú jelző a tábla közepén.
+function overallGauge(pct, total, assigned) {
   const r = 52;
   const c = 2 * Math.PI * r;
   const ring = svg('svg', { viewBox: '0 0 120 120', class: 'gauge-ring', 'aria-hidden': 'true', focusable: 'false' });
@@ -99,39 +104,38 @@ function overallGauge(done, total) {
   return el('div', {
     class: 'gauge',
     role: 'progressbar',
-    'aria-label': 'A csoport összesített haladása',
+    'aria-label': 'A projekt készültsége',
     'aria-valuemin': '0',
     'aria-valuemax': '100',
     'aria-valuenow': String(pct),
   },
   el('div', { class: 'gauge-dial' }, ring, el('div', { class: 'gauge-pct', text: `${pct}%` })),
-  el('div', { class: 'gauge-label', text: 'Összesen' }),
-  el('div', { class: 'person-sub', text: total ? `${done} / ${total} feladat kész` : 'Még nincs kiosztott feladat' }));
+  el('div', { class: 'gauge-label', text: 'A projekt készültsége' }),
+  el('div', { class: 'person-sub', text: `mind a ${total} feladat, súlyozva · ${assigned} kiosztva` }));
 }
 
 export function renderDashboard(members, store) {
   const board = document.getElementById('dash-people');
-  let sumDone = 0;
-  let sumTotal = 0;
+  const tasks = (store?.data?.final?.tasks || []).filter((t) => !t.owner);
+  const assigned = tasks.filter((t) => store.assignments?.get(t.id)?.workers.length).length;
   const cards = members.map((m) => {
-    const { done, total, work, review } = progressOf(store, m);
-    sumDone += done;
-    sumTotal += total;
-    const pct = total ? Math.round((done / total) * 100) : 0;
+    const uid = uidOf(store, m);
+    const { work, review } = uid ? assignedTo(store, uid) : { work: [], review: [] };
+    const pct = progressPct(store, work);
     return el('div', { class: 'person', 'data-color': m.color },
       figure(m.figure, pct),
       el('div', { class: 'person-name', text: m.name }),
-      el('div', { class: 'person-pct', text: `${pct}%` }),
-      el('div', {
+      work.length ? el('div', { class: 'person-pct', text: `${pct}%` }) : null,
+      work.length ? el('div', {
         class: 'person-bar',
         role: 'progressbar',
-        'aria-label': `${m.name} haladása`,
+        'aria-label': `${m.name} saját feladatainak készültsége`,
         'aria-valuemin': '0',
         'aria-valuemax': '100',
         'aria-valuenow': String(pct),
-      }, el('span', { style: `width:${pct}%` })),
-      total ? el('div', { class: 'person-sub', text: `${done} / ${total} feladat kész` }) : null,
-      assignedLines(work, review));
+      }, el('span', { style: `width:${pct}%` })) : null,
+      work.length ? el('div', { class: 'person-sub', text: 'a saját feladataiból' }) : null,
+      assignedBlock(store, work, review));
   });
 
   // Két sor, arányosan: soronként fele-fele a tagoknak, a sor közepén az összesített jelző.
@@ -141,6 +145,5 @@ export function renderDashboard(members, store) {
   board.style.setProperty('--left', left);
   board.style.setProperty('--right', right);
   board.style.setProperty('--gauge-col', left + 1);
-  board.replaceChildren(overallGauge(sumDone, sumTotal), ...cards);
+  board.replaceChildren(overallGauge(progressPct(store, tasks), tasks.length, assigned), ...cards);
 }
-

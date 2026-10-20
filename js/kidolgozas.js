@@ -1,5 +1,6 @@
-// Feladatok kidolgozása: a közös Drive-mappa linkjei, a feltöltött anyagok és a feladatok állapota.
-// Állapot: nincs → feltöltve (kidolgozó) → ellenőrizve (ellenőr) → kész (koordinátor).
+// Feladatok kidolgozása: a közös Drive-mappa linkjei, a feltöltött verziók és a feladatok állapota.
+// Állapot: nincs → folyamatban → leadva (ellenőrzésre) ⇄ javítás kell → ellenőrizve → kész.
+// A készültség súlyozott (WEIGHT); a ki nem osztott feladat is beleszámít a projekt egészébe.
 // Adatok: submissions/{id}, taskStatus/{taskId} (lásd firestore.rules), data/kidolgozas.json.
 import {
   addDoc,
@@ -13,15 +14,30 @@ import {
 } from './firebase.js';
 import { byName, el, formatTime, notify, userName } from './dom.js';
 
-export const STATES = [
-  { id: 'nincs', label: 'Nincs még anyag' },
-  { id: 'feltoltve', label: 'Feltöltve' },
-  { id: 'ellenorizve', label: 'Ellenőrizve' },
-  { id: 'kesz', label: 'Kész' },
-];
+export const STATES = {
+  nincs: { label: 'Nincs még anyag', weight: 0 },
+  folyamatban: { label: 'Folyamatban', weight: 25 },
+  leadva: { label: 'Ellenőrzésre leadva', weight: 50 },
+  javitas: { label: 'Javítás kell', weight: 50 },
+  ellenorizve: { label: 'Ellenőrizve', weight: 75 },
+  kesz: { label: 'Kész', weight: 100 },
+};
+// Az állapotsáv lépései; a „javítás kell” a leadás lépésén jelenik meg (visszadobás).
+const STEPS = ['nincs', 'folyamatban', 'leadva', 'ellenorizve', 'kesz'];
 const DRIVE_RE = /^https:\/\/(drive|docs)\.google\.com\//;
 
-export const stateOf = (store, taskId) => store.taskStatus.get(taskId) || 'nincs';
+export const statusOf = (store, taskId) => store.taskStatus.get(taskId) || { state: 'nincs', note: '' };
+export const stateOf = (store, taskId) => statusOf(store, taskId).state;
+export const weightOf = (store, taskId) => STATES[stateOf(store, taskId)].weight;
+
+// Súlyozott készültség (0–100) a megadott feladatokra.
+export function progressPct(store, tasks) {
+  if (!tasks.length) return 0;
+  return Math.round(tasks.reduce((n, t) => n + weightOf(store, t.id), 0) / tasks.length);
+}
+
+// A feladat legutóbbi verziószáma (v1, v2, …).
+export const versionsOf = (store, taskId) => (store.submissions.get(taskId) || []).length;
 
 // ---- Adatok ------------------------------------------------------------------
 
@@ -33,9 +49,10 @@ export function subscribeWork(store, onUpdate) {
       const s = d.data();
       if (!known.has(s.taskId) || typeof s.url !== 'string' || !DRIVE_RE.test(s.url)) return;
       if (!subs.has(s.taskId)) subs.set(s.taskId, []);
-      subs.get(s.taskId).push({ id: d.id, uid: s.uid, title: String(s.title || ''), url: s.url, createdAt: s.createdAt?.toDate?.() || null });
+      subs.get(s.taskId).push({ id: d.id, uid: s.uid, title: String(s.title || ''), url: s.url, createdAt: s.createdAt?.toDate?.() || new Date() });
     });
-    for (const list of subs.values()) list.sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
+    // Időrendben: a legrégebbi a v1.
+    for (const list of subs.values()) list.sort((a, b) => a.createdAt - b.createdAt);
     store.submissions = subs;
     onUpdate();
   }, () => notify('Nem sikerült betölteni a feltöltött anyagokat.'));
@@ -43,8 +60,8 @@ export function subscribeWork(store, onUpdate) {
   const unsubSt = onSnapshot(collection(db, 'taskStatus'), (snap) => {
     const st = new Map();
     snap.forEach((d) => {
-      const s = d.data().state;
-      if (known.has(d.id) && STATES.some((x) => x.id === s)) st.set(d.id, s);
+      const s = d.data();
+      if (known.has(d.id) && STATES[s.state]) st.set(d.id, { state: s.state, note: typeof s.note === 'string' ? s.note : '' });
     });
     store.taskStatus = st;
     onUpdate();
@@ -53,9 +70,11 @@ export function subscribeWork(store, onUpdate) {
   return () => { unsubSub(); unsubSt(); };
 }
 
-async function setState(store, taskId, state) {
+async function setState(store, taskId, state, note = '') {
+  const data = { state, updatedBy: store.user.uid, updatedAt: serverTimestamp() };
+  if (note) data.note = note.slice(0, 500);
   try {
-    await setDoc(doc(db, 'taskStatus', taskId), { state, updatedBy: store.user.uid, updatedAt: serverTimestamp() });
+    await setDoc(doc(db, 'taskStatus', taskId), data);
     return true;
   } catch (e) {
     notify(e.code === 'permission-denied' ? 'Ehhez az állapothoz nincs jogosultságod.' : 'Nem sikerült menteni az állapotot.');
@@ -71,9 +90,12 @@ function linkBtn(url, text) {
 }
 
 function stepper(state) {
-  const idx = STATES.findIndex((s) => s.id === state);
-  return el('ol', { class: 'stepper', 'aria-label': `Állapot: ${STATES[idx].label}` },
-    ...STATES.map((s, i) => el('li', { class: i < idx ? 'done' : i === idx ? 'current' : null, text: s.label })));
+  const pos = STEPS.indexOf(state === 'javitas' ? 'leadva' : state);
+  return el('ol', { class: 'stepper', 'aria-label': `Állapot: ${STATES[state].label}` },
+    ...STEPS.map((s, i) => el('li', {
+      class: i < pos ? 'done' : i === pos ? (state === 'javitas' ? 'current fix' : 'current') : null,
+      text: i === pos && state === 'javitas' ? STATES.javitas.label : STATES[s].label,
+    })));
 }
 
 function workCard(store, t, drive) {
@@ -81,15 +103,16 @@ function workCard(store, t, drive) {
   const folders = drive?.folders?.[t.id] || {};
   const people = el('div', { class: 'work-people' });
   const stepBox = el('div');
-  const subsBox = el('ul', { class: 'subs' });
+  const noteBox = el('p', { class: 'work-note', hidden: true });
+  const subsBox = el('ol', { class: 'subs' });
   const actions = el('div', { class: 'work-actions' });
 
-  // „Feltöltöttem” űrlap: a kidolgozó (vagy a koordinátor) jegyzi be a Drive-ba feltöltött fájlt.
-  const titleIn = el('input', { type: 'text', maxlength: '120', placeholder: 'Mi ez? pl. Alaprajz, 1. változat', 'aria-label': 'Az anyag címe' });
+  // Új verzió bejegyzése: a kidolgozó (vagy a koordinátor) a Drive-ba feltöltött fájl címét és linkjét adja meg.
+  const titleIn = el('input', { type: 'text', maxlength: '120', placeholder: 'Mi ez? pl. Alaprajz, javított', 'aria-label': 'Az anyag címe' });
   const urlIn = el('input', { type: 'url', maxlength: '500', placeholder: 'A fájl Drive-linkje (https://drive.google.com/…)', 'aria-label': 'Az anyag Drive-linkje' });
-  const send = el('button', { class: 'btn primary small', type: 'submit', text: 'Feltöltöttem' });
+  const send = el('button', { class: 'btn primary small', type: 'submit', text: 'Feltöltöttem (új verzió)' });
   const form = el('form', { class: 'sub-form', hidden: true },
-    el('p', { class: 'note', text: 'Töltsd fel a fájlt a feladat Drive-mappájába, majd másold ide a linkjét (a fájlon jobb klikk → Megosztás → Link másolása).' }),
+    el('p', { class: 'note', text: 'Töltsd fel a fájlt a feladat „munka” mappájába (a kész változatot a „végleges” mappába), majd másold ide a linkjét: a fájlon jobb klikk → Megosztás → Link másolása. Minden bejegyzés új verzió.' }),
     titleIn, urlIn, send);
   form.addEventListener('submit', async (e) => {
     e.preventDefault();
@@ -100,14 +123,29 @@ function workCard(store, t, drive) {
     send.disabled = true;
     try {
       await addDoc(collection(db, 'submissions'), { taskId: t.id, uid: store.user.uid, title, url, createdAt: serverTimestamp() });
-      if (stateOf(store, t.id) === 'nincs') await setState(store, t.id, 'feltoltve');
+      // Új verzió: ha még nem indult el, vagy javítás után jött, „folyamatban” (a megjegyzés megmarad).
+      const cur = statusOf(store, t.id);
+      if (cur.state === 'nincs' || cur.state === 'javitas') await setState(store, t.id, 'folyamatban', cur.note);
       titleIn.value = '';
       urlIn.value = '';
-      notify('Az anyag bejegyezve.', 'info');
+      notify('Az új verzió bejegyezve.', 'info');
     } catch (err) {
       notify(err.code === 'permission-denied' ? 'Anyagot csak a feladat kidolgozója jegyezhet be.' : 'Nem sikerült menteni, próbáld újra.');
     }
     send.disabled = false;
+  });
+
+  // „Javítás kell” megjegyzés az ellenőrtől.
+  const fixIn = el('textarea', { rows: '2', maxlength: '500', placeholder: 'Mit kell javítani? (rövid megjegyzés a kidolgozónak)', 'aria-label': 'Mit kell javítani' });
+  const fixSend = el('button', { class: 'btn small danger', type: 'submit', text: 'Visszaküldöm javításra' });
+  const fixForm = el('form', { class: 'sub-form', hidden: true }, fixIn, fixSend);
+  fixForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const note = fixIn.value.trim();
+    if (!note) { notify('Írd le röviden, mit kell javítani.'); return; }
+    fixSend.disabled = true;
+    if (await setState(store, t.id, 'javitas', note)) { fixIn.value = ''; fixForm.hidden = true; }
+    fixSend.disabled = false;
   });
 
   card.append(
@@ -116,26 +154,30 @@ function workCard(store, t, drive) {
       t.slide && t.slide !== '–' ? el('span', { class: 'task-slide', text: t.slide === 'mind' ? 'minden dia' : `${t.slide} dia` }) : null),
     people,
     el('div', { class: 'work-folders' }, linkBtn(folders.munka, 'Munka mappa'), linkBtn(folders.vegleges, 'Végleges mappa')),
-    stepBox, subsBox, form, actions);
+    stepBox, noteBox, subsBox, form, actions, fixForm);
 
   function update() {
     const uid = store.user?.uid;
     const a = store.assignments.get(t.id) || { workers: [], reviewers: [] };
     const isWorker = a.workers.includes(uid);
     const isReviewer = a.reviewers.includes(uid);
-    const state = stateOf(store, t.id);
-    const names = (l) => l.slice().sort(byName(store)).map((u) => userName(store, u)).join(', ') || '–';
+    const coord = store.isCoordinator;
+    const { state, note } = statusOf(store, t.id);
+    const subs = store.submissions.get(t.id) || [];
+    const names = (l) => l.slice().sort(byName(store)).map((u) => userName(store, u)).join(', ') || 'még nincs kiosztva';
     people.replaceChildren(
       el('span', null, 'Kidolgozó: ', el('b', { text: names(a.workers) })),
       el('span', null, 'Ellenőr: ', el('b', { text: names(a.reviewers) })));
     card.className = `work state-${state}${isWorker || isReviewer ? ' mine' : ''}`;
     stepBox.replaceChildren(stepper(state));
+    noteBox.hidden = !(note && ['javitas', 'folyamatban', 'leadva'].includes(state));
+    noteBox.replaceChildren(el('b', { text: 'Az ellenőr megjegyzése: ' }), note);
 
-    const subs = store.submissions.get(t.id) || [];
-    subsBox.replaceChildren(...(subs.length ? subs.map((s) => {
+    subsBox.replaceChildren(...(subs.length ? subs.map((s, i) => {
       const li = el('li', null,
+        el('span', { class: 'ver', text: `v${i + 1}` }), ' ',
         el('a', { href: s.url, target: '_blank', rel: 'noopener', text: s.title }),
-        el('span', { class: 'muted', text: ` · ${userName(store, s.uid)}${s.createdAt ? `, ${formatTime(s.createdAt)}` : ''}` }));
+        el('span', { class: 'muted', text: ` · ${userName(store, s.uid)}, ${formatTime(s.createdAt)}` }));
       if (s.uid === uid) {
         const del = el('button', { class: 'btn link', type: 'button', text: 'törlés', 'aria-label': `${s.title} törlése` });
         del.addEventListener('click', async () => {
@@ -144,23 +186,39 @@ function workCard(store, t, drive) {
         li.append(' ', del);
       }
       return li;
-    }) : [el('li', { class: 'muted', text: 'Még nincs bejegyzett anyag.' })]));
+    }) : [el('li', { class: 'muted none', text: 'Még nincs bejegyzett verzió.' })]));
 
-    form.hidden = !(isWorker || store.isCoordinator);
+    form.hidden = !((isWorker || coord) && state !== 'kesz');
 
-    // Az állapotváltó gombok, szerepkör szerint.
-    const btn = (text, next, cls = 'btn small') => {
+    // Gombok szerepkör és állapot szerint.
+    const btn = (text, next, cls = 'btn small', keepNote = false) => {
       const b = el('button', { class: cls, type: 'button', text });
-      b.addEventListener('click', async () => { b.disabled = true; await setState(store, t.id, next); b.disabled = false; });
+      b.addEventListener('click', async () => { b.disabled = true; await setState(store, t.id, next, keepNote ? note : ''); b.disabled = false; });
       return b;
     };
     const list = [];
-    // A koordinátornak az összes állapot elérhető, neki nem kellenek a szerepkör szerinti gombok.
-    if (!store.isCoordinator && isReviewer && state === 'feltoltve') list.push(btn('Ellenőriztem', 'ellenorizve', 'btn small primary'));
-    if (!store.isCoordinator && isWorker && state === 'feltoltve') list.push(btn('Vissza: nincs még anyag', 'nincs'));
-    if (store.isCoordinator) {
-      for (const s of STATES) if (s.id !== state) list.push(btn(s.id === 'kesz' ? 'Késznek jelölöm' : `Állapot: ${s.label.toLowerCase()}`, s.id, s.id === 'kesz' ? 'btn small primary' : 'btn small'));
+    if (isWorker || coord) {
+      if (state === 'nincs') list.push(btn('Elkezdtem', 'folyamatban'));
+      if ((state === 'folyamatban' || state === 'javitas') && subs.length) list.push(btn('Ellenőrzésre leadom', 'leadva', 'btn small primary', true));
+      if (state === 'leadva') list.push(btn('Leadás visszavonása', 'folyamatban', 'btn small', true));
     }
+    if (isReviewer || coord) {
+      if (state === 'leadva') {
+        list.push(btn('Ellenőriztem, rendben', 'ellenorizve', 'btn small primary'));
+        const fix = el('button', { class: 'btn small danger', type: 'button', text: 'Javítás kell' });
+        fix.addEventListener('click', () => { fixForm.hidden = false; fixIn.focus(); });
+        list.push(fix);
+      }
+    }
+    if (coord) {
+      if (state === 'ellenorizve') list.push(btn('Késznek jelölöm (végleges)', 'kesz', 'btn small primary'));
+      // Bármelyik állapot kézzel is beállítható (pl. tévedés javítására).
+      const sel = el('select', { 'aria-label': 'Állapot kézi beállítása' },
+        ...Object.entries(STATES).map(([id, s]) => el('option', { value: id, selected: id === state, text: s.label })));
+      sel.addEventListener('change', async () => { sel.disabled = true; await setState(store, t.id, sel.value); sel.disabled = false; });
+      list.push(el('label', { class: 'state-select' }, 'Állapot: ', sel));
+    }
+    if (state !== 'leadva') fixForm.hidden = true;
     actions.replaceChildren(...list);
   }
   return { card, update };
@@ -191,7 +249,9 @@ export function mountWork(store) {
   return function update() {
     for (const c of cards) c.update();
     const count = (s) => tasks.filter((t) => stateOf(store, t.id) === s).length;
-    summary.replaceChildren(...STATES.map((s) => el('span', { class: `work-count state-${s.id}` },
-      el('b', { text: String(count(s.id)) }), ` ${s.label.toLowerCase()}`)));
+    summary.replaceChildren(
+      el('span', { class: 'work-total' }, 'A projekt készültsége: ', el('b', { text: `${progressPct(store, tasks)}%` })),
+      ...Object.entries(STATES).map(([id, s]) => el('span', { class: `work-count state-${id}` },
+        el('b', { text: String(count(id)) }), ` ${s.label.toLowerCase()}`)));
   };
 }

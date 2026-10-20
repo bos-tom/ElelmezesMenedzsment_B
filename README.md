@@ -173,7 +173,7 @@ Ehhez a kódnak már fent kell lennie a GitHubon (push után).
 | `assignments/{feladat}` | a kiosztás: kidolgozók és ellenőrök (legfeljebb 10–10 fő) | csak a `coordinators` |
 | `milestones/{mérföldkő}` | a Dashboard mérföldkövének kézi „kész” jelölése (`done`) | csak a `coordinators` |
 | `submissions/{id}` | a Drive-ba feltöltött anyag címe és linkje (csak Google Drive/Docs link) | a feladat kidolgozója vagy a koordinátor; törölni a bejegyző |
-| `taskStatus/{feladat}` | a feladat állapota: nincs → feltöltve → ellenőrizve → kész | „feltöltve”: a kidolgozó, „ellenőrizve”: az ellenőr, bármelyik: a koordinátor |
+| `taskStatus/{feladat}` | a feladat állapota: nincs → folyamatban → leadva ⇄ javítás kell (megjegyzéssel) → ellenőrizve → kész; súlya 0/25/50/50/75/100% | nincs/folyamatban/leadva: a kidolgozó, javítás/ellenőrizve: az ellenőr, bármelyik: a koordinátor |
 
 Szerepkörök: mivel csak adminok férnek hozzá, minden belépő tag szavazhat, írhat, lezárhat és újranyithat döntést. Csevegőüzenetet mindenki csak a sajátját törölheti. Ezért külön „Admin” jelvény sincs a felületen.
 
